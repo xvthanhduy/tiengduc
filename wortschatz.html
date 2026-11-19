@@ -12,9 +12,14 @@
             min-height: 100vh;
             padding: 28px 16px;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            background: #080f20;
+            background-color: #080f20;
+            background-image: linear-gradient(rgba(8, 15, 32, 0.28), rgba(8, 15, 32, 0.28)), url("11.jpg");
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #f4f7ff;
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -119,6 +124,38 @@
             font-weight: bold;
         }
 
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .nav-btn {
+            flex: 0 0 52px;
+            width: 52px;
+            min-height: 42px;
+            padding: 6px;
+            border: 1px solid #5275ad;
+            border-radius: 12px;
+            background: #263f68;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.18s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #35588d;
+            border-color: #8ab1ff;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         .result { display: none; }
         .result h2 { margin-top: 0; font-size: 28px; }
 
@@ -174,6 +211,11 @@
                 <button class="answer" id="optionB" type="button"></button>
             </div>
 
+            <div class="navigation">
+                <button class="nav-btn" id="prev-button" type="button" onclick="previousQuestion()" aria-label="Câu trước" title="Câu trước">←</button>
+                <button class="nav-btn" id="next-button" type="button" onclick="nextQuestion()" aria-label="Câu tiếp theo" title="Câu tiếp theo">→</button>
+            </div>
+
             <div class="feedback" id="feedback" aria-live="polite"></div>
         </section>
 
@@ -191,8 +233,9 @@
         let questions = [];
         let current = 0;
         let points = 0;
-        let answered = false;
         let currentOptions = [];
+        let optionsByQuestion = [];
+        let selectedAnswers = [];
 
         function shuffle(array) {
             const copy = [...array];
@@ -208,7 +251,17 @@
             questions = shuffle(allWords).slice(0, count);
             current = 0;
             points = 0;
-            answered = false;
+            selectedAnswers = Array(questions.length).fill(null);
+            optionsByQuestion = questions.map(q => {
+                const wrongAnswers = allWords
+                    .filter(item => item.vi !== q.vi)
+                    .map(item => item.vi);
+                const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+                return shuffle([
+                    { text: q.vi, correct: true },
+                    { text: wrongAnswer, correct: false }
+                ]);
+            });
 
             document.getElementById("quiz").style.display = "block";
             document.getElementById("result").style.display = "none";
@@ -221,24 +274,11 @@
                 return;
             }
 
-            answered = false;
             const q = questions[current];
-
-            const wrongAnswers = allWords
-                .filter(item => item.vi !== q.vi)
-                .map(item => item.vi);
-
-            const wrongAnswer =
-                wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
-
-            currentOptions = shuffle([
-                { text: q.vi, correct: true },
-                { text: wrongAnswer, correct: false }
-            ]);
+            currentOptions = optionsByQuestion[current];
 
             document.getElementById("progress").textContent =
                 `Câu hỏi ${current + 1} / ${questions.length}`;
-
             document.getElementById("word").textContent = q.word;
 
             const details = [];
@@ -246,58 +286,69 @@
             if (q.pos) details.push("Giống: " + q.pos);
             document.getElementById("details").textContent = details.join("  •  ");
 
-            const buttonA = document.getElementById("optionA");
-            const buttonB = document.getElementById("optionB");
-
-            buttonA.textContent = "A. " + currentOptions[0].text;
-            buttonB.textContent = "B. " + currentOptions[1].text;
-
-            buttonA.className = "answer";
-            buttonB.className = "answer";
-            buttonA.disabled = false;
-            buttonB.disabled = false;
-
-            document.getElementById("feedback").textContent = "";
-
-            buttonA.onclick = () => chooseAnswer(0);
-            buttonB.onclick = () => chooseAnswer(1);
-        }
-
-        function chooseAnswer(index) {
-            if (answered) return;
-
-            answered = true;
-            speakWord();
-
             const buttons = [
                 document.getElementById("optionA"),
                 document.getElementById("optionB")
             ];
+            buttons.forEach((button, index) => {
+                button.textContent = (index === 0 ? "A. " : "B. ") + currentOptions[index].text;
+                button.className = "answer";
+                button.disabled = false;
+                button.onclick = () => chooseAnswer(index);
+            });
 
-            const correctIndex = currentOptions.findIndex(option => option.correct);
-            buttons.forEach(button => button.disabled = true);
+            const selected = selectedAnswers[current];
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = "";
+            feedback.style.color = "";
 
-            if (currentOptions[index].correct) {
-                points++;
-                buttons[index].classList.add("correct");
-                document.getElementById("feedback").textContent = "Sehr gut!";
-                document.getElementById("feedback").style.color = "#38d996";
-            } else {
-                buttons[index].classList.add("wrong");
-                buttons[correctIndex].classList.add("correct");
-                document.getElementById("feedback").textContent =
-                    "Đáp án đúng: " + currentOptions[correctIndex].text;
-                document.getElementById("feedback").style.color = "#ff8995";
+            if (selected !== null) {
+                const correctIndex = currentOptions.findIndex(option => option.correct);
+                buttons.forEach(button => button.disabled = true);
+                if (currentOptions[selected].correct) {
+                    buttons[selected].classList.add("correct");
+                    feedback.textContent = "Sehr gut!";
+                    feedback.style.color = "#38d996";
+                } else {
+                    buttons[selected].classList.add("wrong");
+                    buttons[correctIndex].classList.add("correct");
+                    feedback.textContent = "Đáp án đúng: " + currentOptions[correctIndex].text;
+                    feedback.style.color = "#ff8995";
+                }
             }
 
-            // Tự chuyển câu sau 1,1 giây.
-            window.setTimeout(() => {
+            document.getElementById("prev-button").disabled = current === 0;
+            document.getElementById("next-button").textContent =
+                "→";
+        }
+
+        function chooseAnswer(index) {
+            if (selectedAnswers[current] !== null) return;
+
+            selectedAnswers[current] = index;
+            speakWord();
+            showQuestion();
+        }
+
+        function previousQuestion() {
+            if (current <= 0) return;
+            current--;
+            showQuestion();
+        }
+
+        function nextQuestion() {
+            if (current < questions.length - 1) {
                 current++;
                 showQuestion();
-            }, 1100);
+            } else {
+                showResult();
+            }
         }
 
         function showResult() {
+            points = selectedAnswers.reduce((total, selected, index) => {
+                return total + (selected !== null && optionsByQuestion[index][selected].correct ? 1 : 0);
+            }, 0);
             document.getElementById("quiz").style.display = "none";
             document.getElementById("result").style.display = "block";
             document.getElementById("score").textContent =
