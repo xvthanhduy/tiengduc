@@ -7,9 +7,7 @@
 <title>Wortschatz B2 – Alltag</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -31,27 +29,180 @@ body {
 }
 
 .container {
+    position: relative;
     width: 100%;
     max-width: 650px;
     padding: 30px;
-
-    /* Khung học tập nổi bật hơn hình nền */
-    border: 1px solid rgba(91, 157, 255, 0.58);
+    border: 1px solid #24375b;
     border-radius: 22px;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(13, 29, 58, 0.985),
-            rgba(7, 18, 39, 0.99)
-        );
-
-    box-shadow:
-        0 22px 65px rgba(0, 0, 0, 0.58),
-        0 0 0 1px rgba(65, 130, 235, 0.12),
-        0 0 32px rgba(45, 120, 235, 0.18),
-        inset 0 1px 0 rgba(190, 218, 255, 0.10);
-
+    background: linear-gradient(145deg, #14213d, #0d172c);
+    box-shadow: 0 18px 55px rgba(0,0,0,0.35);
     text-align: center;
+}
+
+/* BỐ CỤC: KHUNG HỌC BÊN TRÁI + ĐÈN LED BÊN PHẢI */
+
+.quiz-layout {
+    width: 100%;
+    max-width: 850px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: clamp(10px, 2vw, 24px);
+}
+
+.container {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    max-width: 650px;
+}
+
+.lamp-panel {
+    flex: 0 0 62px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 17px;
+}
+
+/* BÓNG ĐÈN DẠNG THANH DÀI */
+
+.lamp-tube {
+    position: relative;
+    width: 18px;
+    height: 320px;
+    border: 2px solid rgba(255,255,255,.8);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #9da9b8, #f5f7fa 48%, #aab5c2);
+    box-shadow: inset 0 0 7px rgba(255,255,255,.7), 0 0 7px rgba(255,255,255,.16);
+    transition: background .35s ease, box-shadow .35s ease;
+}
+
+.lamp-tube::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    bottom: 7px;
+    left: 4px;
+    right: 4px;
+    border-radius: inherit;
+    background: rgba(255,255,255,.38);
+    transition: background .35s ease;
+}
+
+.lamp-cap {
+    width: 28px;
+    height: 12px;
+    margin-top: -17px;
+    border: 1px solid rgba(220,235,255,.55);
+    border-radius: 4px 4px 7px 7px;
+    background: linear-gradient(90deg, #59677d, #c5cfdb, #59677d);
+}
+
+.lamp-switch {
+    width: 58px;
+    min-height: 34px;
+    border: 1px solid #627a9f;
+    border-radius: 999px;
+    background: #263f68;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+.lamp-switch:hover {
+    background: #35588d;
+    border-color: #fff;
+}
+
+/* ĐÈN BẬT: ÁNH SÁNG TRẮNG */
+
+body.lamp-on .lamp-tube {
+    background: linear-gradient(90deg, #e6edf5, #fff 48%, #e6edf5);
+    box-shadow:
+        0 0 12px 3px rgba(255,255,255,.9),
+        0 0 30px 9px rgba(255,255,255,.55),
+        0 0 65px 18px rgba(255,255,255,.24),
+        inset 0 0 10px #fff;
+}
+
+body.lamp-on .lamp-tube::before {
+    background: #fff;
+}
+
+body.lamp-on .lamp-switch {
+    background: #edf2f8;
+    color: #14213d;
+    border-color: #fff;
+    box-shadow: 0 0 14px rgba(255,255,255,.45);
+}
+
+body.lamp-on .container {
+    box-shadow:
+        0 18px 55px rgba(0,0,0,.35),
+        0 0 34px rgba(255,255,255,.12);
+}
+
+/* GIAO DIỆN ĐIỆN THOẠI */
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px 8px;
+        background-attachment: scroll;
+    }
+
+    .quiz-layout {
+        gap: 8px;
+        align-items: center;
+    }
+
+    .container {
+        padding: 22px 12px;
+        border-radius: 17px;
+    }
+
+    .lamp-panel {
+        flex-basis: 36px;
+        gap: 13px;
+    }
+
+    .lamp-tube {
+        width: 12px;
+        height: clamp(170px, 48vh, 245px);
+        border-width: 1px;
+    }
+
+    .lamp-cap {
+        width: 21px;
+        height: 9px;
+        margin-top: -13px;
+    }
+
+    .lamp-switch {
+        width: 38px;
+        min-height: 29px;
+        padding: 4px 2px;
+        font-size: 9px;
+    }
+
+    h1 { font-size: 21px; }
+    .word { font-size: clamp(19px, 5vw, 25px); }
+    .answers { grid-template-columns: 1fr; gap: 9px; }
+    .answer { min-height: 56px; padding: 12px 8px; font-size: 14px; }
+    .details { font-size: 12px; }
+    .feedback { font-size: 14px; }
+}
+
+@media (max-width: 360px) {
+    .lamp-panel { flex-basis: 32px; }
+    .lamp-switch { width: 34px; font-size: 8px; }
+    .container { padding-left: 9px; padding-right: 9px; }
 }
 
 h1 {
@@ -219,38 +370,12 @@ h1 {
 .retry:hover {
     background: #5590ff;
 }
-
-@media (max-width: 520px) {
-    body {
-        padding: 14px 10px;
-        background-attachment: scroll;
-    }
-
-    .container {
-        padding: 24px 16px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    .word {
-        font-size: 26px;
-    }
-
-    .answers {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .answer {
-        min-height: 62px;
-    }
-}
 </style>
 </head>
 
 <body>
+
+<div class="quiz-layout">
 
 <main class="container">
 
@@ -313,6 +438,19 @@ h1 {
     </section>
 
 </main>
+
+<aside class="lamp-panel" aria-label="Đèn chiếu sáng">
+    <div class="lamp-tube" aria-hidden="true"></div>
+    <div class="lamp-cap" aria-hidden="true"></div>
+    <button
+        class="lamp-switch"
+        id="lampSwitch"
+        type="button"
+        aria-pressed="false"
+        onclick="toggleLamp()">OFF</button>
+</aside>
+
+</div>
 
 <script>
 
@@ -429,9 +567,7 @@ const allWords = [
 
 ];
 
-// ========================================
 // BIẾN ĐIỀU KHIỂN QUIZ
-// ========================================
 
 let questions = [];
 let current = 0;
@@ -439,9 +575,7 @@ let currentOptions = [];
 let optionsByQuestion = [];
 let selectedAnswers = [];
 
-// ========================================
 // XÁO TRỘN
-// ========================================
 
 function shuffle(array) {
     const copy = [...array];
@@ -454,13 +588,11 @@ function shuffle(array) {
     return copy;
 }
 
-// ========================================
 // BẮT ĐẦU QUIZ
-// ========================================
 
 function startQuiz() {
 
-    const count = Math.min(20, allWords.length);
+    const count = Math.min(100, allWords.length);
 
     questions = shuffle(allWords).slice(0, count);
 
@@ -489,9 +621,7 @@ function startQuiz() {
     showQuestion();
 }
 
-// ========================================
 // HIỂN THỊ CÂU HỎI
-// ========================================
 
 function showQuestion() {
 
@@ -578,9 +708,7 @@ function showQuestion() {
         current === 0;
 }
 
-// ========================================
 // CHỌN ĐÁP ÁN
-// ========================================
 
 function chooseAnswer(index) {
 
@@ -594,9 +722,7 @@ function chooseAnswer(index) {
     showQuestion();
 }
 
-// ========================================
 // CHUYỂN CÂU HỎI
-// ========================================
 
 function previousQuestion() {
 
@@ -621,9 +747,7 @@ function nextQuestion() {
     }
 }
 
-// ========================================
 // KẾT QUẢ
-// ========================================
 
 function showResult() {
 
@@ -645,14 +769,13 @@ function showResult() {
         `Kết quả: ${points} / ${questions.length} câu đúng`;
 }
 
-// ========================================
 // PHÁT ÂM TIẾNG ĐỨC
-// ========================================
 
 let pendingGermanWord = "";
 let voiceCheckTimer = null;
 
 // Chọn giọng tiếng Đức
+
 function findGermanVoice() {
 
     const voices = window.speechSynthesis.getVoices();
@@ -669,6 +792,7 @@ function findGermanVoice() {
 }
 
 // Chuyển s/r/e thành das/der/die
+
 function expandGermanArticle(word) {
 
     return word
@@ -678,6 +802,7 @@ function expandGermanArticle(word) {
 }
 
 // Phát âm từ
+
 function playGermanWord(word, voice) {
 
     const synth = window.speechSynthesis;
@@ -695,6 +820,7 @@ function playGermanWord(word, voice) {
 }
 
 // Kiểm tra giọng đọc đã sẵn sàng chưa
+
 function tryPlayPendingGermanWord() {
 
     if (!pendingGermanWord) return false;
@@ -718,6 +844,7 @@ function tryPlayPendingGermanWord() {
 }
 
 // Hàm phát âm chính
+
 function speakWord() {
 
     const originalWord =
@@ -774,11 +901,23 @@ function speakWord() {
 }
 
 // Khởi tạo danh sách giọng đọc
+
 if ("speechSynthesis" in window) {
     window.speechSynthesis.getVoices();
 }
 
-// Khởi chạy quiz
+// ĐIỀU KHIỂN ĐÈN LAMPE
+
+function toggleLamp() {
+    const isOn = document.body.classList.toggle("lamp-on");
+    const switchButton = document.getElementById("lampSwitch");
+
+    switchButton.textContent = isOn ? "ON" : "OFF";
+    switchButton.setAttribute("aria-pressed", String(isOn));
+}
+
+// KHỞI CHẠY QUIZ
+
 startQuiz();
 
 </script>
