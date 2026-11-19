@@ -16,129 +16,283 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
+body {
+    background: #101b1c;
+}
+
+/* =========================================
+   WEBSITE
+========================================= */
+
 #website {
+    position: fixed;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: none;
     display: block;
 }
 
-/* TRINH PHAT NHAC MINI */
+/* =========================================
+   GLASS WINDOWS MUSIC PLAYER
+========================================= */
+
 .music-player {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
+    right: 25px;
+    bottom: 25px;
     z-index: 9999;
-    width: 320px;
-    padding: 14px;
-    color: white;
-    background: rgba(20, 25, 30, 0.92);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+
+    width: 350px;
+
+    color: #f4fff8;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(28, 54, 49, 0.88),
+            rgba(15, 31, 34, 0.91)
+        );
+
+    border: 1px solid rgba(179, 255, 211, 0.25);
+    border-radius: 17px;
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.38),
+        0 0 25px rgba(87, 220, 145, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.13);
+
+    backdrop-filter: blur(28px) saturate(150%);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+
+    overflow: hidden;
+
+    transition:
+        width 0.25s ease,
+        transform 0.25s ease,
+        opacity 0.25s ease;
 }
 
-.player-heading {
+/* =========================================
+   WINDOWS TITLE BAR
+========================================= */
+
+.title-bar {
+    height: 44px;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: space-between;
+
+    padding-left: 14px;
+
+    background: rgba(255,255,255,0.055);
+
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+
+    user-select: none;
 }
 
-.player-heading strong {
-    font-size: 13px;
+.title-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
-#status {
-    font-size: 11px;
-    color: #a8edbd;
+.title-icon {
+    color: #8FF0B2;
+    font-size: 18px;
+
+    text-shadow:
+        0 0 12px rgba(114,255,168,0.5);
+}
+
+.window-controls {
+    display: flex;
+    height: 100%;
+}
+
+.window-controls button {
+    width: 40px;
+    height: 100%;
+
+    border: none;
+    background: transparent;
+
+    color: rgba(255,255,255,0.9);
+    font-family: "Segoe UI", sans-serif;
+    font-size: 14px;
+
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.window-controls button:hover {
+    background: rgba(255,255,255,0.14);
+}
+
+.window-controls .close-button:hover {
+    background: #C42B1C;
+    color: white;
+}
+
+/* =========================================
+   PLAYER CONTENT
+========================================= */
+
+.player-content {
+    padding: 14px;
 }
 
 #youtubePlayer {
     width: 100%;
     height: 200px;
-    background: #111;
-    border-radius: 9px;
+    min-width: 200px;
+    min-height: 200px;
+
     overflow: hidden;
+    border-radius: 11px;
+
+    background: #080808;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.25);
 }
 
 .track-name {
-    margin-top: 10px;
+    margin-top: 13px;
+    margin-bottom: 5px;
+
     font-size: 13px;
-    font-weight: bold;
+    font-weight: 600;
+    line-height: 1.4;
+
     overflow-wrap: anywhere;
 }
 
+.player-status {
+    color: #9BE8B5;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+/* =========================================
+   MUSIC CONTROLS
+========================================= */
+
 .controls {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 18px;
-    margin: 10px 0;
+    align-items: center;
+    gap: 25px;
+
+    margin: 13px 0;
 }
 
 .controls button {
     border: none;
     background: transparent;
-    color: white;
+
+    color: #f4fff8;
     font-size: 20px;
+
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .controls button:hover {
-    color: #a8edbd;
+    color: #91F2B5;
+    transform: scale(1.12);
+
+    text-shadow:
+        0 0 12px rgba(122,255,173,0.4);
 }
 
 .controls .play-button {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
+
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(130, 242, 174, 0.30),
+            rgba(67, 170, 117, 0.20)
+        );
+
+    border: 1px solid rgba(174,255,203,0.25);
+
+    font-size: 19px;
+
+    box-shadow:
+        0 0 18px rgba(105,235,155,0.10);
 }
+
+/* =========================================
+   VOLUME
+========================================= */
 
 .volume-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 12px;
+
+    font-size: 13px;
 }
 
 .volume-row input {
     flex: 1;
-    accent-color: #75d69a;
+    accent-color: #8CE9AA;
     cursor: pointer;
 }
+
+/* =========================================
+   FOOTER
+========================================= */
 
 .player-footer {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
-    margin-top: 12px;
+    align-items: center;
+
+    margin-top: 14px;
 }
 
 .player-footer button {
     border: none;
     background: transparent;
-    color: white;
+
+    color: rgba(255,255,255,0.85);
     font-size: 11px;
+
     cursor: pointer;
 }
 
 .player-footer button:hover {
-    color: #a8edbd;
+    color: #9CF4BA;
 }
+
+/* =========================================
+   PLAYLIST
+========================================= */
 
 .playlist {
     display: none;
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    max-height: 130px;
+
+    margin-top: 12px;
+    padding-top: 9px;
+
+    border-top: 1px solid rgba(255,255,255,0.13);
+
+    max-height: 135px;
     overflow-y: auto;
 }
 
@@ -149,26 +303,165 @@ html, body {
 .playlist button {
     display: block;
     width: 100%;
-    padding: 9px;
-    border: none;
-    border-radius: 7px;
+
+    padding: 10px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
     background: transparent;
     color: white;
-    text-align: left;
+
     font-size: 12px;
+    text-align: left;
+
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .playlist button:hover,
 .playlist button.active {
-    background: rgba(255,255,255,0.18);
+    background: rgba(133, 232, 170, 0.13);
+    border-color: rgba(144, 241, 177, 0.15);
 }
 
+/* =========================================
+   MINIMIZED WINDOW
+========================================= */
+
+.music-player.minimized {
+    width: 285px;
+}
+
+.music-player.minimized #youtubePlayer,
+.music-player.minimized .track-name,
+.music-player.minimized .volume-row,
+.music-player.minimized .player-footer,
+.music-player.minimized .player-status,
+.music-player.minimized .playlist {
+    display: none;
+}
+
+.music-player.minimized .player-content {
+    padding: 8px 12px 12px;
+}
+
+.music-player.minimized .controls {
+    margin: 0;
+    gap: 25px;
+}
+
+.music-player.minimized .controls button {
+    font-size: 18px;
+}
+
+.music-player.minimized .controls .play-button {
+    width: 37px;
+    height: 37px;
+}
+
+/* =========================================
+   MAXIMIZED WINDOW
+========================================= */
+
+.music-player.maximized {
+    width: min(650px, calc(100vw - 32px));
+
+    right: 50%;
+    bottom: 50%;
+
+    transform: translate(50%, 50%);
+}
+
+.music-player.maximized #youtubePlayer {
+    height: 300px;
+}
+
+.music-player.maximized .player-content {
+    padding: 20px;
+}
+
+/* =========================================
+   HIDDEN PLAYER / FLOATING BUTTON
+========================================= */
+
+.restore-button {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 10000;
+
+    width: 54px;
+    height: 54px;
+
+    border: 1px solid rgba(180,255,211,0.28);
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(35,75,59,0.94),
+            rgba(16,39,39,0.96)
+        );
+
+    color: #9CF2B7;
+    font-size: 24px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.30),
+        0 0 18px rgba(100,240,155,0.15);
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    cursor: pointer;
+
+    display: none;
+
+    transition: 0.2s;
+}
+
+.restore-button:hover {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.30),
+        0 0 25px rgba(100,240,155,0.30);
+}
+
+.restore-button.show {
+    display: block;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
 @media (max-width: 600px) {
+
     .music-player {
-        width: calc(100% - 24px);
         right: 12px;
         bottom: 12px;
+
+        width: calc(100% - 24px);
+    }
+
+    .music-player.minimized {
+        width: min(285px, calc(100vw - 24px));
+    }
+
+    .music-player.maximized {
+        width: calc(100vw - 24px);
+    }
+
+    .music-player.maximized #youtubePlayer {
+        height: 220px;
+    }
+
+    .restore-button {
+        right: 15px;
+        bottom: 15px;
     }
 }
 </style>
@@ -176,107 +469,222 @@ html, body {
 
 <body>
 
-<!-- NOI DUNG WEBSITE -->
+<!-- WEBSITE -->
 <iframe
     id="website"
     src="home.html"
     title="Deutsch-Lernen B2">
 </iframe>
 
-<!-- TRINH PHAT YOUTUBE -->
-<div class="music-player">
 
-    <div class="player-heading">
-        <strong>♫ Deutsch-Lernen Music</strong>
-        <span id="status">Sẵn sàng</span>
+<!-- =====================================
+     MUSIC PLAYER WINDOW
+===================================== -->
+
+<div class="music-player" id="musicPlayer">
+
+    <!-- TITLE BAR -->
+
+    <div class="title-bar">
+
+        <div class="title-left">
+            <span class="title-icon">♫</span>
+            <span>Deutsch-Lernen Music</span>
+        </div>
+
+        <div class="window-controls">
+
+            <button
+                onclick="minimizePlayer()"
+                title="Thu nhỏ"
+                aria-label="Thu nhỏ">
+                —
+            </button>
+
+            <button
+                onclick="maximizePlayer()"
+                title="Phóng to / Thu gọn"
+                aria-label="Phóng to hoặc thu gọn">
+                □
+            </button>
+
+            <button
+                class="close-button"
+                onclick="hidePlayer()"
+                title="Ẩn trình phát"
+                aria-label="Ẩn trình phát">
+                ×
+            </button>
+
+        </div>
+
     </div>
 
-    <!-- YouTube se hien thi video tai day -->
-    <div id="youtubePlayer"></div>
 
-    <div class="track-name" id="trackName">
-        Bài hát số 1
+    <!-- PLAYER CONTENT -->
+
+    <div class="player-content">
+
+        <div id="youtubePlayer"></div>
+
+        <div class="track-name" id="trackName">
+            Đang tải danh sách nhạc...
+        </div>
+
+        <div class="player-status" id="status">
+            Đang kết nối YouTube
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="controls">
+
+            <button
+                onclick="previousTrack()"
+                title="Bài trước"
+                aria-label="Bài trước">
+                ⏮
+            </button>
+
+            <button
+                class="play-button"
+                id="playButton"
+                onclick="togglePlay()"
+                title="Phát / Tạm dừng"
+                aria-label="Phát hoặc tạm dừng">
+                ▶
+            </button>
+
+            <button
+                onclick="nextTrack()"
+                title="Bài tiếp theo"
+                aria-label="Bài tiếp theo">
+                ⏭
+            </button>
+
+        </div>
+
+
+        <!-- VOLUME -->
+
+        <div class="volume-row">
+
+            <span>🔊</span>
+
+            <input
+                id="volume"
+                type="range"
+                min="0"
+                max="100"
+                value="35"
+                aria-label="Âm lượng">
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="player-footer">
+
+            <button
+                id="playlistToggle"
+                onclick="togglePlaylist()">
+                ☷ Danh sách nhạc
+            </button>
+
+            <button
+                id="repeatButton"
+                onclick="toggleRepeat()">
+                ↻ Lặp: Bật
+            </button>
+
+        </div>
+
+
+        <!-- PLAYLIST -->
+
+        <div class="playlist" id="playlist"></div>
+
     </div>
-
-    <div class="controls">
-
-        <button onclick="previousTrack()" title="Bài trước">
-            ⏮
-        </button>
-
-        <button
-            class="play-button"
-            id="playButton"
-            onclick="togglePlay()"
-            title="Phát hoặc tạm dừng">
-            ▶
-        </button>
-
-        <button onclick="nextTrack()" title="Bài tiếp theo">
-            ⏭
-        </button>
-
-    </div>
-
-    <div class="volume-row">
-        <span>🔊</span>
-
-        <input
-            id="volume"
-            type="range"
-            min="0"
-            max="100"
-            value="35">
-    </div>
-
-    <div class="player-footer">
-        <button onclick="togglePlaylist()">
-            ☷ Danh sách nhạc
-        </button>
-
-        <button id="repeatButton" onclick="toggleRepeat()">
-            ↻ Lặp: Bật
-        </button>
-    </div>
-
-    <div class="playlist" id="playlist"></div>
 
 </div>
+
+
+<!-- FLOATING RESTORE BUTTON -->
+
+<button
+    class="restore-button"
+    id="restoreButton"
+    onclick="restorePlayer()"
+    title="Mở trình phát nhạc"
+    aria-label="Mở trình phát nhạc">
+    ♫
+</button>
+
 
 <script>
 
 // ======================================
-// DANH SACH 3 VIDEO YOUTUBE CUA CẬU
+// 1. YOUTUBE PLAYLIST
 // ======================================
 
 const tracks = [
+
     {
         id: "L1IPbx28wAM",
         name: "Bài hát 1"
     },
+
     {
         id: "jc7Q1X0LeyY",
         name: "Bài hát 2"
     },
+
     {
         id: "dNPl-QqqJ6w",
         name: "Bài hát 3"
     }
+
 ];
 
-let currentTrack = 0;
-let repeatPlaylist = true;
-let player = null;
-let playerReady = false;
-
-const playButton = document.getElementById("playButton");
-const trackName = document.getElementById("trackName");
-const statusText = document.getElementById("status");
-const playlist = document.getElementById("playlist");
-const volume = document.getElementById("volume");
 
 // ======================================
-// TAO DANH SACH NHAC
+// 2. PLAYER VARIABLES
+// ======================================
+
+let currentTrack = 0;
+
+let repeatPlaylist = true;
+
+let player = null;
+
+let playerReady = false;
+
+const musicPlayer =
+    document.getElementById("musicPlayer");
+
+const restoreButton =
+    document.getElementById("restoreButton");
+
+const playButton =
+    document.getElementById("playButton");
+
+const trackName =
+    document.getElementById("trackName");
+
+const statusText =
+    document.getElementById("status");
+
+const playlist =
+    document.getElementById("playlist");
+
+const volume =
+    document.getElementById("volume");
+
+
+// ======================================
+// 3. RENDER PLAYLIST
 // ======================================
 
 function renderPlaylist() {
@@ -285,25 +693,33 @@ function renderPlaylist() {
 
     tracks.forEach((track, index) => {
 
-        const button = document.createElement("button");
+        const button =
+            document.createElement("button");
 
         button.textContent =
             (index + 1) + ". " + track.name;
 
         if (index === currentTrack) {
+
             button.classList.add("active");
+
         }
 
         button.onclick = function() {
+
             loadTrack(index);
+
         };
 
         playlist.appendChild(button);
+
     });
+
 }
 
+
 // ======================================
-// CAP NHAT TEN BAI HAT
+// 4. UPDATE TRACK NAME
 // ======================================
 
 function updateTrackName() {
@@ -313,18 +729,24 @@ function updateTrackName() {
 
     if (playerReady) {
 
-        const videoInfo = player.getVideoData();
+        const info = player.getVideoData();
 
-        if (videoInfo && videoInfo.title) {
-            trackName.textContent = videoInfo.title;
+        if (info && info.title) {
+
+            trackName.textContent =
+                info.title;
+
         }
+
     }
 
     renderPlaylist();
+
 }
 
+
 // ======================================
-// KHOI TAO YOUTUBE PLAYER
+// 5. YOUTUBE PLAYER
 // ======================================
 
 function onYouTubeIframeAPIReady() {
@@ -332,15 +754,21 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player("youtubePlayer", {
 
         width: "100%",
+
         height: "200",
 
         videoId: tracks[0].id,
 
         playerVars: {
+
             autoplay: 0,
+
             controls: 1,
+
             playsinline: 1,
+
             rel: 0
+
         },
 
         events: {
@@ -353,12 +781,15 @@ function onYouTubeIframeAPIReady() {
                     Number(volume.value)
                 );
 
-                statusText.textContent = "Sẵn sàng";
+                statusText.textContent =
+                    "Sẵn sàng";
 
                 updateTrackName();
+
             },
 
-            onStateChange: onPlayerStateChange,
+            onStateChange:
+                onPlayerStateChange,
 
             onError: function(event) {
 
@@ -366,58 +797,70 @@ function onYouTubeIframeAPIReady() {
                     "Video không phát được";
 
                 console.log(
-                    "Lỗi YouTube:",
+                    "YouTube error:",
                     event.data
                 );
+
             }
+
         }
+
     });
+
 }
 
+
 // ======================================
-// THEO DOI TRANG THAI VIDEO
+// 6. PLAYER STATE
 // ======================================
 
 function onPlayerStateChange(event) {
 
-    // 1 = Dang phat
     if (event.data === 1) {
 
         playButton.textContent = "Ⅱ";
 
-        statusText.textContent = "Đang phát";
+        statusText.textContent =
+            "Đang phát";
 
         updateTrackName();
+
     }
 
-    // 2 = Tam dung
     else if (event.data === 2) {
 
         playButton.textContent = "▶";
 
-        statusText.textContent = "Đã tạm dừng";
+        statusText.textContent =
+            "Đã tạm dừng";
+
     }
 
-    // 0 = Video da ket thuc
     else if (event.data === 0) {
 
         if (
             repeatPlaylist ||
             currentTrack < tracks.length - 1
         ) {
+
             nextTrack();
+
         } else {
 
             playButton.textContent = "▶";
 
             statusText.textContent =
                 "Đã hết danh sách";
+
         }
+
     }
+
 }
 
+
 // ======================================
-// PHAT / TAM DUNG
+// 7. PLAY / PAUSE
 // ======================================
 
 function togglePlay() {
@@ -428,9 +871,11 @@ function togglePlay() {
             "Đang tải YouTube...";
 
         return;
+
     }
 
-    const state = player.getPlayerState();
+    const state =
+        player.getPlayerState();
 
     if (state === 1) {
 
@@ -439,11 +884,14 @@ function togglePlay() {
     } else {
 
         player.playVideo();
+
     }
+
 }
 
+
 // ======================================
-// CHON BAI HAT
+// 8. LOAD TRACK
 // ======================================
 
 function loadTrack(index) {
@@ -454,15 +902,20 @@ function loadTrack(index) {
 
     updateTrackName();
 
-    statusText.textContent = "Đang tải bài hát";
+    statusText.textContent =
+        "Đang tải bài hát";
+
+    playButton.textContent = "▶";
 
     player.loadVideoById(
         tracks[currentTrack].id
     );
+
 }
 
+
 // ======================================
-// BAI TIEP THEO
+// 9. NEXT TRACK
 // ======================================
 
 function nextTrack() {
@@ -470,14 +923,18 @@ function nextTrack() {
     let next = currentTrack + 1;
 
     if (next >= tracks.length) {
+
         next = 0;
+
     }
 
     loadTrack(next);
+
 }
 
+
 // ======================================
-// BAI TRUOC
+// 10. PREVIOUS TRACK
 // ======================================
 
 function previousTrack() {
@@ -485,14 +942,18 @@ function previousTrack() {
     let previous = currentTrack - 1;
 
     if (previous < 0) {
+
         previous = tracks.length - 1;
+
     }
 
     loadTrack(previous);
+
 }
 
+
 // ======================================
-// DIEU CHINH AM LUONG
+// 11. VOLUME
 // ======================================
 
 volume.addEventListener("input", function() {
@@ -502,45 +963,132 @@ volume.addEventListener("input", function() {
         player.setVolume(
             Number(volume.value)
         );
+
     }
+
 });
 
+
 // ======================================
-// HIEN / AN PLAYLIST
+// 12. PLAYLIST TOGGLE
 // ======================================
 
 function togglePlaylist() {
 
     playlist.classList.toggle("show");
+
+    const isOpen =
+        playlist.classList.contains("show");
+
+    document.getElementById(
+        "playlistToggle"
+    ).textContent =
+
+        isOpen
+            ? "☷ Ẩn danh sách"
+            : "☷ Danh sách nhạc";
+
 }
 
+
 // ======================================
-// BAT / TAT LAP PLAYLIST
+// 13. REPEAT
 // ======================================
 
 function toggleRepeat() {
 
     repeatPlaylist = !repeatPlaylist;
 
-    document.getElementById("repeatButton").textContent =
+    document.getElementById(
+        "repeatButton"
+    ).textContent =
+
         repeatPlaylist
             ? "↻ Lặp: Bật"
             : "↻ Lặp: Tắt";
+
 }
 
+
 // ======================================
-// TAI YOUTUBE IFRAME API
+// 14. MINIMIZE
 // ======================================
 
-const youtubeScript = document.createElement("script");
+function minimizePlayer() {
+
+    musicPlayer.classList.remove("maximized");
+
+    musicPlayer.classList.add("minimized");
+
+}
+
+
+// ======================================
+// 15. MAXIMIZE / RESTORE SIZE
+// ======================================
+
+function maximizePlayer() {
+
+    if (
+        musicPlayer.classList.contains("maximized")
+    ) {
+
+        musicPlayer.classList.remove("maximized");
+
+    } else {
+
+        musicPlayer.classList.remove("minimized");
+
+        musicPlayer.classList.add("maximized");
+
+    }
+
+}
+
+
+// ======================================
+// 16. HIDE WINDOW
+// ======================================
+
+function hidePlayer() {
+
+    musicPlayer.style.display = "none";
+
+    restoreButton.classList.add("show");
+
+}
+
+
+// ======================================
+// 17. RESTORE WINDOW
+// ======================================
+
+function restorePlayer() {
+
+    musicPlayer.style.display = "block";
+
+    musicPlayer.classList.remove("minimized");
+
+    restoreButton.classList.remove("show");
+
+}
+
+
+// ======================================
+// 18. LOAD YOUTUBE API
+// ======================================
+
+const youtubeScript =
+    document.createElement("script");
 
 youtubeScript.src =
     "https://www.youtube.com/iframe_api";
 
 document.head.appendChild(youtubeScript);
 
+
 // ======================================
-// KHOI TAO PLAYLIST
+// 19. INITIALIZE
 // ======================================
 
 renderPlaylist();
