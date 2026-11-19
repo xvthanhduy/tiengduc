@@ -464,6 +464,285 @@ body {
         bottom: 15px;
     }
 }
+
+
+/* =========================================
+   WINDOWS 11 / FLUENT DESIGN REFRESH
+   Chỉ thay đổi giao diện trình phát nhạc.
+   Website, playlist và JavaScript được giữ nguyên.
+========================================= */
+
+.music-player {
+    width: 370px;
+    color: #f7f8fc;
+    background:
+        linear-gradient(145deg, rgba(38, 43, 56, .94), rgba(24, 28, 39, .96));
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 12px;
+    box-shadow:
+        0 24px 70px rgba(0,0,0,.48),
+        0 5px 18px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter: blur(36px) saturate(155%);
+    -webkit-backdrop-filter: blur(36px) saturate(155%);
+    overflow: hidden;
+    transition:
+        width .22s ease,
+        transform .22s ease,
+        opacity .22s ease,
+        box-shadow .22s ease;
+}
+
+.title-bar {
+    height: 42px;
+    padding-left: 14px;
+    background: rgba(255,255,255,.045);
+    border-bottom: 1px solid rgba(255,255,255,.085);
+}
+
+.title-left {
+    gap: 9px;
+    color: #f4f5f9;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1px;
+}
+
+.title-icon {
+    display: inline-flex;
+    width: 21px;
+    height: 21px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    background: linear-gradient(145deg, #4389ee, #725bd7);
+    text-shadow: none;
+    box-shadow: 0 2px 8px rgba(66,133,235,.28);
+}
+
+.window-controls button {
+    width: 44px;
+    color: rgba(245,247,252,.88);
+    font-size: 13px;
+    transition: background .15s ease, color .15s ease;
+}
+
+.window-controls button:hover {
+    background: rgba(255,255,255,.11);
+}
+
+.window-controls .close-button:hover {
+    background: #c42b1c;
+    color: #fff;
+}
+
+.player-content {
+    padding: 16px;
+}
+
+#youtubePlayer {
+    width: 100%;
+    height: 208px;
+    min-width: 0;
+    min-height: 0;
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 8px;
+    background: #080a10;
+    box-shadow: 0 5px 18px rgba(0,0,0,.3);
+}
+
+.track-name {
+    margin-top: 14px;
+    margin-bottom: 4px;
+    color: #f6f7fb;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.player-status {
+    color: #9dbbe9;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.controls {
+    gap: 24px;
+    margin: 15px 0 16px;
+}
+
+.controls button {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    color: #e8ebf2;
+    font-size: 19px;
+    transition: background .15s ease, color .15s ease, transform .15s ease;
+}
+
+.controls button:hover {
+    color: #fff;
+    background: rgba(255,255,255,.10);
+    transform: none;
+    text-shadow: none;
+}
+
+.controls .play-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(145deg, #3989ed, #2868ca);
+    border: 1px solid rgba(255,255,255,.2);
+    font-size: 20px;
+    box-shadow: 0 4px 14px rgba(36,112,220,.32);
+}
+
+.controls .play-button:hover {
+    background: linear-gradient(145deg, #4b98f5, #3478dc);
+    box-shadow: 0 5px 18px rgba(36,112,220,.42);
+}
+
+.volume-row {
+    gap: 11px;
+    color: #d8dce6;
+    font-size: 13px;
+}
+
+.volume-row input {
+    accent-color: #60a5fa;
+}
+
+.player-footer {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,.09);
+}
+
+.player-footer button {
+    padding: 6px 8px;
+    border-radius: 6px;
+    color: #d8deea;
+    font-size: 11px;
+    transition: background .15s ease, color .15s ease;
+}
+
+.player-footer button:hover {
+    color: #fff;
+    background: rgba(255,255,255,.09);
+}
+
+.playlist {
+    margin-top: 11px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,.09);
+    max-height: 150px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(180,190,210,.45) transparent;
+}
+
+.playlist button {
+    padding: 10px 11px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: #e8ebf2;
+    font-size: 12px;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.playlist button:hover {
+    background: rgba(255,255,255,.075);
+    border-color: rgba(255,255,255,.06);
+}
+
+.playlist button.active {
+    background: rgba(55,125,220,.22);
+    border-color: rgba(92,158,245,.24);
+    color: #fff;
+}
+
+.music-player.minimized {
+    width: 292px;
+    border-radius: 10px;
+}
+
+.music-player.minimized .player-content {
+    padding: 9px 12px 12px;
+}
+
+.music-player.minimized .controls {
+    gap: 22px;
+}
+
+.music-player.minimized .controls button {
+    font-size: 18px;
+}
+
+.music-player.minimized .controls .play-button {
+    width: 39px;
+    height: 39px;
+}
+
+.music-player.maximized {
+    width: min(680px, calc(100vw - 32px));
+    border-radius: 12px;
+}
+
+.music-player.maximized #youtubePlayer {
+    height: 330px;
+}
+
+.music-player.maximized .player-content {
+    padding: 20px;
+}
+
+.restore-button {
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(49,91,151,.97), rgba(38,62,111,.98));
+    color: #fff;
+    font-size: 23px;
+    box-shadow: 0 12px 32px rgba(0,0,0,.38);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.restore-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 36px rgba(0,0,0,.43);
+}
+
+@media (max-width: 600px) {
+    .music-player {
+        right: 12px;
+        bottom: 12px;
+        width: calc(100% - 24px);
+        max-height: calc(100vh - 24px);
+        overflow-y: auto;
+    }
+
+    .music-player.maximized {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 24px);
+    }
+
+    .music-player.maximized #youtubePlayer {
+        height: 220px;
+    }
+
+    .music-player.maximized .player-content {
+        padding: 14px;
+    }
+}
+
 </style>
 </head>
 
