@@ -2,9 +2,440 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Wortschatz - Alltag</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ vựng B2 – Alltag</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 28px 16px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #080f20;
+            background-image: linear-gradient(rgba(8, 15, 32, 0.28), rgba(8, 15, 32, 0.28)), url("../../../11.jpg");
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #f4f7ff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            padding: 30px;
+            border: 1px solid #24375b;
+            border-radius: 22px;
+            background: linear-gradient(145deg, #14213d, #0d172c);
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            color: #ffffff;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            color: #aab9d5;
+            font-size: 14px;
+        }
+
+        .progress {
+            margin-bottom: 24px;
+            color: #9db8f5;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .word-container {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .word {
+            color: #ffffff;
+            font-size: 30px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .speak-btn {
+            flex: 0 0 auto;
+            padding: 4px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .speak-btn:hover { transform: scale(1.12); }
+
+        .details {
+            min-height: 24px;
+            margin-bottom: 24px;
+            color: #9eacc7;
+            font-size: 14px;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .answer {
+            min-height: 76px;
+            padding: 16px 12px;
+            border: 1px solid #38517c;
+            border-radius: 14px;
+            background: #1a2b4b;
+            color: #f4f7ff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.18s ease;
+        }
+
+        .answer:hover:not(:disabled) {
+            border-color: #6e9cff;
+            background: #243d68;
+            transform: translateY(-2px);
+        }
+
+        .answer:disabled { cursor: default; opacity: 1; }
+        .answer.correct { border-color: #38d996; background: #124c3b; }
+        .answer.wrong { border-color: #ff8995; background: #592936; }
+
+        .feedback {
+            min-height: 30px;
+            margin-top: 22px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .nav-btn {
+            flex: 0 0 52px;
+            width: 52px;
+            min-height: 42px;
+            padding: 6px;
+            border: 1px solid #5275ad;
+            border-radius: 12px;
+            background: #263f68;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.18s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #35588d;
+            border-color: #8ab1ff;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .result { display: none; }
+        .result h2 { margin-top: 0; font-size: 28px; }
+
+        .score {
+            margin: 20px 0;
+            color: #9db8f5;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .retry {
+            margin-top: 12px;
+            padding: 13px 24px;
+            border: none;
+            border-radius: 12px;
+            background: #3978ed;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .retry:hover { background: #5590ff; }
+
+        @media (max-width: 520px) {
+            body { padding: 14px 10px; }
+            .container { padding: 24px 16px; }
+            h1 { font-size: 24px; }
+            .word { font-size: 26px; }
+            .answers { grid-template-columns: 1fr; gap: 10px; }
+            .answer { min-height: 62px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Alltag - Đời sống hằng ngày</h1>
+    <main class="container">
+        <section id="quiz">
+            <h1>Hãy chọn đáp án đúng</h1>
+            <p class="subtitle">Chủ đề Alltag – Từ vựng tiếng Đức B2</p>
+
+            <div class="progress" id="progress"></div>
+
+            <div class="word-container">
+                <div class="word" id="word"></div>
+                <button class="speak-btn" type="button"
+                        onclick="speakWord()" aria-label="Nghe phát âm">🔊</button>
+            </div>
+
+            <div class="details" id="details"></div>
+
+            <div class="answers">
+                <button class="answer" id="optionA" type="button"></button>
+                <button class="answer" id="optionB" type="button"></button>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn" id="prev-button" type="button" onclick="previousQuestion()" aria-label="Câu trước" title="Câu trước">←</button>
+                <button class="nav-btn" id="next-button" type="button" onclick="nextQuestion()" aria-label="Câu tiếp theo" title="Câu tiếp theo">→</button>
+            </div>
+
+            <div class="feedback" id="feedback" aria-live="polite"></div>
+        </section>
+
+        <section class="result" id="result">
+            <h2>Hoàn thành bài quiz!</h2>
+            <p>Bạn đã hoàn thành bài luyện tập.</p>
+            <div class="score" id="score"></div>
+            <button class="retry" type="button" onclick="startQuiz()">Làm lại</button>
+        </section>
+    </main>
+
+    <script>
+        const allWords = [{"word":"r Alltag","plural":"Alltage","pos":"(n)","vi":"đời sống hằng ngày"},{"word":"r Haushalt","plural":"Haushalte","pos":"(n)","vi":"hộ gia đình; việc nhà"},{"word":"e Wohnung","plural":"Wohnungen","pos":"(n)","vi":"căn hộ"},{"word":"s Wohnhaus","plural":"Wohnhäuser","pos":"(n)","vi":"nhà ở"},{"word":"e Miete","plural":"Mieten","pos":"(n)","vi":"tiền thuê nhà"},{"word":"r Mietvertrag","plural":"Mietverträge","pos":"(n)","vi":"hợp đồng thuê nhà"},{"word":"e Nebenkosten","plural":"(thường dùng số nhiều)","pos":"(n)","vi":"chi phí phụ; phí sinh hoạt kèm theo"},{"word":"e Hausordnung","plural":"Hausordnungen","pos":"(n)","vi":"nội quy nhà ở"},{"word":"e Einrichtung","plural":"Einrichtungen","pos":"(n)","vi":"đồ đạc; trang thiết bị nội thất"},{"word":"s Möbelstück","plural":"Möbelstücke","pos":"(n)","vi":"món đồ nội thất"},{"word":"e Waschmaschine","plural":"Waschmaschinen","pos":"(n)","vi":"máy giặt"},{"word":"r Kühlschrank","plural":"Kühlschränke","pos":"(n)","vi":"tủ lạnh"},{"word":"e Heizung","plural":"Heizungen","pos":"(n)","vi":"hệ thống sưởi"},{"word":"r Stromverbrauch","plural":"Stromverbräuche","pos":"(n)","vi":"mức tiêu thụ điện"},{"word":"r Einkauf","plural":"Einkäufe","pos":"(n)","vi":"việc mua sắm; món hàng đã mua"},{"word":"e Einkaufsliste","plural":"Einkaufslisten","pos":"(n)","vi":"danh sách mua sắm"},{"word":"r Einkaufswagen","plural":"Einkaufswagen","pos":"(n)","vi":"xe đẩy mua hàng"},{"word":"e Rechnung","plural":"Rechnungen","pos":"(n)","vi":"hóa đơn"},{"word":"r Kassenbon","plural":"Kassenbons","pos":"(n)","vi":"biên lai thanh toán"},{"word":"s Sonderangebot","plural":"Sonderangebote","pos":"(n)","vi":"hàng khuyến mãi; ưu đãi đặc biệt"},{"word":"e Öffnungszeit","plural":"Öffnungszeiten","pos":"(n)","vi":"giờ mở cửa"},{"word":"e Verabredung","plural":"Verabredungen","pos":"(n)","vi":"cuộc hẹn"},{"word":"r Termin","plural":"Termine","pos":"(n)","vi":"lịch hẹn; cuộc hẹn"},{"word":"e Freizeit","plural":"(không có số nhiều)","pos":"(n)","vi":"thời gian rảnh"},{"word":"s Hobby","plural":"Hobbys","pos":"(n)","vi":"sở thích"},{"word":"r Spaziergang","plural":"Spaziergänge","pos":"(n)","vi":"cuộc đi dạo"},{"word":"e Veranstaltung","plural":"Veranstaltungen","pos":"(n)","vi":"sự kiện; hoạt động được tổ chức"},{"word":"e Fahrkarte","plural":"Fahrkarten","pos":"(n)","vi":"vé xe; vé phương tiện công cộng"},{"word":"r Fahrplan","plural":"Fahrpläne","pos":"(n)","vi":"lịch trình phương tiện"},{"word":"e Verspätung","plural":"Verspätungen","pos":"(n)","vi":"sự chậm trễ"},{"word":"r Verkehr","plural":"(không có số nhiều)","pos":"(n)","vi":"giao thông"},{"word":"e Haltestelle","plural":"Haltestellen","pos":"(n)","vi":"trạm dừng"},{"word":"r Führerschein","plural":"Führerscheine","pos":"(n)","vi":"bằng lái xe"},{"word":"e Reise","plural":"Reisen","pos":"(n)","vi":"chuyến đi; du lịch"},{"word":"e Unterkunft","plural":"Unterkünfte","pos":"(n)","vi":"chỗ ở; nơi lưu trú"},{"word":"e Reservierung","plural":"Reservierungen","pos":"(n)","vi":"sự đặt chỗ"},{"word":"r Alltagstermin","plural":"Alltagstermine","pos":"(n)","vi":"lịch hẹn thường ngày"},{"word":"e Gewohnheit","plural":"Gewohnheiten","pos":"(n)","vi":"thói quen"},{"word":"e Ernährung","plural":"(không có số nhiều)","pos":"(n)","vi":"chế độ dinh dưỡng"},{"word":"e Bewegung","plural":"Bewegungen","pos":"(n)","vi":"sự vận động"}];
+
+        let questions = [];
+        let current = 0;
+        let points = 0;
+        let currentOptions = [];
+        let optionsByQuestion = [];
+        let selectedAnswers = [];
+
+        function shuffle(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function startQuiz() {
+            const count = Math.min(20, allWords.length);
+            questions = shuffle(allWords).slice(0, count);
+            current = 0;
+            points = 0;
+            selectedAnswers = Array(questions.length).fill(null);
+            optionsByQuestion = questions.map(q => {
+                const wrongAnswers = allWords
+                    .filter(item => item.vi !== q.vi)
+                    .map(item => item.vi);
+                const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+                return shuffle([
+                    { text: q.vi, correct: true },
+                    { text: wrongAnswer, correct: false }
+                ]);
+            });
+
+            document.getElementById("quiz").style.display = "block";
+            document.getElementById("result").style.display = "none";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (current >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const q = questions[current];
+            currentOptions = optionsByQuestion[current];
+
+            document.getElementById("progress").textContent =
+                `Câu hỏi ${current + 1} / ${questions.length}`;
+            document.getElementById("word").textContent = q.word;
+
+            const details = [];
+            if (q.plural) details.push("Số nhiều: " + q.plural);
+            if (q.pos) details.push("Từ loại: " + q.pos);
+            document.getElementById("details").textContent = details.join("  •  ");
+
+            const buttons = [
+                document.getElementById("optionA"),
+                document.getElementById("optionB")
+            ];
+            buttons.forEach((button, index) => {
+                button.textContent = (index === 0 ? "A. " : "B. ") + currentOptions[index].text;
+                button.className = "answer";
+                button.disabled = false;
+                button.onclick = () => chooseAnswer(index);
+            });
+
+            const selected = selectedAnswers[current];
+            const feedback = document.getElementById("feedback");
+            feedback.textContent = "";
+            feedback.style.color = "";
+
+            if (selected !== null) {
+                const correctIndex = currentOptions.findIndex(option => option.correct);
+                buttons.forEach(button => button.disabled = true);
+                if (currentOptions[selected].correct) {
+                    buttons[selected].classList.add("correct");
+                    feedback.textContent = "Sehr gut!";
+                    feedback.style.color = "#38d996";
+                } else {
+                    buttons[selected].classList.add("wrong");
+                    buttons[correctIndex].classList.add("correct");
+                    feedback.textContent = "Đáp án đúng: " + currentOptions[correctIndex].text;
+                    feedback.style.color = "#ff8995";
+                }
+            }
+
+            document.getElementById("prev-button").disabled = current === 0;
+            document.getElementById("next-button").textContent =
+                "→";
+        }
+
+        function chooseAnswer(index) {
+            if (selectedAnswers[current] !== null) return;
+
+            selectedAnswers[current] = index;
+            speakWord();
+            showQuestion();
+        }
+
+        function previousQuestion() {
+            if (current <= 0) return;
+            current--;
+            showQuestion();
+        }
+
+        function nextQuestion() {
+            if (current < questions.length - 1) {
+                current++;
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            points = selectedAnswers.reduce((total, selected, index) => {
+                return total + (selected !== null && optionsByQuestion[index][selected].correct ? 1 : 0);
+            }, 0);
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("result").style.display = "block";
+            document.getElementById("score").textContent =
+                `Kết quả: ${points} / ${questions.length} câu đúng`;
+        }
+
+        // Chọn giọng tiếng Đức, tuyệt đối không dùng giọng tiếng Việt thay thế.
+        let pendingGermanWord = "";
+        let voiceCheckTimer = null;
+
+        function findGermanVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            return voices.find(v => v.lang.toLowerCase() === "de-de")
+                || voices.find(v => v.lang.toLowerCase().startsWith("de-"))
+                || voices.find(v => v.lang.toLowerCase() === "de");
+        }
+
+        function playGermanWord(word, voice) {
+            const synth = window.speechSynthesis;
+            synth.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.voice = voice;
+            utterance.lang = voice.lang;
+            utterance.rate = 0.85;
+            utterance.pitch = 1;
+            synth.speak(utterance);
+        }
+
+        function tryPlayPendingGermanWord() {
+            if (!pendingGermanWord) return false;
+
+            const voice = findGermanVoice();
+            if (!voice) return false;
+
+            const word = pendingGermanWord;
+            pendingGermanWord = "";
+
+            if (voiceCheckTimer) {
+                clearTimeout(voiceCheckTimer);
+                voiceCheckTimer = null;
+            }
+
+            playGermanWord(word, voice);
+            return true;
+        }
+
+        function speakWord() {
+            const word = document.getElementById("word").textContent.trim();
+            if (!word) return;
+
+            if (!("speechSynthesis" in window)) {
+                document.getElementById("feedback").textContent =
+                    "Trình duyệt này không hỗ trợ phát âm tự động.";
+                document.getElementById("feedback").style.color = "#ff8995";
+                return;
+            }
+
+            const synth = window.speechSynthesis;
+            synth.cancel();
+            pendingGermanWord = word;
+
+            // Thử ngay; nếu điện thoại chưa tải danh sách giọng thì chờ.
+            if (tryPlayPendingGermanWord()) return;
+
+            synth.onvoiceschanged = function () {
+                tryPlayPendingGermanWord();
+            };
+
+            if (voiceCheckTimer) clearTimeout(voiceCheckTimer);
+
+            voiceCheckTimer = window.setTimeout(() => {
+                if (!tryPlayPendingGermanWord() && pendingGermanWord) {
+                    pendingGermanWord = "";
+                    document.getElementById("feedback").textContent =
+                        "Thiết bị chưa có giọng đọc tiếng Đức. Hãy tải giọng German trong cài đặt điện thoại.";
+                    document.getElementById("feedback").style.color = "#ff8995";
+                }
+            }, 1800);
+        }
+
+        // Khởi tạo danh sách giọng đọc khi trang mở.
+        if ("speechSynthesis" in window) {
+            window.speechSynthesis.getVoices();
+        }
+
+        startQuiz();
+    </script>
 </body>
 </html>
