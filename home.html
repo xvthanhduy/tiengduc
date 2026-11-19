@@ -92,8 +92,9 @@ body {
 .level-card {
     position: relative;
 
-    width: 260px;
-    padding: 24px;
+    width: fit-content;
+    min-width: 0;
+    padding: 12px 22px;
 
     border: 1px solid rgba(255,255,255,0.45);
     border-radius: 16px;
@@ -127,6 +128,7 @@ body {
     font-size: 30px;
     font-weight: 700;
     letter-spacing: 3px;
+    white-space: nowrap;
 
     text-align: center;
     color: white;
@@ -139,6 +141,7 @@ body {
 ========================= */
 
 .hint {
+    display: none;
     margin-top: 8px;
 
     font-size: 10px;
@@ -201,34 +204,22 @@ body {
    CÁC THƯ MỤC NHỎ
 ========================= */
 
-.menu a {
+.menu > a,
+.menu-item > .submenu-trigger {
     display: block;
-
     width: 100%;
-
     text-decoration: none;
     color: white;
-
     padding: 18px 12px;
-
     border: 1px solid rgba(255,255,255,0.42);
     border-radius: 11px;
-
-    /* HIỆU ỨNG KÍNH MỜ */
-
-    background: rgba(255,255,255,0.17);
-
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-
+    background: rgba(19, 32, 55, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     text-align: center;
-
     box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-
     opacity: 0;
-
     transform: translateY(-12px);
-
     transition:
         opacity 0.4s ease,
         transform 0.4s ease,
@@ -236,29 +227,70 @@ body {
         border-color 0.3s ease;
 }
 
-/* HIỆU ỨNG XUẤT HIỆN */
+.menu-item {
+    position: relative;
+    width: 100%;
+}
 
-.level-card:hover .menu a,
-.level-card.open .menu a {
+.level-card:hover .menu > a,
+.level-card.open .menu > a,
+.level-card:hover .menu-item > .submenu-trigger,
+.level-card.open .menu-item > .submenu-trigger {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* XUẤT HIỆN LẦN LƯỢT */
-
-.menu a:nth-child(1) {
-    transition-delay: 0.12s;
+/* MENU CHỦ ĐỀ SỔ RA BÊN PHẢI WORTSCHATZ */
+.submenu {
+    position: absolute;
+    top: 0;
+    /* Bắt đầu sát mép Wortschatz; phần đệm tạo cầu hover vô hình,
+       giúp con trỏ không bị rơi khỏi mục khi di chuyển sang submenu. */
+    left: 100%;
+    width: 194px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 0 0 14px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-12px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
-.menu a:nth-child(2) {
-    transition-delay: 0.25s;
+.menu-item:hover > .submenu,
+.menu-item:focus-within > .submenu,
+.menu-item.submenu-open > .submenu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
 }
 
-/* HOVER TỪNG MỤC */
+.submenu a {
+    display: block;
+    width: 100%;
+    padding: 13px 12px;
+    border: 1px solid rgba(255,255,255,0.42);
+    border-radius: 11px;
+    background: rgba(19, 32, 55, 0.90);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
 
-.menu a:hover {
-    background: rgba(255,255,255,0.32);
-    border-color: white;
+.submenu a:hover,
+.menu > a:hover,
+.menu-item > .submenu-trigger:hover {
+    background: rgba(43, 61, 91, 0.97);
+    border-color: rgba(255,255,255,0.9);
 }
 
 /* CHỮ TRONG MENU */
@@ -332,8 +364,9 @@ body {
     /* KHUNG B2 */
 
     .level-card {
-        width: 220px;
-        padding: 22px;
+        width: fit-content;
+        min-width: 0;
+        padding: 12px 22px;
     }
 
     /* MENU CHUYỂN XUỐNG BÊN DƯỚI B2 */
@@ -341,7 +374,7 @@ body {
     .menu {
         position: static;
 
-        width: 100%;
+        width: 180px;
 
         display: flex;
         flex-direction: column;
@@ -355,7 +388,7 @@ body {
 
     .level-card:hover .menu,
     .level-card.open .menu {
-        max-height: 180px;
+        max-height: 700px;
         margin-top: 16px;
 
         opacity: 1;
@@ -366,8 +399,43 @@ body {
 
     /* THƯ MỤC NHỎ */
 
-    .menu a {
+    .menu > a,
+    .menu-item > .submenu-trigger {
         padding: 16px 12px;
+    }
+
+    /* Trên điện thoại, menu chủ đề mở xuống bên dưới Wortschatz */
+    .menu-item {
+        position: static;
+    }
+
+    .submenu {
+        position: static;
+        width: 100%;
+        max-height: 0;
+        margin-top: 0;
+        padding-left: 12px;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: max-height 0.35s ease, opacity 0.3s ease, transform 0.3s ease, margin 0.3s ease;
+    }
+
+    .menu-item:hover > .submenu,
+    .menu-item:focus-within > .submenu,
+    .menu-item.submenu-open > .submenu {
+        max-height: 500px;
+        margin-top: 10px;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .submenu a {
+        padding: 13px 12px;
     }
 
     .menu h2 {
@@ -462,10 +530,21 @@ body {
                 <p>Đọc</p>
             </a>
 
-            <a href="wortschatz.html">
-                <h2>Wortschatz</h2>
-                <p>Từ vựng</p>
-            </a>
+            <div class="menu-item" id="wortschatzMenu">
+                <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">
+                    <h2>Wortschatz</h2>
+                    <p>Từ vựng</p>
+                </a>
+
+                <div class="submenu">
+                    <a href="Wortschatz/Alltag/index.html">Alltag</a>
+                    <a href="Wortschatz/Technik/index.html">Technik</a>
+                    <a href="Wortschatz/Medizin/index.html">Medizin</a>
+                    <a href="Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
+                    <a href="Wortschatz/Umwelt/index.html">Umwelt</a>
+                    <a href="Wortschatz/Beruf/index.html">Beruf</a>
+                </div>
+            </div>
 
         </div>
 
@@ -490,31 +569,36 @@ body {
 <script>
 
 const levelB2 = document.getElementById("levelB2");
-
+const wortschatzMenu = document.getElementById("wortschatzMenu");
+const wortschatzTrigger = wortschatzMenu.querySelector(".submenu-trigger");
 const touchDevice = window.matchMedia("(hover: none)");
 
 levelB2.addEventListener("click", function(event) {
-
-    // Không đóng menu khi nhấn vào Lesen hoặc Wortschatz
-    if (event.target.closest("a")) {
-        return;
-    }
-
-    // Trên thiết bị cảm ứng:
-    // Chạm B2 để mở hoặc đóng menu
-    if (touchDevice.matches) {
+    // Trên thiết bị cảm ứng, chạm B2 để mở hoặc đóng menu cấp độ.
+    if (touchDevice.matches && !event.target.closest("a")) {
         levelB2.classList.toggle("open");
     }
-
 });
 
-// Đóng menu khi nhấn phím Escape
-document.addEventListener("keydown", function(event) {
+// Trên điện thoại/máy tính bảng cảm ứng, chạm Wortschatz để mở danh sách chủ đề.
+wortschatzTrigger.addEventListener("click", function(event) {
+    if (touchDevice.matches) {
+        event.preventDefault();
+        const isOpen = wortschatzMenu.classList.toggle("submenu-open");
+        wortschatzTrigger.setAttribute("aria-expanded", String(isOpen));
+    } else {
+        // Trên máy tính, Wortschatz là nhãn mở menu con bằng cách rê chuột.
+        event.preventDefault();
+    }
+});
 
+// Đóng các menu khi nhấn phím Escape.
+document.addEventListener("keydown", function(event) {
     if (event.key === "Escape") {
         levelB2.classList.remove("open");
+        wortschatzMenu.classList.remove("submenu-open");
+        wortschatzTrigger.setAttribute("aria-expanded", "false");
     }
-
 });
 
 </script>
