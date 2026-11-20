@@ -19,7 +19,7 @@ body {
             rgba(5,12,25,0.78),
             rgba(5,12,25,0.88)
         ),
-        url("11.jpg");
+        url("./11.jpg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -186,34 +186,91 @@ header p {
 
 .feedback {
     display: none;
-    padding: 20px;
-    margin-top: 22px;
+    padding: 16px;
+    margin-top: 18px;
     border-radius: 12px;
     background: #202d43;
     border: 1px solid #3b4d68;
-    line-height: 1.7;
-    white-space: pre-line;
+    line-height: 1.45;
 }
 
 .feedback h3 {
-    margin-top: 0;
+    margin: 0 0 12px;
 }
 
-.good {
-    color: #4ade80;
+.feedback p {
+    margin: 7px 0;
 }
 
-.bad {
-    color: #f87171;
+.feedback-section {
+    padding: 14px 16px;
+    margin-top: 12px;
+    border-radius: 10px;
+    line-height: 1.45;
+    white-space: normal;
+}
+
+.feedback-section h4 {
+    margin: 0 0 9px;
+    font-size: 16px;
+}
+
+.feedback-section p {
+    margin: 6px 0;
+}
+
+.feedback-section-a {
+    background: #15243a;
+    border: 1px solid #41658e;
+    border-left: 4px solid #60a5fa;
+    color: #dbeafe;
+}
+
+.feedback-section-b {
+    background: #192d35;
+    border: 1px solid #38645b;
+    border-left: 4px solid #34d399;
+    color: #d1fae5;
+}
+
+.feedback-section-b p {
+    margin: 6px 0;
+    line-height: 1.5;
+}
+
+#other-answer {
+    margin-top: 14px;
+}
+
+.feedback-label {
+    font-weight: bold;
+    color: #bfdbfe;
 }
 
 .evidence {
-    padding: 13px;
-    margin: 12px 0;
-    border-left: 4px solid #60a5fa;
-    background: #15243a;
+    padding: 10px 12px;
+    margin: 8px 0 0;
+    border-radius: 7px;
+    background: rgba(96,165,250,.10);
     color: #bfdbfe;
-    border-radius: 5px;
+    line-height: 1.45;
+}
+
+.explanation-line {
+    margin: 6px 0;
+}
+
+.explanation-line strong {
+    color: #a7f3d0;
+}
+
+@media(max-width:600px) {
+    .feedback {
+        padding: 12px;
+    }
+    .feedback-section {
+        padding: 12px;
+    }
 }
 
 .next-button,
@@ -350,6 +407,234 @@ header p {
         font-size: 17px;
     }
 }
+
+
+/* =========================================================
+   WINDOWS 10 DARK MODE – giao diện בלבד, không thay đổi JS
+   ========================================================= */
+:root {
+    color-scheme: dark;
+    --win-bg: #080808;
+    --win-surface: #1f1f1f;
+    --win-surface-2: #252525;
+    --win-surface-3: #2d2d2d;
+    --win-border: #3b3b3b;
+    --win-text: #f3f3f3;
+    --win-muted: #bdbdbd;
+    --win-blue: #0078d4;
+    --win-blue-hover: #1683d8;
+}
+
+/* Giữ nền tối và ảnh nền 11.jpg đang có */
+body {
+    color: var(--win-text);
+    background-color: var(--win-bg);
+}
+
+/* Tiêu đề theo phong cách ứng dụng Windows */
+header {
+    text-align: left;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    background: rgba(31,31,31,.96);
+    border: 1px solid var(--win-border);
+    border-top: 3px solid var(--win-blue);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+
+header h1 {
+    color: #ffffff;
+    font-size: 27px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    letter-spacing: .2px;
+}
+
+header p {
+    color: var(--win-muted);
+    margin: 0;
+}
+
+/* Các khung nội dung chính */
+.card {
+    background: rgba(31,31,31,.97);
+    border: 1px solid var(--win-border);
+    border-radius: 5px;
+    padding: 23px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.32);
+}
+
+.topic {
+    color: #60b6ff;
+    letter-spacing: .7px;
+}
+
+.passage {
+    color: #eeeeee;
+    line-height: 1.8;
+}
+
+.question {
+    color: #ffffff;
+}
+
+/* Thanh tiến độ */
+.progress-text {
+    color: #d6d6d6;
+}
+
+.progress-bar {
+    height: 7px;
+    background: #303030;
+    border: 1px solid #414141;
+    border-radius: 2px;
+}
+
+.progress-fill {
+    background: var(--win-blue);
+}
+
+/* Lựa chọn A/B */
+.choice {
+    background: #292929;
+    color: #f1f1f1;
+    border: 1px solid #505050;
+    border-radius: 3px;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.choice:hover:not(:disabled) {
+    background: #343434;
+    border-color: #60b6ff;
+}
+
+.choice.correct {
+    background: #173b2a;
+    border: 1px solid #2ea66a;
+    color: #c8f7d8;
+}
+
+.choice.wrong {
+    background: #482326;
+    border: 1px solid #d95757;
+    color: #ffd5d5;
+}
+
+/* Phản hồi và hai khung giải thích */
+.feedback {
+    background: #242424;
+    border: 1px solid #484848;
+    border-radius: 4px;
+    padding: 17px;
+    line-height: 1.5;
+}
+
+.feedback-section {
+    border-radius: 3px;
+    padding: 14px 16px;
+    margin-top: 12px;
+}
+
+.feedback-section-a {
+    background: #202a34;
+    border: 1px solid #3d5368;
+    border-left: 3px solid #0078d4;
+    color: #e5edf5;
+}
+
+.feedback-section-b {
+    background: #242b2b;
+    border: 1px solid #465b58;
+    border-left: 3px solid #299d78;
+    color: #e3f1ed;
+}
+
+.feedback-section h4 {
+    letter-spacing: .15px;
+}
+
+.evidence {
+    background: #182735;
+    border-left: 3px solid #60b6ff;
+    border-radius: 2px;
+    color: #d5eaff;
+}
+
+/* Nút hành động kiểu Windows */
+.next-button,
+.retry-button {
+    background: var(--win-blue);
+    border: 1px solid #1683d8;
+    border-radius: 3px;
+    color: #ffffff;
+    transition: background .15s ease;
+}
+
+.next-button:hover:not(:disabled),
+.retry-button:hover {
+    background: var(--win-blue-hover);
+}
+
+.next-button:disabled {
+    background: #3a3a3a;
+    border-color: #505050;
+    color: #999999;
+}
+
+/* Cửa sổ tra từ */
+.word-popup {
+    background: rgba(0,0,0,.78);
+}
+
+.popup-content {
+    background: #202020;
+    border: 1px solid #555555;
+    border-top: 3px solid var(--win-blue);
+    border-radius: 4px;
+}
+
+.popup-content h2 {
+    color: #60b6ff;
+}
+
+.close-popup {
+    background: #353535;
+    border: 1px solid #555555;
+    border-radius: 3px;
+}
+
+.close-popup:hover {
+    background: #454545;
+}
+
+/* Khu vực kết quả */
+.result h2 {
+    color: #60b6ff;
+}
+
+.score-number {
+    color: #4ade80;
+}
+
+/* Thanh cuộn tối, đồng bộ với giao diện */
+* {
+    scrollbar-color: #555555 #1c1c1c;
+    scrollbar-width: thin;
+}
+
+@media(max-width:600px) {
+    header {
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 23px;
+    }
+    .card {
+        padding: 17px;
+    }
+}
+
 </style>
 </head>
 
@@ -398,15 +683,22 @@ header p {
 
             <h3 id="feedback-title"></h3>
 
-            <p id="correct-answer"></p>
+            <section class="feedback-section feedback-section-a">
+                <h4>📌 PHẦN A – ĐÁP ÁN VÀ DẪN CHỨNG</h4>
+                <p id="correct-answer"></p>
+                <div class="evidence">
+                    <strong>📖 Dẫn chứng trong bài:</strong>
+                    <div id="evidence-text"></div>
+                </div>
+            </section>
 
-            <div class="evidence">
-                <strong>📖 Câu tiếng Đức trong bài:</strong>
-                <div id="evidence-text"></div>
-            </div>
-
-            <p id="explanation"></p>
-            <p id="other-answer"></p>
+            <section class="feedback-section feedback-section-b">
+                <h4>💡 PHẦN B – GIẢI THÍCH ĐÚNG / SAI</h4>
+                <p id="explanation"><strong>Giải thích:</strong> </p>
+                <p id="explanation-vi"><strong>Nghĩa tiếng Việt:</strong> </p>
+                <p id="other-answer"></p>
+                <p id="other-answer-vi"></p>
+            </section>
 
         </div>
 
@@ -1711,21 +2003,28 @@ function selectAnswer(selected) {
     getElement("feedback-title"),
     correct ? "✓ Chính xác! Sehr gut!" : "✗ Chưa chính xác!"
   );
+  const wrongAnswer = task.answer === "A" ? "B" : "A";
+  const correctOptionText = task.answer === "A" ? task.a : task.b;
   setText(
     getElement("correct-answer"),
-    "Đáp án đúng: " + task.answer + ". " +
-      (task.answer === "A" ? task.a : task.b)
+    "✓ Đáp án đúng: " + task.answer + ". " + correctOptionText
   );
   setText(getElement("evidence-text"), task.evidence);
   setText(
     getElement("explanation"),
-    "Giải thích (tiếng Đức): " + task.explanation +
-      "\nNghĩa tiếng Việt: " + (task.explanation_vi || "Chưa có bản dịch.")
+    "Giải thích: " + task.explanation
+  );
+  setText(
+    getElement("explanation-vi"),
+    "Nghĩa tiếng Việt: " + (task.explanation_vi || "Chưa có bản dịch.")
   );
   setText(
     getElement("other-answer"),
-    "Vì sao đáp án còn lại sai? " + task.wrong_reason +
-      "\nNghĩa tiếng Việt: " + (task.wrong_reason_vi || "Chưa có bản dịch.")
+    "✗ Đáp án " + wrongAnswer + " chưa đúng: " + task.wrong_reason
+  );
+  setText(
+    getElement("other-answer-vi"),
+    "Nghĩa tiếng Việt: " + (task.wrong_reason_vi || "Chưa có bản dịch.")
   );
 
   if (feedback) feedback.style.display = "block";
