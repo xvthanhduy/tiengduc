@@ -743,6 +743,258 @@ body {
     }
 }
 
+
+
+/* =========================================
+   MOBILE FIX: WINDOW CONTROLS + VOLUME
+   Giữ nguyên giao diện desktop.
+========================================= */
+
+.title-bar {
+    display: flex;
+    min-width: 0;
+}
+
+.title-left {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.title-left span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.window-controls {
+    display: flex !important;
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    margin-left: 6px;
+    position: relative;
+    z-index: 5;
+}
+
+.window-controls button {
+    flex: 0 0 40px;
+    min-width: 0;
+    touch-action: manipulation;
+}
+
+.volume-row {
+    position: relative;
+    z-index: 2;
+    min-width: 0;
+}
+
+.volume-row input[type="range"] {
+    display: block;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+    margin: 0;
+    padding: 0;
+    touch-action: pan-x;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+}
+
+.volume-row input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 99px;
+    background: #697386;
+}
+
+.volume-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: #60a5fa;
+    border: 2px solid #eaf2ff;
+}
+
+.volume-row input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 99px;
+    background: #697386;
+}
+
+.volume-row input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #60a5fa;
+    border: 2px solid #eaf2ff;
+}
+
+@media (max-width: 600px) {
+    .title-bar {
+        height: 44px;
+        padding-left: 10px;
+    }
+
+    .title-left {
+        gap: 6px;
+        font-size: 11px;
+    }
+
+    .window-controls {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .window-controls button {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        flex-basis: 34px;
+        height: 44px;
+        font-size: 13px;
+    }
+
+    .volume-row {
+        gap: 9px;
+        padding: 3px 0;
+    }
+
+    .volume-row input[type="range"] {
+        min-height: 32px;
+    }
+}
+
+
+/* =========================================
+   COMPACT PLAYER: small screens / short windows
+   Giữ thanh tiêu đề và 3 nút cửa sổ luôn nhìn thấy.
+========================================= */
+.music-player {
+    width: 320px;
+    max-width: calc(100vw - 20px);
+}
+
+.music-player #youtubePlayer {
+    height: 170px;
+}
+
+.music-player .player-content {
+    padding: 12px;
+}
+
+.title-bar {
+    min-height: 42px;
+    height: 42px;
+}
+
+.window-controls {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex: 0 0 auto;
+}
+
+.window-controls button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    flex: 0 0 34px;
+    height: 42px;
+    padding: 0;
+}
+
+/* Cửa sổ có chiều cao thấp: thu gọn nội dung, không ẩn title bar */
+@media (max-height: 760px) {
+    .music-player:not(.minimized) #youtubePlayer {
+        height: 135px;
+    }
+    .music-player .player-content {
+        padding: 9px 11px;
+    }
+    .music-player .track-name {
+        margin-top: 8px;
+        font-size: 13px;
+    }
+    .music-player .controls {
+        margin: 8px 0;
+        gap: 18px;
+    }
+    .music-player .controls .play-button {
+        width: 40px;
+        height: 40px;
+    }
+    .music-player .player-footer {
+        margin-top: 8px;
+        padding-top: 7px;
+    }
+}
+
+@media (max-width: 600px) {
+    .music-player,
+    .music-player.maximized {
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+        width: auto;
+        max-width: none;
+        max-height: calc(100dvh - 20px);
+        overflow-y: auto;
+    }
+
+    .music-player #youtubePlayer {
+        height: 150px;
+    }
+
+    .music-player.maximized #youtubePlayer {
+        height: 180px;
+    }
+
+    .title-bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(35, 40, 53, .98);
+    }
+
+    .title-left {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: 10px;
+    }
+
+    .window-controls button {
+        width: 32px;
+        flex-basis: 32px;
+        height: 42px;
+    }
+
+    .volume-row input[type="range"] {
+        min-width: 0;
+        width: 100%;
+        min-height: 38px;
+        touch-action: pan-y;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 380px) {
+    .title-left span:last-child {
+        max-width: 90px;
+    }
+    .window-controls button {
+        width: 29px;
+        flex-basis: 29px;
+        font-size: 12px;
+    }
+}
+
 </style>
 </head>
 
@@ -1034,7 +1286,7 @@ function onYouTubeIframeAPIReady() {
 
         width: "100%",
 
-        height: "200",
+        height: "170",
 
         videoId: tracks[0].id,
 
@@ -1235,17 +1487,28 @@ function previousTrack() {
 // 11. VOLUME
 // ======================================
 
-volume.addEventListener("input", function() {
-
-    if (playerReady) {
-
-        player.setVolume(
-            Number(volume.value)
-        );
-
+function applyPlayerVolume() {
+    if (!playerReady || !player || typeof player.setVolume !== "function") {
+        return;
     }
 
-});
+    const nextVolume = Math.max(0, Math.min(100, Number(volume.value)));
+
+    try {
+        player.setVolume(nextVolume);
+    } catch (error) {
+        console.warn("Không thể thay đổi âm lượng YouTube:", error);
+    }
+}
+
+// "input" cập nhật ngay khi kéo; "change" là dự phòng cho một số trình duyệt di động.
+volume.addEventListener("input", applyPlayerVolume);
+volume.addEventListener("change", applyPlayerVolume);
+
+// Hỗ trợ thao tác chạm trên màn hình cảm ứng.
+volume.addEventListener("touchend", function() {
+    window.setTimeout(applyPlayerVolume, 0);
+}, { passive: true });
 
 
 // ======================================
