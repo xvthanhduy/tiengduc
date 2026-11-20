@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch Lesen B2</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 18px;
+    min-height: 100vh;
+    background:
+        linear-gradient(
+            rgba(5,12,25,0.78),
+            rgba(5,12,25,0.88)
+        ),
+        url("11.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #e5e7eb;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Khung Lesen nằm bên trái */
+.container {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    max-width: 850px;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Ánh sáng trắng nhẹ phía sau khung */
+.container::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    inset: -22px;
+
+    background: radial-gradient(
+        ellipse at 42% 35%,
+        rgba(255,255,255,0.17) 0%,
+        rgba(255,255,255,0.09) 42%,
+        rgba(255,255,255,0.025) 72%,
+        transparent 100%
+    );
+
+    filter: blur(30px);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+header h1 {
+    color: #60a5fa;
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #cbd5e1;
+}
+
+.progress-area {
+    margin-bottom: 20px;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-bottom: 9px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #263247;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #3b82f6;
+    transition: width .3s;
+}
+
+.card {
+    background: rgba(23,32,51,.96);
+    border: 1px solid #40506a;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.25);
+}
+
+.topic {
+    color: #60a5fa;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.passage {
+    color: #f1f5f9;
+    font-size: 17px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+}
+
+.passage-word {
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.passage-word:hover {
+    background: #334b70;
+    color: #93c5fd;
+}
+
+.hint {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 17px;
+    font-style: italic;
+}
+
+.question {
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.choice {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    margin: 12px 0;
+    border: 2px solid #344258;
+    border-radius: 10px;
+    background: #202d43;
+    color: #e5e7eb;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.choice:hover:not(:disabled) {
+    border-color: #60a5fa;
+    background: #263b59;
+}
+
+.choice:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+.choice.correct {
+    border-color: #22c55e;
+    background: #123c30;
+    color: #bbf7d0;
+}
+
+.choice.wrong {
+    border-color: #ef4444;
+    background: #451f2a;
+    color: #fecaca;
+}
+
+.feedback {
+    display: none;
+    padding: 20px;
+    margin-top: 22px;
+    border-radius: 12px;
+    background: #202d43;
+    border: 1px solid #3b4d68;
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+.feedback h3 {
+    margin-top: 0;
+}
+
+.good {
+    color: #4ade80;
+}
+
+.bad {
+    color: #f87171;
+}
+
+.evidence {
+    padding: 13px;
+    margin: 12px 0;
+    border-left: 4px solid #60a5fa;
+    background: #15243a;
+    color: #bfdbfe;
+    border-radius: 5px;
+}
+
+.next-button,
+.retry-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-top: 22px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.next-button:hover,
+.retry-button:hover {
+    background: #1d4ed8;
+}
+
+.next-button:disabled {
+    background: #475569;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.result {
+    display: none;
+    text-align: center;
+    padding: 35px 25px;
+}
+
+.result h2 {
+    color: #60a5fa;
+    font-size: 28px;
+}
+
+.score-number {
+    font-size: 55px;
+    font-weight: bold;
+    color: #4ade80;
+    margin: 20px 0;
+}
+
+.result-detail {
+    font-size: 18px;
+    line-height: 2;
+    color: #cbd5e1;
+}
+
+/* Cửa sổ tra từ */
+.word-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.75);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.popup-content {
+    width: 100%;
+    max-width: 430px;
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,.4);
+}
+
+.popup-content h2 {
+    color: #60a5fa;
+    margin-top: 0;
+    overflow-wrap: anywhere;
+}
+
+.word-meaning {
+    font-size: 20px;
+    color: #f8fafc;
+    margin: 18px 0 10px;
+}
+
+.word-pos,
+.word-plural {
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.word-status {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+.close-popup {
+    margin-top: 22px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+@media(max-width:600px) {
+    body {
+        padding: 15px 10px;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    .passage {
+        font-size: 16px;
+    }
+
+    .question {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>Deutsch Lesen B2</h1>
+    <p>Luyện đọc hiểu tiếng Đức – Goethe B2</p>
+</header>
+
+<div id="quiz-area">
+
+    <div class="progress-area">
+        <div class="progress-text">
+            <span id="progress-text"></span>
+            <span id="score-text">Đúng: 0</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="topic" id="topic"></div>
+        <div class="passage" id="passage"></div>
+
+        <div class="hint">
+            💡 Bấm vào từ tiếng Đức để tra nghĩa, từ loại và số nhiều.
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="question" id="question"></div>
+
+        <button class="choice" id="choice-A"
+            onclick="selectAnswer('A')"></button>
+
+        <button class="choice" id="choice-B"
+            onclick="selectAnswer('B')"></button>
+
+        <div class="feedback" id="feedback">
+
+            <h3 id="feedback-title"></h3>
+
+            <p id="correct-answer"></p>
+
+            <div class="evidence">
+                <strong>📖 Câu tiếng Đức trong bài:</strong>
+                <div id="evidence-text"></div>
+            </div>
+
+            <p id="explanation"></p>
+            <p id="other-answer"></p>
+
+        </div>
+
+        <button class="next-button"
+            id="next-button"
+            onclick="nextQuestion()"
+            disabled>
+            Chọn đáp án trước nhé
+        </button>
+
+    </div>
+
+</div>
+
+<div class="card result" id="result">
+
+    <h2>Hoàn thành bài Lesen B2!</h2>
+
+    <p>Kết quả của cậu:</p>
+
+    <div class="score-number" id="final-score"></div>
+
+    <div class="result-detail" id="result-detail"></div>
+
+    <button class="retry-button" onclick="startQuiz()">
+        🔄 Làm lại 50 bài đọc
+    </button>
+
+</div>
+
+</div>
+
+<div class="word-popup" id="word-popup"
+    onclick="closePopupOutside(event)">
+
+    <div class="popup-content">
+
+        <h2 id="popup-word"></h2>
+
+        <div class="word-meaning" id="popup-meaning"></div>
+
+        <div class="word-pos" id="popup-pos"></div>
+
+        <div class="word-plural" id="popup-plural"></div>
+
+        <div class="word-status" id="popup-status"></div>
+
+        <button class="close-popup" onclick="closePopup()">
+            Đóng
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+const allTasks = [
+  {
+    title: "Aufgabe 1 – Arbeiten im Homeoffice",
+    text: `In vielen Unternehmen gehört das Arbeiten im Homeoffice inzwischen zum Alltag. Während einige Beschäftigte die größere Flexibilität schätzen, vermissen andere den direkten Austausch mit ihren Kollegen. Eine aktuelle Untersuchung zeigt, dass die Produktivität nicht automatisch steigt, wenn Mitarbeiter von zu Hause arbeiten. Entscheidend sind vielmehr klare Arbeitszeiten, eine geeignete technische Ausstattung und die Fähigkeit, Beruf und Privatleben voneinander zu trennen.
+
+Besonders problematisch ist es, wenn Beschäftigte auch nach Feierabend ständig erreichbar sind. Dadurch kann die Grenze zwischen Arbeit und Freizeit zunehmend verschwimmen. Einige Unternehmen reagieren darauf, indem sie feste Zeiten für Besprechungen einführen und von ihren Mitarbeitern nicht erwarten, außerhalb der Arbeitszeit auf Nachrichten zu antworten.
+
+Experten empfehlen außerdem, regelmäßige persönliche Treffen zu organisieren. Denn obwohl digitale Kommunikation viele Aufgaben erleichtert, kann sie das Vertrauen zwischen Kollegen nicht in jeder Situation vollständig ersetzen.`,
+    question: "Welche Aussage entspricht dem Text?",
+    a: "Homeoffice führt grundsätzlich zu einer höheren Produktivität.",
+    b: "Klare Grenzen zwischen Arbeitszeit und Freizeit sind beim Homeoffice wichtig.",
+    answer: "B",
+    evidence: "Besonders problematisch ist es, wenn Beschäftigte auch nach Feierabend ständig erreichbar sind.",
+    explanation: "Der Text betont, dass die Grenze zwischen Arbeit und Freizeit beim Homeoffice geschützt werden muss. Feste Arbeitszeiten helfen dabei.",
+    explanation_vi: "Đoạn văn nhấn mạnh rằng khi làm việc tại nhà, cần giữ ranh giới rõ ràng giữa công việc và thời gian nghỉ ngơi. Giờ làm việc cố định giúp thực hiện điều đó.",
+    wrong_reason: "A ist falsch, weil im Text ausdrücklich steht, dass die Produktivität nicht automatisch steigt, wenn man von zu Hause arbeitet.",
+    wrong_reason_vi: "A sai vì đoạn văn nói rõ rằng năng suất không tự động tăng lên khi nhân viên làm việc tại nhà."
+  },
+  {
+    title: "Aufgabe 2 – Nachhaltiger Tourismus",
+    text: `Der Tourismus ist für viele Regionen eine wichtige Einnahmequelle. Gleichzeitig kann eine große Zahl von Besuchern erhebliche Belastungen verursachen. In beliebten Urlaubsorten steigen häufig die Mietpreise, während öffentliche Plätze und natürliche Landschaften zunehmend unter Druck geraten.
+
+Einige Gemeinden versuchen deshalb, den Tourismus nachhaltiger zu gestalten. Sie fördern beispielsweise öffentliche Verkehrsmittel, begrenzen den Zugang zu besonders empfindlichen Naturgebieten oder unterstützen kleine Betriebe aus der Region. Ziel ist es nicht, Touristen grundsätzlich fernzuhalten, sondern die negativen Auswirkungen des Reisens zu reduzieren.
+
+Auch Reisende können einen Beitrag leisten. Wer länger an einem Ort bleibt, regionale Produkte kauft und auf unnötige Autofahrten verzichtet, unterstützt die lokale Wirtschaft und schont gleichzeitig die Umwelt. Fachleute weisen jedoch darauf hin, dass nachhaltiger Tourismus nur funktioniert, wenn Gemeinden, Unternehmen und Urlauber gemeinsam Verantwortung übernehmen.`,
+    question: "Was ist das Hauptziel nachhaltiger Tourismuskonzepte?",
+    a: "Die negativen Folgen des Tourismus sollen verringert werden.",
+    b: "Beliebte Urlaubsregionen sollen möglichst vollständig für Besucher gesperrt werden.",
+    answer: "A",
+    evidence: "Ziel ist es nicht, Touristen grundsätzlich fernzuhalten, sondern die negativen Auswirkungen des Reisens zu reduzieren.",
+    explanation: "Nachhaltiger Tourismus bedeutet, die Umwelt und die lokale Bevölkerung zu schützen, ohne den Tourismus vollständig zu verhindern.",
+    explanation_vi: "Du lịch bền vững có nghĩa là bảo vệ môi trường và người dân địa phương mà không ngăn cản hoàn toàn hoạt động du lịch.",
+    wrong_reason: "B widerspricht dem Text. Die Gemeinden möchten Touristen nicht grundsätzlich ausschließen, sondern den Tourismus besser organisieren.",
+    wrong_reason_vi: "B trái với nội dung bài đọc. Các địa phương không muốn loại trừ hoàn toàn khách du lịch, mà muốn tổ chức hoạt động du lịch hợp lý hơn."
+  },
+  {
+    title: "Aufgabe 3 – Digitale Nachrichten",
+    text: `Immer mehr Menschen informieren sich über aktuelle Ereignisse hauptsächlich über soziale Netzwerke. Nachrichten lassen sich dort schnell verbreiten und erreichen häufig auch Personen, die keine klassischen Nachrichtenmedien nutzen. Allerdings besteht die Gefahr, dass unvollständige oder falsche Informationen ebenso schnell verbreitet werden.
+
+Ein weiteres Problem ist die Auswahl der Inhalte. Viele Plattformen zeigen ihren Nutzern vor allem Beiträge, die zu ihren bisherigen Interessen passen. Dadurch kann der Eindruck entstehen, dass die eigene Meinung von besonders vielen Menschen geteilt wird. Andere Perspektiven werden dagegen möglicherweise kaum wahrgenommen.
+
+Medienexperten empfehlen deshalb, Informationen aus unterschiedlichen Quellen zu vergleichen und vor dem Weiterleiten eines Beitrags dessen Herkunft zu überprüfen. Digitale Medien können eine wertvolle Informationsquelle sein, ersetzen aber nicht die kritische Prüfung der Inhalte.`,
+    question: "Warum kann die persönliche Nachrichten-Auswahl problematisch sein?",
+    a: "Weil Nutzer dadurch möglicherweise weniger unterschiedliche Meinungen kennenlernen.",
+    b: "Weil soziale Netzwerke grundsätzlich keine aktuellen Nachrichten anbieten.",
+    answer: "A",
+    evidence: "Andere Perspektiven werden dagegen möglicherweise kaum wahrgenommen.",
+    explanation: "Die Plattformen zeigen häufig Inhalte, die zu den bisherigen Interessen passen. Dadurch kann die Vielfalt der wahrgenommenen Meinungen eingeschränkt werden.",
+    explanation_vi: "Các nền tảng thường hiển thị những nội dung phù hợp với sở thích trước đây của người dùng. Vì vậy, sự đa dạng trong các quan điểm mà họ tiếp nhận có thể bị hạn chế.",
+    wrong_reason: "B ist falsch, denn der Text sagt ausdrücklich, dass Nachrichten über soziale Netzwerke schnell verbreitet werden können.",
+    wrong_reason_vi: "B sai vì bài đọc nói rõ rằng tin tức có thể được lan truyền nhanh chóng qua mạng xã hội."
+  },
+  {
+    title: "Aufgabe 4 – Weiterbildung im Berufsleben",
+    text: `Die Anforderungen in vielen Berufen verändern sich ständig. Neue Technologien, digitale Arbeitsprozesse und internationale Zusammenarbeit führen dazu, dass Beschäftigte regelmäßig neue Kenntnisse erwerben müssen. Weiterbildung ist daher längst nicht mehr nur für Menschen interessant, die ihre berufliche Laufbahn verändern möchten.
+
+Viele Unternehmen bieten inzwischen interne Schulungen an. Diese haben den Vorteil, dass sie sich direkt an den Anforderungen des jeweiligen Arbeitsplatzes orientieren. Externe Kurse ermöglichen dagegen häufig einen umfassenderen Einblick in ein Fachgebiet und bieten die Gelegenheit, Kontakte zu Menschen aus anderen Unternehmen zu knüpfen.
+
+Allerdings nehmen nicht alle Beschäftigten regelmäßig an Weiterbildungsmaßnahmen teil. Häufig fehlen Zeit, finanzielle Unterstützung oder eine klare Vorstellung davon, welche Kenntnisse in Zukunft benötigt werden. Fachleute raten deshalb dazu, Weiterbildungsziele gemeinsam mit Vorgesetzten zu planen und langfristig in die berufliche Entwicklung zu integrieren.`,
+    question: "Welche Schwierigkeit wird im Text im Zusammenhang mit Weiterbildung genannt?",
+    a: "Externe Kurse bieten grundsätzlich keine beruflichen Vorteile.",
+    b: "Beschäftigten fehlen manchmal Zeit und finanzielle Unterstützung.",
+    answer: "B",
+    evidence: "Häufig fehlen Zeit, finanzielle Unterstützung oder eine klare Vorstellung davon, welche Kenntnisse in Zukunft benötigt werden.",
+    explanation: "Der Text nennt mehrere Hindernisse, die eine regelmäßige Weiterbildung erschweren können.",
+    explanation_vi: "Đoạn văn nêu ra một số trở ngại có thể khiến việc tham gia các khóa đào tạo thường xuyên trở nên khó khăn.",
+    wrong_reason: "A ist falsch. Im Text wird sogar erwähnt, dass externe Kurse neue Kontakte und umfassendere Einblicke ermöglichen können.",
+    wrong_reason_vi: "A sai. Đoạn văn còn đề cập rằng các khóa học bên ngoài doanh nghiệp có thể giúp người học mở rộng quan hệ và có cái nhìn toàn diện hơn."
+  },
+  {
+    title: "Aufgabe 5 – Leben in der Großstadt",
+    text: `Großstädte ziehen viele Menschen an, weil sie zahlreiche Arbeitsplätze, kulturelle Angebote und gute Bildungsmöglichkeiten bieten. Gleichzeitig sind sie mit Problemen konfrontiert, die das tägliche Leben erschweren können. Dazu gehören hohe Wohnkosten, Verkehrsbelastung und ein Mangel an öffentlichen Grünflächen.
+
+Einige Stadtverwaltungen versuchen, diesen Herausforderungen mit neuen Konzepten zu begegnen. So werden ehemalige Industrieflächen in Wohngebiete oder Parks umgewandelt. Außerdem entstehen zunehmend Fahrradwege und autofreie Bereiche. Solche Maßnahmen sollen nicht nur die Umwelt entlasten, sondern auch die Lebensqualität verbessern.
+
+Allerdings führen Veränderungen im Stadtbild manchmal zu Konflikten. Während manche Bewohner neue Grünflächen begrüßen, befürchten Geschäftsleute beispielsweise, dass weniger Parkplätze zu einem Rückgang ihrer Kundschaft führen könnten. Stadtplanung muss deshalb unterschiedliche Interessen berücksichtigen und die Bevölkerung möglichst früh in Entscheidungsprozesse einbeziehen.`,
+    question: "Was ist laut Text eine wichtige Aufgabe der Stadtplanung?",
+    a: "Die Interessen verschiedener Bevölkerungsgruppen zu berücksichtigen.",
+    b: "Die Zahl der Parkplätze in allen Stadtteilen zu erhöhen.",
+    answer: "A",
+    evidence: "Stadtplanung muss deshalb unterschiedliche Interessen berücksichtigen und die Bevölkerung möglichst früh in Entscheidungsprozesse einbeziehen.",
+    explanation: "Der Text zeigt, dass städtische Veränderungen unterschiedliche Auswirkungen auf Bewohner und Geschäftsleute haben können.",
+    explanation_vi: "Đoạn văn cho thấy những thay đổi trong thành phố có thể ảnh hưởng khác nhau đến cư dân và người kinh doanh.",
+    wrong_reason: "B ist falsch, weil der Text keine allgemeine Erhöhung der Parkplätze fordert. Vielmehr werden auch autofreie Bereiche und Fahrradwege genannt.",
+    wrong_reason_vi: "B sai vì bài đọc không đề xuất tăng số lượng chỗ đỗ xe nói chung. Ngược lại, bài còn nhắc đến các khu vực hạn chế ô tô và đường dành cho xe đạp."
+  },
+  {
+    title: "Aufgabe 6 – Ernährung und Gesundheit",
+    text: `Das Interesse an gesunder Ernährung ist in den vergangenen Jahren deutlich gestiegen. Viele Menschen achten stärker darauf, welche Lebensmittel sie kaufen und wie diese hergestellt werden. Gleichzeitig wächst das Angebot an Produkten, die mit Begriffen wie „natürlich“, „leicht“ oder „frei von Zusatzstoffen“ beworben werden.
+
+Ernährungsexperten warnen jedoch davor, solche Werbeaussagen automatisch mit gesundheitlichen Vorteilen gleichzusetzen. Ein Produkt kann beispielsweise wenig Zucker enthalten und trotzdem einen hohen Anteil an Fett oder Salz aufweisen. Entscheidend ist deshalb nicht ein einzelner Inhaltsstoff, sondern die gesamte Zusammensetzung der Ernährung.
+
+Eine ausgewogene Ernährung muss außerdem nicht besonders teuer oder kompliziert sein. Wer möglichst abwechslungsreich isst, regelmäßig frische Lebensmittel verwendet und stark verarbeitete Produkte nur in Maßen konsumiert, kann bereits viel für seine Gesundheit tun. Individuelle Bedürfnisse sollten dabei ebenfalls berücksichtigt werden.`,
+    question: "Worauf sollte man laut Ernährungsexperten besonders achten?",
+    a: "Auf Werbeaussagen, die einen einzelnen positiven Inhaltsstoff hervorheben.",
+    b: "Auf die gesamte Zusammensetzung der Ernährung.",
+    answer: "B",
+    evidence: "Entscheidend ist deshalb nicht ein einzelner Inhaltsstoff, sondern die gesamte Zusammensetzung der Ernährung.",
+    explanation: "Ein Lebensmittel ist nicht automatisch gesund, nur weil es beispielsweise wenig Zucker enthält. Auch andere Bestandteile müssen berücksichtigt werden.",
+    explanation_vi: "Một loại thực phẩm không tự động trở nên lành mạnh chỉ vì nó chứa ít đường. Cũng cần xem xét những thành phần khác.",
+    wrong_reason: "A ist falsch, weil der Text gerade davor warnt, Werbeaussagen über einzelne Inhaltsstoffe unkritisch zu übernehmen.",
+    wrong_reason_vi: "A sai vì đoạn văn cảnh báo rằng không nên tiếp nhận thiếu cân nhắc các thông điệp quảng cáo chỉ nhấn mạnh một thành phần riêng lẻ."
+  },
+  {
+    title: "Aufgabe 7 – Ehrenamtliches Engagement",
+    text: `Viele gesellschaftliche Einrichtungen sind auf die Unterstützung freiwilliger Helfer angewiesen. Sie engagieren sich beispielsweise in Sportvereinen, bei sozialen Projekten oder im Umweltschutz. Ohne diesen Einsatz könnten manche Angebote nur eingeschränkt oder überhaupt nicht stattfinden.
+
+Für die Freiwilligen selbst kann das Engagement ebenfalls wertvoll sein. Sie lernen neue Menschen kennen, sammeln praktische Erfahrungen und entwickeln soziale Fähigkeiten. Besonders junge Menschen nutzen ehrenamtliche Tätigkeiten manchmal, um erste Einblicke in bestimmte Berufsfelder zu gewinnen.
+
+Dennoch ist freiwillige Arbeit nicht immer leicht mit dem Alltag zu vereinbaren. Berufliche Verpflichtungen, familiäre Aufgaben und lange Arbeitszeiten können die verfügbare Zeit begrenzen. Organisationen versuchen deshalb zunehmend, flexible Einsatzmöglichkeiten anzubieten. Dadurch sollen auch Menschen mit einem vollen Terminkalender die Möglichkeit erhalten, sich gelegentlich zu engagieren.`,
+    question: "Welcher Vorteil kann sich für freiwillige Helfer ergeben?",
+    a: "Sie können praktische Erfahrungen sammeln und soziale Fähigkeiten entwickeln.",
+    b: "Sie erhalten grundsätzlich eine bezahlte berufliche Stelle.",
+    answer: "A",
+    evidence: "Sie lernen neue Menschen kennen, sammeln praktische Erfahrungen und entwickeln soziale Fähigkeiten.",
+    explanation: "Ehrenamtliches Engagement bietet nicht nur Vorteile für die Gesellschaft, sondern kann auch die persönliche Entwicklung unterstützen.",
+    explanation_vi: "Hoạt động tình nguyện không chỉ mang lại lợi ích cho xã hội mà còn có thể hỗ trợ sự phát triển cá nhân.",
+    wrong_reason: "B ist falsch. Der Text beschreibt freiwillige Arbeit und erwähnt keine garantierte bezahlte Beschäftigung.",
+    wrong_reason_vi: "B sai. Đoạn văn nói về công việc tình nguyện và không đề cập đến việc chắc chắn sẽ nhận được một công việc có trả lương."
+  },
+  {
+    title: "Aufgabe 8 – Künstliche Intelligenz im Alltag",
+    text: `Künstliche Intelligenz wird inzwischen in vielen Bereichen des täglichen Lebens eingesetzt. Navigationssysteme schlagen passende Routen vor, Übersetzungsprogramme erleichtern die Kommunikation und digitale Assistenten beantworten einfache Fragen. Viele dieser Anwendungen arbeiten im Hintergrund, sodass Nutzer ihre technische Funktionsweise kaum bemerken.
+
+Trotz der zahlreichen Vorteile gibt es auch offene Fragen. Besonders wichtig ist der Umgang mit persönlichen Daten. Wenn Systeme große Mengen an Informationen sammeln, muss geklärt werden, wer Zugriff darauf hat und wie diese Daten geschützt werden. Außerdem können automatisierte Entscheidungen problematisch sein, wenn die zugrunde liegenden Informationen unvollständig oder einseitig sind.
+
+Experten halten es daher für notwendig, technische Innovationen mit klaren Regeln zu verbinden. Künstliche Intelligenz sollte Menschen unterstützen, aber wichtige Entscheidungen müssen nachvollziehbar bleiben. Dazu gehört auch, dass Nutzer verstehen können, wann sie mit einem automatisierten System kommunizieren.`,
+    question: "Welche Forderung wird im Text im Zusammenhang mit künstlicher Intelligenz gestellt?",
+    a: "Automatisierte Systeme sollten grundsätzlich alle menschlichen Entscheidungen ersetzen.",
+    b: "Der Einsatz künstlicher Intelligenz sollte durch klare Regeln begleitet werden.",
+    answer: "B",
+    evidence: "Experten halten es daher für notwendig, technische Innovationen mit klaren Regeln zu verbinden.",
+    explanation: "Der Text erkennt die Vorteile künstlicher Intelligenz an, betont aber auch Datenschutz und nachvollziehbare Entscheidungen.",
+    explanation_vi: "Đoạn văn thừa nhận những lợi ích của trí tuệ nhân tạo, nhưng đồng thời nhấn mạnh việc bảo vệ dữ liệu cá nhân và bảo đảm các quyết định có thể được giải thích rõ ràng.",
+    wrong_reason: "A ist falsch, denn der Text sagt, dass KI Menschen unterstützen soll. Von einem vollständigen Ersatz menschlicher Entscheidungen ist nicht die Rede.",
+    wrong_reason_vi: "A sai vì bài đọc nói rằng AI nên hỗ trợ con người. Bài không đề cập đến việc thay thế hoàn toàn các quyết định của con người."
+  },
+  {
+    title: "Aufgabe 9 – Öffentliche Bibliotheken",
+    text: `Öffentliche Bibliotheken werden häufig noch immer hauptsächlich als Orte betrachtet, an denen Bücher ausgeliehen werden können. Tatsächlich hat sich ihr Angebot in vielen Städten deutlich erweitert. Besucher können dort nicht nur lesen, sondern auch an Sprachkursen teilnehmen, digitale Medien nutzen oder an kulturellen Veranstaltungen teilnehmen.
+
+Besonders für Menschen, die zu Hause keinen ruhigen Arbeitsplatz haben, können Bibliotheken eine wichtige Funktion übernehmen. Sie bieten einen vergleichsweise kostengünstigen Zugang zu Informationen und technischen Geräten. Einige Einrichtungen stellen sogar Räume für Gruppenarbeiten oder kleinere Veranstaltungen zur Verfügung.
+
+Trotz dieser Entwicklung stehen viele Bibliotheken unter finanziellem Druck. Ihre Angebote müssen regelmäßig an neue Bedürfnisse angepasst werden, während die verfügbaren Mittel häufig begrenzt sind. Fachleute betonen deshalb, dass Bibliotheken nicht allein nach der Zahl ausgeliehener Bücher bewertet werden sollten. Auch ihre Bedeutung als öffentliche Begegnungs- und Lernorte müsse berücksichtigt werden.`,
+    question: "Wie sollte man die Bedeutung moderner Bibliotheken laut Text beurteilen?",
+    a: "Nicht nur anhand der Anzahl ausgeliehener Bücher.",
+    b: "Ausschließlich anhand ihrer digitalen Angebote.",
+    answer: "A",
+    evidence: "Bibliotheken nicht allein nach der Zahl ausgeliehener Bücher bewertet werden sollten.",
+    explanation: "Moderne Bibliotheken erfüllen viele Aufgaben: Sie sind Lernorte, Begegnungsorte und bieten Zugang zu digitalen Medien.",
+    explanation_vi: "Thư viện hiện đại đảm nhiệm nhiều chức năng: là nơi học tập, gặp gỡ và cung cấp quyền tiếp cận các phương tiện truyền thông số.",
+    wrong_reason: "B ist falsch, weil der Text mehrere unterschiedliche Angebote nennt und nicht nur digitale Dienstleistungen hervorhebt.",
+    wrong_reason_vi: "B sai vì đoạn văn nêu nhiều loại hình dịch vụ khác nhau, chứ không chỉ nhấn mạnh các dịch vụ kỹ thuật số."
+  },
+  {
+    title: "Aufgabe 10 – Nachhaltigkeit am Arbeitsplatz",
+    text: `Immer mehr Unternehmen versuchen, ihren Arbeitsalltag umweltfreundlicher zu gestalten. Dazu gehören Maßnahmen wie die Reduzierung des Papierverbrauchs, die Nutzung energiesparender Geräte oder die Förderung öffentlicher Verkehrsmittel. Einige Firmen ermöglichen ihren Beschäftigten außerdem, Fahrräder zu leihen oder an bestimmten Tagen von zu Hause zu arbeiten.
+
+Solche Veränderungen können jedoch nur erfolgreich sein, wenn die Mitarbeiter sie tatsächlich unterstützen. Werden neue Regeln ohne Erklärung eingeführt, besteht die Gefahr, dass sie im Alltag ignoriert werden. Unternehmen sollten deshalb nicht nur Maßnahmen beschließen, sondern auch verständlich erklären, welchen Beitrag diese zum Umweltschutz leisten.
+
+Darüber hinaus ist es sinnvoll, Beschäftigte aktiv an der Entwicklung neuer Ideen zu beteiligen. Menschen, die täglich mit bestimmten Arbeitsabläufen zu tun haben, kennen häufig praktische Möglichkeiten, Ressourcen einzusparen. Nachhaltigkeit wird dadurch nicht als zusätzliche Belastung wahrgenommen, sondern kann Teil der gemeinsamen Unternehmenskultur werden.`,
+    question: "Was ist laut Text eine Voraussetzung für erfolgreiche Umweltmaßnahmen im Unternehmen?",
+    a: "Die Mitarbeiter sollten die Maßnahmen verstehen und unterstützen.",
+    b: "Die Unternehmensleitung sollte alle Entscheidungen ohne Beteiligung der Mitarbeiter treffen.",
+    answer: "A",
+    evidence: "Solche Veränderungen können jedoch nur erfolgreich sein, wenn die Mitarbeiter sie tatsächlich unterstützen.",
+    explanation: "Umweltmaßnahmen funktionieren besser, wenn Beschäftigte ihren Sinn verstehen und sich aktiv daran beteiligen.",
+    explanation_vi: "Các biện pháp bảo vệ môi trường sẽ hiệu quả hơn khi nhân viên hiểu được ý nghĩa và tích cực tham gia thực hiện.",
+    wrong_reason: "B ist falsch, weil der Text ausdrücklich empfiehlt, Mitarbeiter an der Entwicklung neuer Ideen zu beteiligen.",
+    wrong_reason_vi: "B sai vì bài đọc khuyến khích nhân viên tham gia vào quá trình xây dựng những ý tưởng mới."
+  },
+  {
+    title: "Aufgabe 11 – Flexible Arbeitszeiten",
+    text: `Flexible Arbeitszeiten gelten für viele Beschäftigte als wichtiger Vorteil eines modernen Arbeitsplatzes. Wer selbst entscheiden kann, wann der Arbeitstag beginnt und endet, kann berufliche Aufgaben oft besser mit privaten Verpflichtungen vereinbaren. Besonders Eltern oder Menschen, die Angehörige betreuen, profitieren von solchen Regelungen.
+
+Allerdings bringt dieses Modell auch Herausforderungen mit sich. Wenn die Arbeitszeiten innerhalb eines Teams stark voneinander abweichen, wird es schwieriger, gemeinsame Besprechungen zu organisieren. Außerdem besteht die Gefahr, dass Beschäftigte ihre Arbeit immer weiter ausdehnen, weil sie sich nicht an feste Zeiten halten.
+
+Einige Unternehmen legen deshalb sogenannte Kernarbeitszeiten fest. In diesen Stunden müssen alle Teammitglieder erreichbar sein. Außerhalb dieses Zeitraums können sie ihre Arbeitszeit weitgehend selbst gestalten. Auf diese Weise sollen individuelle Freiheit und Zusammenarbeit miteinander verbunden werden.`,
+    question: "Wie versuchen einige Unternehmen, flexible Arbeitszeiten zu organisieren?",
+    a: "Sie schreiben für alle Beschäftigten dieselben täglichen Arbeitszeiten vor.",
+    b: "Sie legen gemeinsame Erreichbarkeitszeiten fest und ermöglichen außerhalb davon Flexibilität.",
+    answer: "B",
+    evidence: "Einige Unternehmen legen deshalb sogenannte Kernarbeitszeiten fest.",
+    explanation: "Kernarbeitszeiten sorgen dafür, dass sich Teammitglieder zu bestimmten Zeiten abstimmen können, während sie außerhalb dieser Zeiten flexibel bleiben.",
+    explanation_vi: "Thời gian làm việc cốt lõi giúp các thành viên trong nhóm phối hợp với nhau vào những khung giờ nhất định, đồng thời vẫn được linh hoạt ngoài khoảng thời gian đó.",
+    wrong_reason: "A ist falsch. Der Text beschreibt gerade ein Modell, bei dem Beschäftigte außerhalb der Kernarbeitszeiten ihre Arbeitszeit selbst gestalten können.",
+    wrong_reason_vi: "A sai. Đoạn văn mô tả mô hình cho phép nhân viên tự sắp xếp giờ làm ngoài khoảng thời gian làm việc cốt lõi."
+  },
+  {
+    title: "Aufgabe 12 – Fremdsprachenlernen im Erwachsenenalter",
+    text: `Viele Erwachsene beginnen erst im Berufsleben damit, eine neue Fremdsprache zu lernen. Häufig ist der Wunsch nach besseren beruflichen Möglichkeiten der wichtigste Grund. Andere möchten sich auf einen längeren Auslandsaufenthalt vorbereiten oder mit Menschen aus anderen Ländern kommunizieren können.
+
+Im Vergleich zu Kindern haben Erwachsene oft weniger freie Zeit. Dafür verfügen sie über Erfahrungen und Lernstrategien, die ihnen den Spracherwerb erleichtern können. Sie können beispielsweise neue Wörter mit bereits bekannten Situationen verbinden und gezielt nach Erklärungen suchen, wenn sie etwas nicht verstehen.
+
+Sprachlehrer empfehlen, regelmäßig zu üben, anstatt nur gelegentlich mehrere Stunden hintereinander zu lernen. Besonders hilfreich ist es, die Sprache aktiv zu verwenden. Gespräche, kurze Texte und Hörübungen können dazu beitragen, das Gelernte langfristig zu behalten. Fehler sollten dabei nicht als Zeichen mangelnder Begabung betrachtet werden, sondern als normaler Teil des Lernprozesses.`,
+    question: "Welche Lernstrategie wird im Text empfohlen?",
+    a: "Regelmäßiges Üben und die aktive Verwendung der Sprache.",
+    b: "Das Lernen sollte möglichst auf seltene, lange Unterrichtseinheiten beschränkt werden.",
+    answer: "A",
+    evidence: "Sprachlehrer empfehlen, regelmäßig zu üben, anstatt nur gelegentlich mehrere Stunden hintereinander zu lernen.",
+    explanation: "Regelmäßiges Lernen hilft dabei, Sprachkenntnisse langfristig aufzubauen. Zusätzlich sollte man die Sprache aktiv anwenden.",
+    explanation_vi: "Việc học đều đặn giúp xây dựng kiến thức ngôn ngữ lâu dài. Ngoài ra, người học nên chủ động sử dụng ngôn ngữ đó.",
+    wrong_reason: "B ist falsch, denn der Text stellt seltene, lange Lerneinheiten ausdrücklich dem regelmäßigen Üben gegenüber.",
+    wrong_reason_vi: "B sai vì bài đọc đối lập rõ ràng những buổi học dài nhưng ít thường xuyên với việc luyện tập đều đặn."
+  },
+  {
+    title: "Aufgabe 13 – Carsharing in Städten",
+    text: `In vielen Städten entscheiden sich immer mehr Menschen dafür, gelegentlich ein Auto zu nutzen, ohne selbst eines zu besitzen. Carsharing-Angebote ermöglichen es, Fahrzeuge für kurze Zeit zu mieten. Die Buchung erfolgt häufig über eine App, und die Autos können an verschiedenen Standorten abgeholt werden.
+
+Für Menschen, die nur selten ein Fahrzeug benötigen, kann dieses Modell finanziell interessant sein. Sie müssen sich weder um Reparaturen noch um Versicherung oder regelmäßige Wartung kümmern. Gleichzeitig kann Carsharing dazu beitragen, dass weniger private Autos dauerhaft im öffentlichen Raum stehen.
+
+Allerdings hängt der tatsächliche Nutzen stark von den örtlichen Bedingungen ab. Wenn Fahrzeuge nur in wenigen Stadtteilen verfügbar sind, profitieren nicht alle Einwohner gleichermaßen. Auch die Verfügbarkeit öffentlicher Verkehrsmittel spielt eine wichtige Rolle. Fachleute betonen deshalb, dass Carsharing am besten als Ergänzung zu Bus, Bahn und Fahrrad funktioniert.`,
+    question: "Unter welcher Voraussetzung kann Carsharing besonders sinnvoll sein?",
+    a: "Wenn es den öffentlichen Nahverkehr vollständig ersetzt.",
+    b: "Wenn es mit anderen umweltfreundlichen Verkehrsmitteln kombiniert wird.",
+    answer: "B",
+    evidence: "Carsharing am besten als Ergänzung zu Bus, Bahn und Fahrrad funktioniert.",
+    explanation: "Der Text beschreibt Carsharing nicht als alleinige Verkehrslösung, sondern als Ergänzung zu bestehenden Angeboten.",
+    explanation_vi: "Đoạn văn không xem việc chia sẻ ô tô là giải pháp giao thông duy nhất, mà là phương án bổ sung cho những hình thức giao thông hiện có.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich die Kombination mit öffentlichen Verkehrsmitteln und Fahrrädern empfiehlt.",
+    wrong_reason_vi: "A sai vì đoạn văn khuyến nghị kết hợp dịch vụ chia sẻ ô tô với phương tiện công cộng và xe đạp."
+  },
+  {
+    title: "Aufgabe 14 – Musikunterricht für Kinder",
+    text: `Musikunterricht wird häufig mit der Entwicklung musikalischer Fähigkeiten verbunden. Kinder lernen dabei, ein Instrument zu spielen, Noten zu lesen und gemeinsam mit anderen zu musizieren. Pädagogen weisen jedoch darauf hin, dass musikalische Aktivitäten auch andere Fähigkeiten fördern können.
+
+Beim gemeinsamen Spielen müssen Kinder beispielsweise aufeinander hören, ihre Einsätze koordinieren und Rücksicht auf andere nehmen. Dadurch können Konzentration und soziale Kompetenzen gestärkt werden. Außerdem lernen sie, mit Fehlern umzugehen und über einen längeren Zeitraum auf ein Ziel hinzuarbeiten.
+
+Trotz dieser Vorteile sollte Musikunterricht nicht zu einem zusätzlichen Leistungsdruck führen. Wenn Eltern ausschließlich schnelle Fortschritte erwarten, kann die Freude am Musizieren verloren gehen. Fachleute empfehlen deshalb, die Interessen der Kinder zu berücksichtigen und ihnen ausreichend Zeit zu geben, eigene musikalische Vorlieben zu entwickeln.`,
+    question: "Was sollten Eltern laut Text beim Musikunterricht beachten?",
+    a: "Sie sollten vor allem möglichst schnelle musikalische Fortschritte verlangen.",
+    b: "Sie sollten die Interessen ihrer Kinder berücksichtigen und keinen unnötigen Druck ausüben.",
+    answer: "B",
+    evidence: "Fachleute empfehlen deshalb, die Interessen der Kinder zu berücksichtigen und ihnen ausreichend Zeit zu geben.",
+    explanation: "Musikunterricht soll die Entwicklung fördern und gleichzeitig Freude machen. Zu hoher Leistungsdruck kann diese Freude beeinträchtigen.",
+    explanation_vi: "Việc học âm nhạc nên hỗ trợ sự phát triển và đồng thời đem lại niềm vui. Áp lực thành tích quá lớn có thể làm mất đi niềm vui đó.",
+    wrong_reason: "A ist falsch, weil der Text gerade davor warnt, ausschließlich schnelle Fortschritte zu erwarten.",
+    wrong_reason_vi: "A sai vì bài đọc cảnh báo không nên chỉ đòi hỏi trẻ tiến bộ thật nhanh."
+  },
+  {
+    title: "Aufgabe 15 – Lebensmittelverschwendung",
+    text: `In privaten Haushalten werden jedes Jahr große Mengen an Lebensmitteln weggeworfen. Ein Teil davon ist noch problemlos essbar. Häufig liegt das daran, dass Verbraucher das Mindesthaltbarkeitsdatum mit dem Verbrauchsdatum verwechseln. Während das Verbrauchsdatum bei leicht verderblichen Produkten unbedingt beachtet werden sollte, bedeutet das Mindesthaltbarkeitsdatum nicht automatisch, dass ein Lebensmittel danach ungenießbar ist.
+
+Auch eine ungenaue Einkaufsplanung trägt zur Verschwendung bei. Wer ohne Einkaufsliste einkauft oder zu große Mengen kauft, hat oft Schwierigkeiten, alle Produkte rechtzeitig zu verbrauchen. Experten empfehlen daher, Mahlzeiten im Voraus zu planen und Lebensmittel richtig zu lagern.
+
+Einige Supermärkte und soziale Einrichtungen arbeiten außerdem zusammen, um überschüssige, noch verwendbare Produkte weiterzugeben. Solche Initiativen können die Verschwendung zwar reduzieren, doch auch das Verhalten der einzelnen Verbraucher bleibt entscheidend.`,
+    question: "Welche Aussage über das Mindesthaltbarkeitsdatum ist richtig?",
+    a: "Lebensmittel müssen unmittelbar nach diesem Datum weggeworfen werden.",
+    b: "Das Überschreiten dieses Datums bedeutet nicht automatisch, dass ein Produkt ungenießbar ist.",
+    answer: "B",
+    evidence: "Das Mindesthaltbarkeitsdatum nicht automatisch, dass ein Lebensmittel danach ungenießbar ist.",
+    explanation: "Das Mindesthaltbarkeitsdatum gibt an, bis wann ein Produkt bestimmte Eigenschaften mindestens behält. Danach kann es häufig noch genießbar sein.",
+    explanation_vi: "Hạn sử dụng tối thiểu cho biết sản phẩm duy trì được những đặc tính nhất định đến thời điểm nào. Sau thời điểm đó, thực phẩm vẫn có thể còn sử dụng được.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich erklärt, dass ein Lebensmittel nach Ablauf des Mindesthaltbarkeitsdatums nicht automatisch schlecht ist.",
+    wrong_reason_vi: "A sai vì đoạn văn giải thích rõ rằng thực phẩm không tự động bị hỏng ngay sau khi hết hạn sử dụng tối thiểu."
+  },
+  {
+    title: "Aufgabe 16 – Sport und Motivation",
+    text: `Viele Menschen nehmen sich vor, regelmäßig Sport zu treiben. Dennoch fällt es ihnen oft schwer, ihre guten Vorsätze dauerhaft umzusetzen. Ein häufiger Grund dafür sind unrealistische Erwartungen. Wer nach einer langen Pause sofort täglich intensiv trainieren möchte, verliert möglicherweise schnell die Motivation.
+
+Sportwissenschaftler empfehlen deshalb, mit kleinen und erreichbaren Zielen zu beginnen. Schon kurze Bewegungseinheiten können einen positiven Effekt haben, wenn sie regelmäßig stattfinden. Ebenso wichtig ist es, eine Aktivität zu wählen, die den eigenen Interessen entspricht. Nicht jeder muss joggen oder im Fitnessstudio trainieren. Schwimmen, Tanzen oder Radfahren können genauso geeignete Möglichkeiten sein.
+
+Auch soziale Unterstützung kann helfen. Wer sich mit Freunden verabredet oder einer Sportgruppe anschließt, hält seine Trainingsroutine möglicherweise leichter ein. Entscheidend ist jedoch, dass Bewegung langfristig in den Alltag integriert wird.`,
+    question: "Was hilft laut Text dabei, langfristig motiviert zu bleiben?",
+    a: "Mit erreichbaren Zielen zu beginnen und eine passende Sportart auszuwählen.",
+    b: "Möglichst schnell mit einem besonders intensiven Trainingsprogramm anzufangen.",
+    answer: "A",
+    evidence: "Sportwissenschaftler empfehlen deshalb, mit kleinen und erreichbaren Zielen zu beginnen.",
+    explanation: "Kleine Ziele sind leichter umzusetzen. Außerdem erhöht eine Sportart, die Spaß macht, die Wahrscheinlichkeit, dass man langfristig dabei bleibt.",
+    explanation_vi: "Bắt đầu với những mục tiêu nhỏ sẽ dễ thực hiện hơn. Ngoài ra, lựa chọn môn thể thao mình yêu thích làm tăng khả năng duy trì tập luyện lâu dài.",
+    wrong_reason: "B ist falsch, weil der Text unrealistische und zu intensive Trainingspläne als möglichen Grund für Motivationsverlust nennt.",
+    wrong_reason_vi: "B sai vì bài đọc nêu các kế hoạch tập luyện quá sức và thiếu thực tế là một nguyên nhân có thể khiến người tập mất động lực."
+  },
+  {
+    title: "Aufgabe 17 – Wohnen im Alter",
+    text: `Mit zunehmendem Alter verändern sich häufig die Anforderungen an die eigene Wohnung. Treppen können zu einem Hindernis werden, und auch alltägliche Tätigkeiten wie das Duschen oder Einkaufen können schwieriger sein. Deshalb beschäftigen sich immer mehr Städte mit der Frage, wie ältere Menschen möglichst lange selbstständig wohnen können.
+
+Eine Möglichkeit ist der altersgerechte Umbau bestehender Wohnungen. Dazu gehören beispielsweise ebenerdige Duschen, Haltegriffe und Aufzüge. Darüber hinaus entstehen Wohnprojekte, in denen mehrere Generationen zusammenleben und sich gegenseitig unterstützen.
+
+Solche Modelle bieten nicht nur praktische Vorteile. Sie können auch dazu beitragen, Einsamkeit zu vermeiden. Allerdings ist nicht jede Wohnform für alle Menschen geeignet. Während manche ältere Personen ihre Privatsphäre besonders schätzen, wünschen sich andere mehr Gemeinschaft. Entscheidend ist daher, dass individuelle Bedürfnisse bei der Planung berücksichtigt werden.`,
+    question: "Was ist bei Wohnkonzepten für ältere Menschen besonders wichtig?",
+    a: "Alle älteren Menschen sollten in gemeinschaftlichen Wohnprojekten leben.",
+    b: "Die Wohnangebote sollten an die individuellen Bedürfnisse angepasst werden.",
+    answer: "B",
+    evidence: "Entscheidend ist daher, dass individuelle Bedürfnisse bei der Planung berücksichtigt werden.",
+    explanation: "Der Text macht deutlich, dass ältere Menschen unterschiedliche Wünsche haben. Deshalb sollte es verschiedene Wohnmöglichkeiten geben.",
+    explanation_vi: "Đoạn văn cho thấy người cao tuổi có những mong muốn khác nhau. Vì vậy, cần có nhiều hình thức nhà ở phù hợp.",
+    wrong_reason: "A ist falsch, weil der Text betont, dass nicht jede Wohnform für alle Menschen geeignet ist.",
+    wrong_reason_vi: "A sai vì đoạn văn nhấn mạnh rằng không phải hình thức nhà ở nào cũng phù hợp với tất cả mọi người."
+  },
+  {
+    title: "Aufgabe 18 – Online-Shopping und Rücksendungen",
+    text: `Der Online-Handel bietet Verbrauchern eine große Auswahl und ermöglicht es, Produkte bequem von zu Hause aus zu bestellen. Gleichzeitig führt die Möglichkeit, Waren problemlos zurückzusenden, zu einer steigenden Zahl von Retouren. Besonders bei Kleidung bestellen manche Kunden mehrere Größen oder Farben, um anschließend einen Teil der Ware zurückzuschicken.
+
+Für Händler bedeutet dies zusätzlichen Aufwand. Zurückgesendete Produkte müssen geprüft, neu verpackt und teilweise sogar repariert werden. Nicht alle Waren können anschließend wieder als Neuware verkauft werden. Auch der Transport verursacht zusätzliche Kosten und belastet die Umwelt.
+
+Einige Unternehmen versuchen deshalb, Kunden bereits vor dem Kauf besser zu informieren. Detaillierte Größentabellen, Produktvideos und realistische Fotos sollen helfen, Fehlkäufe zu vermeiden. Experten sind der Meinung, dass eine bessere Beratung langfristig sowohl den Unternehmen als auch den Verbrauchern zugutekommen kann.`,
+    question: "Wie wollen einige Online-Händler die Zahl der Retouren verringern?",
+    a: "Durch bessere Informationen über die angebotenen Produkte.",
+    b: "Indem sie grundsätzlich keine Rücksendungen mehr akzeptieren.",
+    answer: "A",
+    evidence: "Detaillierte Größentabellen, Produktvideos und realistische Fotos sollen helfen, Fehlkäufe zu vermeiden.",
+    explanation: "Wenn Kunden vor dem Kauf genauere Informationen erhalten, können sie besser entscheiden, ob ein Produkt ihren Erwartungen entspricht.",
+    explanation_vi: "Khi khách hàng nhận được thông tin chi tiết hơn trước khi mua, họ có thể quyết định tốt hơn liệu sản phẩm có đáp ứng mong đợi hay không.",
+    wrong_reason: "B ist falsch, weil der Text nicht von einem vollständigen Ausschluss der Rücksendungen spricht, sondern von besserer Beratung vor dem Kauf.",
+    wrong_reason_vi: "B sai vì bài đọc không nói sẽ loại bỏ hoàn toàn việc trả hàng, mà đề xuất cung cấp thông tin và tư vấn tốt hơn trước khi mua."
+  },
+  {
+    title: "Aufgabe 19 – Wissenschaftliche Informationen im Internet",
+    text: `Das Internet ermöglicht es, wissenschaftliche Informationen innerhalb weniger Sekunden zu finden. Universitäten, Forschungsinstitute und Fachzeitschriften veröffentlichen zahlreiche Ergebnisse online. Dadurch können sich auch Menschen ohne wissenschaftliche Ausbildung über aktuelle Entwicklungen informieren.
+
+Allerdings ist nicht jede Internetseite eine zuverlässige Informationsquelle. Manche Beiträge stellen einzelne Studienergebnisse übertrieben dar oder lassen wichtige Einschränkungen weg. Außerdem wird eine Untersuchung manchmal veröffentlicht, bevor andere Wissenschaftler ihre Ergebnisse überprüft haben.
+
+Wer wissenschaftliche Informationen nutzen möchte, sollte deshalb auf die Herkunft der Inhalte achten. Wichtig sind unter anderem die Qualifikation der Autoren, die verwendeten Methoden und die Frage, ob andere Untersuchungen zu ähnlichen Ergebnissen kommen. Eine einzelne Studie kann interessante Hinweise liefern, reicht aber nicht immer aus, um eine allgemeingültige Aussage zu treffen.`,
+    question: "Warum sollte man einzelne wissenschaftliche Studien kritisch betrachten?",
+    a: "Weil ihre Ergebnisse nicht immer bereits umfassend überprüft wurden.",
+    b: "Weil wissenschaftliche Informationen im Internet grundsätzlich unzuverlässig sind.",
+    answer: "A",
+    evidence: "Außerdem wird eine Untersuchung manchmal veröffentlicht, bevor andere Wissenschaftler ihre Ergebnisse überprüft haben.",
+    explanation: "Eine Studie kann wichtige Hinweise geben, aber ihre Ergebnisse sollten im Zusammenhang mit weiteren Untersuchungen betrachtet werden.",
+    explanation_vi: "Một nghiên cứu có thể cung cấp những gợi ý quan trọng, nhưng kết quả cần được xem xét cùng với các nghiên cứu khác.",
+    wrong_reason: "B ist falsch, weil der Text durchaus zuverlässige Quellen wie Universitäten und Forschungsinstitute nennt.",
+    wrong_reason_vi: "B sai vì đoạn văn có nhắc đến những nguồn đáng tin cậy như trường đại học và viện nghiên cứu."
+  },
+  {
+    title: "Aufgabe 20 – Die Zukunft des öffentlichen Nahverkehrs",
+    text: `Viele Städte möchten den öffentlichen Nahverkehr attraktiver machen, um die Zahl privater Autofahrten zu reduzieren. Dazu werden neue Straßenbahnlinien gebaut, Busverbindungen verbessert und digitale Fahrgastinformationen eingeführt. Einige Verkehrsunternehmen testen außerdem kleinere Fahrzeuge, die auf weniger stark nachgefragten Strecken eingesetzt werden können.
+
+Trotz solcher Investitionen nutzen nicht alle Menschen regelmäßig Bus und Bahn. In manchen Regionen sind die Verbindungen außerhalb der Hauptverkehrszeiten unzuverlässig oder zu selten. Besonders Menschen, die weit außerhalb des Stadtzentrums wohnen, sind deshalb weiterhin auf ein Auto angewiesen.
+
+Verkehrsexperten betonen, dass ein attraktiver Nahverkehr nicht allein von modernen Fahrzeugen abhängt. Entscheidend sind auch günstige Fahrpreise, kurze Wartezeiten und eine gute Verbindung zwischen verschiedenen Verkehrsmitteln. Erst wenn diese Bedingungen erfüllt sind, kann der öffentliche Nahverkehr für einen größeren Teil der Bevölkerung eine echte Alternative zum Auto werden.`,
+    question: "Welche Faktoren sind laut Verkehrsexperten für einen attraktiven Nahverkehr wichtig?",
+    a: "Vor allem moderne Fahrzeuge und eine möglichst große Zahl neuer Straßenbahnlinien.",
+    b: "Günstige Preise, kurze Wartezeiten und gute Verbindungen zwischen Verkehrsmitteln.",
+    answer: "B",
+    evidence: "Entscheidend sind auch günstige Fahrpreise, kurze Wartezeiten und eine gute Verbindung zwischen verschiedenen Verkehrsmitteln.",
+    explanation: "Moderne Fahrzeuge allein reichen nicht aus. Der Nahverkehr muss auch praktisch, bezahlbar und gut miteinander vernetzt sein.",
+    explanation_vi: "Chỉ có phương tiện hiện đại là chưa đủ. Giao thông công cộng cũng cần thuận tiện, có giá cả hợp lý và kết nối tốt giữa các phương tiện.",
+    wrong_reason: "A ist unvollständig. Der Text nennt moderne Fahrzeuge und neue Linien als Maßnahmen, betont aber andere Faktoren als entscheidend für die Attraktivität.",
+    wrong_reason_vi: "A chưa đầy đủ. Bài đọc có nhắc đến phương tiện hiện đại và các tuyến mới, nhưng nhấn mạnh những yếu tố khác mới là điều quyết định sức hấp dẫn của giao thông công cộng."
+  },
+  {
+    title: "Aufgabe 21 – Die Vier-Tage-Woche",
+    text: `In einigen Unternehmen wird inzwischen mit einer Vier-Tage-Woche experimentiert. Dabei arbeiten die Beschäftigten an vier Tagen statt an fünf, ohne dass ihr Gehalt unbedingt gekürzt wird. Befürworter hoffen, dass sich dadurch die Zufriedenheit der Mitarbeiter erhöht und gleichzeitig die Produktivität erhalten bleibt.
+
+Erste Erfahrungen zeigen jedoch, dass eine solche Arbeitszeitregelung nicht für jeden Betrieb gleich gut geeignet ist. Während sie in manchen Büros problemlos umgesetzt werden kann, ist sie beispielsweise in Krankenhäusern oder im Einzelhandel schwieriger zu organisieren. Dort muss die Versorgung beziehungsweise der Kundenservice weiterhin gewährleistet sein.
+
+Außerdem bedeutet eine kürzere Arbeitswoche nicht automatisch weniger Arbeitsbelastung. Wenn dieselbe Menge an Aufgaben in weniger Tagen erledigt werden muss, kann der Zeitdruck sogar steigen. Experten empfehlen deshalb, Arbeitsabläufe vor einer Einführung sorgfältig zu überprüfen und die Beschäftigten in die Planung einzubeziehen.`,
+    question: "Welche Schwierigkeit kann bei der Einführung einer Vier-Tage-Woche entstehen?",
+    a: "Die gleiche Arbeitsmenge kann zu einem höheren Zeitdruck führen.",
+    b: "Die Beschäftigten verlieren grundsätzlich einen Teil ihres Gehalts.",
+    answer: "A",
+    evidence: "Wenn dieselbe Menge an Aufgaben in weniger Tagen erledigt werden muss, kann der Zeitdruck sogar steigen.",
+    explanation: "Eine kürzere Arbeitswoche ist nicht automatisch entspannter. Wenn die Arbeitsmenge gleich bleibt, müssen die Aufgaben in weniger Zeit erledigt werden.",
+    explanation_vi: "Tuần làm việc ngắn hơn không có nghĩa là công việc tự động trở nên nhẹ nhàng hơn. Nếu khối lượng công việc không đổi, mọi nhiệm vụ phải được hoàn thành trong thời gian ít hơn.",
+    wrong_reason: "B ist falsch, weil im Text steht, dass das Gehalt nicht unbedingt gekürzt wird. Eine Gehaltskürzung wird nicht als allgemeine Folge dargestellt.",
+    wrong_reason_vi: "B sai vì đoạn văn nói rằng tiền lương không nhất thiết bị cắt giảm. Việc giảm lương không được xem là hệ quả chung."
+  },
+  {
+    title: "Aufgabe 22 – Stadtgärten und Gemeinschaft",
+    text: `In vielen Städten entstehen auf ungenutzten Grundstücken kleine Gemeinschaftsgärten. Anwohner können dort Gemüse anbauen, Blumen pflanzen und gemeinsam Zeit im Freien verbringen. Die Projekte werden häufig von freiwilligen Gruppen organisiert und teilweise von den Stadtverwaltungen unterstützt.
+
+Neben dem ökologischen Nutzen erfüllen solche Gärten auch eine soziale Funktion. Menschen unterschiedlichen Alters und verschiedener Herkunft kommen miteinander ins Gespräch. Dabei entstehen Kontakte, die im anonymen Alltag einer Großstadt sonst möglicherweise nicht zustande gekommen wären.
+
+Allerdings erfordern Gemeinschaftsgärten eine gute Organisation. Es muss geklärt werden, wer für die Pflege zuständig ist, wie Kosten verteilt werden und was mit der Ernte geschieht. Wenn diese Fragen nicht rechtzeitig besprochen werden, können Konflikte entstehen. Erfolgreiche Projekte zeichnen sich deshalb nicht nur durch gute Ideen, sondern auch durch klare Absprachen aus.`,
+    question: "Was ist neben dem ökologischen Nutzen ein wichtiger Vorteil von Gemeinschaftsgärten?",
+    a: "Sie ermöglichen es den Bewohnern, ohne weitere Absprachen gemeinsam zu wirtschaften.",
+    b: "Sie fördern den Kontakt zwischen Menschen, die sich sonst kaum begegnen würden.",
+    answer: "B",
+    evidence: "Menschen unterschiedlichen Alters und verschiedener Herkunft kommen miteinander ins Gespräch.",
+    explanation: "Die Gärten bieten einen Ort, an dem Menschen aus unterschiedlichen Gruppen Kontakte knüpfen und gemeinsam etwas unternehmen können.",
+    explanation_vi: "Các khu vườn tạo ra không gian để những người thuộc các nhóm khác nhau làm quen, kết nối và cùng tham gia hoạt động.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich betont, dass klare Absprachen und eine gute Organisation notwendig sind.",
+    wrong_reason_vi: "A sai vì bài đọc nhấn mạnh rằng cần có sự thống nhất rõ ràng và tổ chức tốt."
+  },
+  {
+    title: "Aufgabe 23 – Lernen mit Podcasts",
+    text: `Podcasts haben sich in den vergangenen Jahren zu einem beliebten Medium entwickelt. Sie lassen sich unterwegs, beim Sport oder während der Hausarbeit hören. Auch im Bildungsbereich werden sie zunehmend eingesetzt, beispielsweise zum Erlernen von Fremdsprachen oder zur Vermittlung wissenschaftlicher Themen.
+
+Ein Vorteil besteht darin, dass Lernende Inhalte mehrfach anhören können. Schwierige Abschnitte lassen sich wiederholen, und unterschiedliche Sprecher bieten die Möglichkeit, verschiedene Stimmen und Sprechweisen kennenzulernen. Besonders beim Fremdsprachenlernen kann dies das Hörverständnis verbessern.
+
+Allerdings ist das reine Zuhören nicht für alle Lernziele ausreichend. Wer sich beispielsweise Fachbegriffe merken oder komplexe Zusammenhänge verstehen möchte, sollte zusätzliche Materialien verwenden. Notizen, Übungen und Diskussionen können dabei helfen, Informationen besser zu verarbeiten. Podcasts sind daher besonders effektiv, wenn sie mit anderen Lernmethoden kombiniert werden.`,
+    question: "Welche Rolle sollten Podcasts beim Lernen laut Text spielen?",
+    a: "Sie sollten möglichst alle anderen Lernmaterialien ersetzen.",
+    b: "Sie können eine sinnvolle Ergänzung zu anderen Lernmethoden sein.",
+    answer: "B",
+    evidence: "Podcasts sind daher besonders effektiv, wenn sie mit anderen Lernmethoden kombiniert werden.",
+    explanation: "Podcasts sind hilfreich, aber für bestimmte Lernziele braucht man zusätzliche Materialien und aktive Übungen.",
+    explanation_vi: "Podcast rất hữu ích, nhưng đối với một số mục tiêu học tập, người học vẫn cần tài liệu bổ sung và các bài tập thực hành chủ động.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich empfiehlt, Podcasts mit Notizen, Übungen und Diskussionen zu verbinden.",
+    wrong_reason_vi: "A sai vì đoạn văn khuyến nghị kết hợp podcast với ghi chú, bài tập và thảo luận."
+  },
+  {
+    title: "Aufgabe 24 – Kleine Unternehmen und Digitalisierung",
+    text: `Die Digitalisierung bietet kleinen Unternehmen zahlreiche Möglichkeiten. Sie können ihre Produkte online präsentieren, Kunden über soziale Netzwerke erreichen und Verwaltungsaufgaben mithilfe digitaler Programme vereinfachen. Dadurch lassen sich teilweise auch Kunden gewinnen, die außerhalb der eigenen Region leben.
+
+Trotzdem fällt es vielen kleinen Betrieben schwer, digitale Lösungen einzuführen. Häufig fehlen finanzielle Mittel oder Mitarbeiter mit entsprechenden Fachkenntnissen. Zudem müssen neue Programme in bestehende Arbeitsabläufe integriert werden, was zunächst zusätzlichen Aufwand verursachen kann.
+
+Experten raten kleinen Unternehmen deshalb, nicht möglichst viele technische Lösungen gleichzeitig einzuführen. Sinnvoller sei es, zunächst die größten Schwierigkeiten im Betrieb zu identifizieren und gezielt passende Werkzeuge auszuwählen. Eine erfolgreiche Digitalisierung hängt demnach weniger von der Menge der eingesetzten Technik ab als davon, ob sie tatsächlich einen praktischen Nutzen bringt.`,
+    question: "Welche Vorgehensweise empfehlen Experten kleinen Unternehmen?",
+    a: "Sie sollten zuerst ihren Bedarf analysieren und anschließend passende digitale Lösungen auswählen.",
+    b: "Sie sollten möglichst viele neue Programme gleichzeitig einsetzen.",
+    answer: "A",
+    evidence: "Sinnvoller sei es, zunächst die größten Schwierigkeiten im Betrieb zu identifizieren und gezielt passende Werkzeuge auszuwählen.",
+    explanation: "Die Digitalisierung sollte sich an den tatsächlichen Problemen und Bedürfnissen eines Unternehmens orientieren.",
+    explanation_vi: "Việc số hóa nên dựa trên những vấn đề và nhu cầu thực tế của doanh nghiệp.",
+    wrong_reason: "B ist falsch, denn der Text warnt ausdrücklich davor, zu viele technische Lösungen gleichzeitig einzuführen.",
+    wrong_reason_vi: "B sai vì bài đọc cảnh báo rõ ràng việc triển khai quá nhiều giải pháp công nghệ cùng một lúc."
+  },
+  {
+    title: "Aufgabe 25 – Der Einfluss von Werbung",
+    text: `Werbung begegnet Verbrauchern täglich: im Fernsehen, auf Internetseiten, in sozialen Netzwerken und sogar in öffentlichen Verkehrsmitteln. Unternehmen nutzen unterschiedliche Strategien, um Aufmerksamkeit zu erzeugen und ihre Produkte von denen der Konkurrenz abzuheben.
+
+Besonders wirkungsvoll sind häufig Werbebotschaften, die Gefühle ansprechen. Ein Produkt wird dann nicht nur mit seinen praktischen Eigenschaften verbunden, sondern beispielsweise mit Erfolg, Freiheit oder einem bestimmten Lebensgefühl. Dadurch können Verbraucher den Eindruck gewinnen, dass der Kauf eines Artikels ihr Leben grundlegend verbessern wird.
+
+Medienforscher empfehlen deshalb, Werbeaussagen kritisch zu betrachten. Vor einer Kaufentscheidung sollte man prüfen, ob die dargestellten Vorteile tatsächlich nachweisbar sind. Auch der Vergleich verschiedener Angebote kann helfen, unnötige Ausgaben zu vermeiden. Werbung ist zwar ein wichtiges Instrument der Wirtschaft, sollte aber nicht mit neutraler Produktinformation verwechselt werden.`,
+    question: "Wie versuchen Unternehmen laut Text häufig, Verbraucher zu beeinflussen?",
+    a: "Sie konzentrieren sich ausschließlich auf technische Produktinformationen.",
+    b: "Sie verbinden ihre Produkte mit bestimmten Gefühlen und Lebensvorstellungen.",
+    answer: "B",
+    evidence: "Ein Produkt wird dann nicht nur mit seinen praktischen Eigenschaften verbunden, sondern beispielsweise mit Erfolg, Freiheit oder einem bestimmten Lebensgefühl.",
+    explanation: "Werbung arbeitet häufig mit Emotionen. Sie verkauft nicht nur ein Produkt, sondern auch ein bestimmtes Bild davon, wie das Leben mit diesem Produkt aussehen könnte.",
+    explanation_vi: "Quảng cáo thường tác động đến cảm xúc. Nó không chỉ bán một sản phẩm mà còn gắn sản phẩm với hình ảnh về cuộc sống mà người mua có thể có khi sở hữu nó.",
+    wrong_reason: "A ist falsch, weil der Text gerade beschreibt, dass Werbung oft über praktische Informationen hinausgeht und Gefühle anspricht.",
+    wrong_reason_vi: "A sai vì đoạn văn mô tả quảng cáo thường vượt ra ngoài thông tin thực tế về sản phẩm và tác động đến cảm xúc."
+  },
+  {
+    title: "Aufgabe 26 – Kulturelle Unterschiede im Berufsleben",
+    text: `Internationale Zusammenarbeit gehört für viele Unternehmen inzwischen zum Alltag. Mitarbeiter aus verschiedenen Ländern arbeiten gemeinsam an Projekten, führen Besprechungen und treffen geschäftliche Entscheidungen. Dabei können unterschiedliche kulturelle Gewohnheiten zu Missverständnissen führen.
+
+In manchen Kulturen wird beispielsweise großer Wert auf eine direkte Kommunikation gelegt. In anderen gilt es als höflicher, Kritik vorsichtiger auszudrücken. Auch der Umgang mit Zeit kann unterschiedlich sein: Während einige Teams sehr genaue Zeitpläne erwarten, betrachten andere Termine etwas flexibler.
+
+Solche Unterschiede bedeuten nicht zwangsläufig, dass eine Zusammenarbeit schwierig sein muss. Entscheidend ist vielmehr die Bereitschaft, andere Sichtweisen kennenzulernen und die eigenen Erwartungen zu hinterfragen. Unternehmen bieten deshalb zunehmend interkulturelle Trainings an. Diese sollen nicht dazu führen, dass alle Mitarbeiter gleich handeln, sondern dass sie besser miteinander kommunizieren können.`,
+    question: "Was ist das Ziel interkultureller Trainings?",
+    a: "Unterschiedliche kulturelle Verhaltensweisen sollen vollständig vereinheitlicht werden.",
+    b: "Mitarbeiter sollen lernen, kulturelle Unterschiede besser zu verstehen und miteinander umzugehen.",
+    answer: "B",
+    evidence: "Diese sollen nicht dazu führen, dass alle Mitarbeiter gleich handeln, sondern dass sie besser miteinander kommunizieren können.",
+    explanation: "Interkulturelle Trainings sollen Verständnis schaffen und die Zusammenarbeit verbessern, nicht alle Unterschiede beseitigen.",
+    explanation_vi: "Các khóa đào tạo liên văn hóa nhằm tạo sự thấu hiểu và cải thiện hợp tác, chứ không phải xóa bỏ mọi khác biệt.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich sagt, dass nicht alle Mitarbeiter gleich handeln müssen.",
+    wrong_reason_vi: "A sai vì bài đọc nói rõ rằng không cần tất cả nhân viên phải hành động giống hệt nhau."
+  },
+  {
+    title: "Aufgabe 27 – Reparieren statt Wegwerfen",
+    text: `Viele technische Geräte werden heute ersetzt, obwohl sie noch repariert werden könnten. Häufig entscheiden sich Verbraucher für ein neues Produkt, weil eine Reparatur teuer erscheint oder passende Ersatzteile schwer zu finden sind. Dadurch entstehen große Mengen an Elektroschrott.
+
+In einigen Städten gibt es inzwischen sogenannte Reparaturcafés. Dort treffen sich freiwillige Helfer und Menschen, die beschädigte Gegenstände wieder funktionsfähig machen möchten. Die Besucher können bei der Reparatur mithelfen und dabei lernen, wie ihre Geräte aufgebaut sind.
+
+Solche Initiativen haben nicht nur einen ökologischen Effekt. Sie fördern auch den Austausch von Wissen und stärken das Bewusstsein dafür, dass viele Gegenstände länger genutzt werden können. Allerdings lassen sich nicht alle Schäden mit einfachen Mitteln beheben. Bei komplizierten technischen Problemen ist weiterhin professionelle Hilfe erforderlich.`,
+    question: "Welchen zusätzlichen Vorteil bieten Reparaturcafés neben dem Umweltschutz?",
+    a: "Sie ermöglichen den Austausch von Wissen und praktische Lernerfahrungen.",
+    b: "Sie garantieren, dass jedes beschädigte Gerät kostenlos repariert werden kann.",
+    answer: "A",
+    evidence: "Sie fördern auch den Austausch von Wissen und stärken das Bewusstsein dafür, dass viele Gegenstände länger genutzt werden können.",
+    explanation: "In Reparaturcafés können Besucher nicht nur Gegenstände reparieren, sondern auch von den Erfahrungen anderer lernen.",
+    explanation_vi: "Tại các quán cà phê sửa chữa, khách tham gia không chỉ có thể sửa đồ vật mà còn học hỏi từ kinh nghiệm của người khác.",
+    wrong_reason: "B ist falsch, weil der Text keine Garantie für eine kostenlose Reparatur aller Geräte gibt. Manche Schäden erfordern sogar professionelle Hilfe.",
+    wrong_reason_vi: "B sai vì đoạn văn không bảo đảm rằng mọi thiết bị đều có thể được sửa miễn phí. Một số hư hỏng thậm chí cần đến sự trợ giúp chuyên nghiệp."
+  },
+  {
+    title: "Aufgabe 28 – Schlaf und Leistungsfähigkeit",
+    text: `Ausreichender Schlaf ist eine wichtige Voraussetzung für körperliche und geistige Leistungsfähigkeit. Während der Nacht verarbeitet das Gehirn neue Informationen und festigt Erinnerungen. Wer regelmäßig zu wenig schläft, kann sich deshalb schlechter konzentrieren und reagiert in bestimmten Situationen langsamer.
+
+Dennoch unterschätzen viele Menschen die Bedeutung eines regelmäßigen Schlafrhythmus. Sie gehen unter der Woche spät ins Bett und versuchen, den Schlafmangel am Wochenende auszugleichen. Fachleute weisen darauf hin, dass ein stark wechselnder Schlafrhythmus den natürlichen Tagesablauf des Körpers stören kann.
+
+Hilfreich sind feste Schlafenszeiten und eine ruhige Umgebung. Außerdem sollte man kurz vor dem Schlafengehen möglichst auf intensive Bildschirmnutzung verzichten. Entscheidend ist jedoch nicht nur die Dauer des Schlafs, sondern auch seine Qualität. Jeder Mensch hat dabei einen etwas anderen Schlafbedarf.`,
+    question: "Was empfehlen Fachleute im Zusammenhang mit dem Schlafrhythmus?",
+    a: "Unter der Woche sollte man möglichst wenig schlafen und am Wochenende länger schlafen.",
+    b: "Regelmäßige Schlafenszeiten können helfen, den natürlichen Rhythmus zu unterstützen.",
+    answer: "B",
+    evidence: "Hilfreich sind feste Schlafenszeiten und eine ruhige Umgebung.",
+    explanation: "Ein regelmäßiger Schlafrhythmus unterstützt den natürlichen Tagesablauf des Körpers. Starke Schwankungen können dagegen problematisch sein.",
+    explanation_vi: "Nhịp sinh hoạt ngủ nghỉ đều đặn hỗ trợ nhịp sinh học tự nhiên của cơ thể. Ngược lại, những thay đổi quá lớn có thể gây bất lợi.",
+    wrong_reason: "A ist falsch, weil der Text gerade darauf hinweist, dass das Nachholen von Schlaf am Wochenende einen unregelmäßigen Rhythmus nicht unbedingt ausgleicht.",
+    wrong_reason_vi: "A sai vì bài đọc lưu ý rằng ngủ bù vào cuối tuần không nhất thiết bù đắp được nhịp sinh hoạt thiếu đều đặn."
+  },
+  {
+    title: "Aufgabe 29 – Wissenschaftskommunikation",
+    text: `Wissenschaftliche Forschung ist häufig komplex und für Menschen ohne Fachkenntnisse schwer verständlich. Dennoch betrifft sie viele Bereiche des täglichen Lebens, beispielsweise Gesundheit, Energieversorgung oder Klimaschutz. Deshalb wird es immer wichtiger, Forschungsergebnisse verständlich zu vermitteln.
+
+Wissenschaftler nutzen dafür zunehmend Videos, Podcasts und öffentliche Veranstaltungen. Ziel ist es, nicht nur fertige Ergebnisse zu präsentieren, sondern auch zu erklären, wie wissenschaftliche Erkenntnisse entstehen. Dazu gehört, dass Unsicherheiten und offene Fragen offen angesprochen werden.
+
+Manche Forscher befürchten, dass eine vereinfachte Darstellung zu Missverständnissen führen könnte. Andere halten es für problematischer, wenn wissenschaftliche Themen ausschließlich in Fachkreisen diskutiert werden. Eine gute Wissenschaftskommunikation muss daher verständlich sein, ohne wichtige Zusammenhänge zu verfälschen.`,
+    question: "Welche Herausforderung besteht bei der Vermittlung wissenschaftlicher Erkenntnisse?",
+    a: "Komplexe Inhalte sollen verständlich erklärt werden, ohne ihre Bedeutung zu verfälschen.",
+    b: "Wissenschaftliche Themen sollten ausschließlich von Fachleuten diskutiert werden.",
+    answer: "A",
+    evidence: "Eine gute Wissenschaftskommunikation muss daher verständlich sein, ohne wichtige Zusammenhänge zu verfälschen.",
+    explanation: "Die zentrale Schwierigkeit besteht darin, komplizierte Inhalte zu vereinfachen und dabei fachlich korrekt zu bleiben.",
+    explanation_vi: "Khó khăn cốt lõi là phải diễn đạt những nội dung phức tạp một cách dễ hiểu mà vẫn giữ được tính chính xác về chuyên môn.",
+    wrong_reason: "B ist falsch, weil der Text gerade betont, dass Forschungsergebnisse auch Menschen außerhalb wissenschaftlicher Fachkreise erreichen sollen.",
+    wrong_reason_vi: "B sai vì đoạn văn nhấn mạnh rằng kết quả nghiên cứu cần đến được với cả những người không thuộc giới chuyên môn."
+  },
+  {
+    title: "Aufgabe 30 – Regionale Produkte",
+    text: `Der Kauf regionaler Produkte wird von vielen Verbrauchern als Beitrag zum Umweltschutz betrachtet. Lebensmittel aus der Umgebung müssen häufig kürzere Transportwege zurücklegen und können die wirtschaftliche Entwicklung kleiner landwirtschaftlicher Betriebe unterstützen.
+
+Allerdings ist die Herkunft eines Produkts allein kein zuverlässiger Hinweis auf seine gesamte Umweltbilanz. Entscheidend sind auch die Anbaumethode, der Energieverbrauch bei der Lagerung und die Art der Verpackung. Ein regional angebautes Produkt, das in einem beheizten Gewächshaus wächst, kann unter Umständen eine schlechtere Umweltbilanz haben als ein saisonales Produkt aus größerer Entfernung.
+
+Experten empfehlen deshalb, beim Einkauf nicht nur auf die Herkunft zu achten. Auch die Saison, die Produktionsbedingungen und die Verpackung sollten berücksichtigt werden. Regional einzukaufen kann sinnvoll sein, ist aber nicht automatisch in jedem Fall die umweltfreundlichste Entscheidung.`,
+    question: "Welche Aussage vertritt der Text über regionale Lebensmittel?",
+    a: "Regionale Produkte sind unabhängig von ihrer Herstellung immer umweltfreundlicher.",
+    b: "Für die Umweltbilanz spielen neben der Herkunft auch andere Faktoren eine Rolle.",
+    answer: "B",
+    evidence: "Entscheidend sind auch die Anbaumethode, der Energieverbrauch bei der Lagerung und die Art der Verpackung.",
+    explanation: "Die Umweltbilanz hängt von mehreren Faktoren ab. Kurze Transportwege allein garantieren noch keine besonders umweltfreundliche Herstellung.",
+    explanation_vi: "Tác động môi trường phụ thuộc vào nhiều yếu tố. Chỉ riêng quãng đường vận chuyển ngắn không bảo đảm rằng quá trình sản xuất thân thiện với môi trường.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich ein Beispiel nennt, bei dem ein regionales Produkt eine schlechtere Umweltbilanz haben kann.",
+    wrong_reason_vi: "A sai vì bài đọc đưa ra ví dụ cho thấy một sản phẩm địa phương vẫn có thể có tác động môi trường xấu hơn."
+  },
+  {
+    title: "Aufgabe 31 – Elektromobilität",
+    text: `Elektroautos werden zunehmend als Alternative zu Fahrzeugen mit Verbrennungsmotor betrachtet. Sie verursachen während der Fahrt keine direkten Abgase und können dazu beitragen, die Luftqualität in Städten zu verbessern. Allerdings hängt ihre tatsächliche Umweltbilanz auch davon ab, wie der benötigte Strom erzeugt und die Batterie hergestellt wird.
+
+Ein weiteres Hindernis ist die Ladeinfrastruktur. Während es in größeren Städten immer mehr öffentliche Ladestationen gibt, ist die Versorgung in ländlichen Regionen teilweise noch unzureichend. Für Menschen ohne eigene Garage kann es deshalb schwierig sein, ein Elektroauto regelmäßig aufzuladen.
+
+Experten sehen die Elektromobilität als wichtigen Bestandteil einer zukünftigen Verkehrswende. Sie betonen jedoch, dass neben technischen Verbesserungen auch der Ausbau öffentlicher Verkehrsmittel notwendig bleibt.`,
+    question: "Welche Einschränkung der Elektromobilität wird im Text genannt?",
+    a: "Die Umweltbilanz hängt unter anderem von der Stromerzeugung und Batterieproduktion ab.",
+    b: "Elektroautos können grundsätzlich nicht in ländlichen Regionen genutzt werden.",
+    answer: "A",
+    evidence: "Allerdings hängt ihre tatsächliche Umweltbilanz auch davon ab, wie der benötigte Strom erzeugt und die Batterie hergestellt wird.",
+    explanation: "Elektroautos verursachen während der Fahrt keine direkten Abgase. Ihre gesamte Umweltbilanz hängt aber auch von der Herstellung und der Energiequelle ab.",
+    explanation_vi: "Xe điện không thải khí trực tiếp khi đang di chuyển. Tuy nhiên, tác động môi trường tổng thể còn phụ thuộc vào quá trình sản xuất và nguồn năng lượng.",
+    wrong_reason: "B ist falsch. Der Text sagt nicht, dass Elektroautos auf dem Land unmöglich sind, sondern dass dort die Ladeinfrastruktur teilweise noch unzureichend ist.",
+    wrong_reason_vi: "B sai. Đoạn văn không nói rằng xe điện không thể sử dụng ở nông thôn, mà chỉ cho biết hạ tầng sạc tại đó đôi khi còn chưa đầy đủ."
+  },
+  {
+    title: "Aufgabe 32 – Selbstständigkeit im Studium",
+    text: `Ein Studium verlangt von jungen Menschen ein hohes Maß an Selbstorganisation. Anders als in der Schule müssen Studierende häufig selbst entscheiden, wann sie lernen, welche Veranstaltungen sie besuchen und wie sie sich auf Prüfungen vorbereiten.
+
+Diese Freiheit wird von vielen als Vorteil empfunden. Gleichzeitig kann sie jedoch zu Schwierigkeiten führen, wenn Lernzeiten nicht sinnvoll geplant werden. Manche Studierende verschieben Aufgaben so lange, bis kurz vor einer Prüfung großer Zeitdruck entsteht.
+
+Hochschulen bieten deshalb zunehmend Beratungsangebote und Kurse zum Zeitmanagement an. Dabei geht es nicht darum, den gesamten Tagesablauf vorzuschreiben. Vielmehr sollen Studierende lernen, realistische Ziele zu setzen und ihre Aufgaben eigenständig zu organisieren. Wer frühzeitig Unterstützung sucht, kann Schwierigkeiten häufig vermeiden.`,
+    question: "Was sollen Kurse zum Zeitmanagement an Hochschulen erreichen?",
+    a: "Sie sollen den Studierenden einen festen Tagesablauf vorschreiben.",
+    b: "Sie sollen Studierende dabei unterstützen, ihre Aufgaben selbstständig zu planen.",
+    answer: "B",
+    evidence: "Vielmehr sollen Studierende lernen, realistische Ziele zu setzen und ihre Aufgaben eigenständig zu organisieren.",
+    explanation: "Die Kurse sollen die Selbstorganisation verbessern. Die Studierenden sollen lernen, selbst Verantwortung für ihr Lernen zu übernehmen.",
+    explanation_vi: "Các khóa học nhằm cải thiện khả năng tự tổ chức. Sinh viên cần học cách tự chịu trách nhiệm đối với việc học của mình.",
+    wrong_reason: "A ist falsch, denn im Text steht ausdrücklich, dass kein vollständiger Tagesablauf vorgeschrieben werden soll.",
+    wrong_reason_vi: "A sai vì bài đọc nói rõ rằng các khóa học không nhằm áp đặt một lịch trình hằng ngày cố định."
+  },
+  {
+    title: "Aufgabe 33 – Secondhand-Kleidung",
+    text: `Secondhand-Kleidung wird besonders bei jüngeren Verbrauchern immer beliebter. In spezialisierten Geschäften und auf digitalen Plattformen lassen sich gebrauchte Kleidungsstücke zu vergleichsweise günstigen Preisen kaufen. Gleichzeitig wird dadurch die Nutzungsdauer vieler Produkte verlängert.
+
+Einige Menschen verbinden gebrauchte Kleidung noch immer mit schlechter Qualität oder einem niedrigen sozialen Status. Diese Einstellung verändert sich jedoch langsam. Für viele Käufer spielen inzwischen individuelle Mode, Nachhaltigkeit und ein bewusster Umgang mit Ressourcen eine größere Rolle.
+
+Trotzdem sollte man auch beim Kauf gebrauchter Kleidung auf Qualität und Zustand achten. Nicht jedes günstige Angebot ist automatisch eine gute Wahl. Fachleute empfehlen, Kleidungsstücke sorgfältig zu prüfen und nur Dinge zu kaufen, die man tatsächlich verwenden möchte.`,
+    question: "Warum gewinnt Secondhand-Kleidung an Bedeutung?",
+    a: "Weil sie günstige Preise mit einem bewussteren Umgang mit Ressourcen verbinden kann.",
+    b: "Weil gebrauchte Kleidung grundsätzlich eine bessere Qualität als neue Kleidung besitzt.",
+    answer: "A",
+    evidence: "Für viele Käufer spielen inzwischen individuelle Mode, Nachhaltigkeit und ein bewusster Umgang mit Ressourcen eine größere Rolle.",
+    explanation: "Secondhand-Kleidung ist für viele Menschen attraktiv, weil sie Ressourcen schont und individuelle Einkaufsmöglichkeiten bietet.",
+    explanation_vi: "Quần áo secondhand hấp dẫn nhiều người vì có thể tiết kiệm tài nguyên và mang đến những lựa chọn mua sắm độc đáo.",
+    wrong_reason: "B ist falsch. Der Text behauptet nicht, dass gebrauchte Kleidung grundsätzlich besser ist, sondern empfiehlt, Zustand und Qualität zu prüfen.",
+    wrong_reason_vi: "B sai. Đoạn văn không khẳng định quần áo đã qua sử dụng luôn tốt hơn, mà khuyên người mua kiểm tra tình trạng và chất lượng sản phẩm."
+  },
+  {
+    title: "Aufgabe 34 – Arbeiten im Ausland",
+    text: `Ein beruflicher Aufenthalt im Ausland kann für Beschäftigte eine wertvolle Erfahrung sein. Sie lernen neue Arbeitsweisen kennen, verbessern ihre Sprachkenntnisse und können internationale Kontakte aufbauen. Besonders in Unternehmen mit internationalen Standorten werden solche Erfahrungen häufig geschätzt.
+
+Allerdings ist ein Auslandsaufenthalt nicht automatisch einfach. Neben sprachlichen Herausforderungen müssen sich Beschäftigte an andere Arbeitsabläufe und gesellschaftliche Gewohnheiten gewöhnen. Auch die Entfernung zur Familie und zum Freundeskreis kann belastend sein.
+
+Vor einer solchen Entscheidung ist es deshalb sinnvoll, sich gründlich vorzubereiten. Dazu gehören Informationen über das Zielland, die Arbeitsbedingungen und die Wohnsituation. Unternehmen können ihre Mitarbeiter unterstützen, indem sie Beratung anbieten und bei organisatorischen Fragen helfen.`,
+    question: "Was sollte man vor einem beruflichen Aufenthalt im Ausland tun?",
+    a: "Man sollte sich möglichst umfassend über das Zielland und die Arbeitsbedingungen informieren.",
+    b: "Man sollte davon ausgehen, dass berufliche und private Schwierigkeiten automatisch verschwinden.",
+    answer: "A",
+    evidence: "Dazu gehören Informationen über das Zielland, die Arbeitsbedingungen und die Wohnsituation.",
+    explanation: "Eine gute Vorbereitung kann dabei helfen, sprachliche, berufliche und private Herausforderungen besser zu bewältigen.",
+    explanation_vi: "Sự chuẩn bị tốt có thể giúp người lao động ứng phó hiệu quả hơn với những thách thức về ngôn ngữ, công việc và đời sống cá nhân.",
+    wrong_reason: "B ist falsch, weil der Text ausdrücklich auf mögliche Belastungen und Schwierigkeiten eines Auslandsaufenthalts hinweist.",
+    wrong_reason_vi: "B sai vì bài đọc đề cập rõ những áp lực và khó khăn có thể phát sinh khi làm việc ở nước ngoài."
+  },
+  {
+    title: "Aufgabe 35 – Öffentliche Parks",
+    text: `Öffentliche Parks sind für viele Stadtbewohner wichtige Orte der Erholung. Sie bieten Platz für Spaziergänge, sportliche Aktivitäten und Begegnungen. Besonders in dicht bebauten Stadtteilen können Grünflächen dazu beitragen, die Lebensqualität deutlich zu verbessern.
+
+Darüber hinaus erfüllen Parks ökologische Aufgaben. Bäume spenden Schatten, Pflanzen bieten Lebensräume für Insekten und Grünflächen können Regenwasser aufnehmen. Bei hohen Temperaturen wirken größere Grünanlagen außerdem häufig wie natürliche Kühlbereiche.
+
+Die Pflege solcher Flächen verursacht allerdings Kosten. Stadtverwaltungen müssen entscheiden, welche Bereiche regelmäßig gepflegt werden und wo naturnahe Flächen entstehen können. Fachleute empfehlen, die Bevölkerung in diese Entscheidungen einzubeziehen, damit unterschiedliche Bedürfnisse berücksichtigt werden.`,
+    question: "Welche ökologische Funktion können öffentliche Parks erfüllen?",
+    a: "Sie verhindern, dass in Städten überhaupt noch hohe Temperaturen auftreten.",
+    b: "Sie bieten Lebensräume für Tiere und können zur Abkühlung beitragen.",
+    answer: "B",
+    evidence: "Bäume spenden Schatten, Pflanzen bieten Lebensräume für Insekten und Grünflächen können Regenwasser aufnehmen.",
+    explanation: "Parks leisten einen Beitrag zum Stadtklima und zur biologischen Vielfalt. Sie können hohe Temperaturen jedoch nicht vollständig verhindern.",
+    explanation_vi: "Công viên góp phần cải thiện khí hậu đô thị và bảo vệ đa dạng sinh học. Tuy nhiên, chúng không thể ngăn nhiệt độ tăng cao hoàn toàn.",
+    wrong_reason: "A ist falsch, weil der Text nur von einer kühlenden Wirkung spricht und nicht behauptet, dass hohe Temperaturen dadurch ausgeschlossen werden.",
+    wrong_reason_vi: "A sai vì đoạn văn chỉ nói công viên có tác dụng làm mát, chứ không khẳng định chúng có thể loại bỏ hoàn toàn nhiệt độ cao."
+  },
+  {
+    title: "Aufgabe 36 – Digitale Bewerbungen",
+    text: `Viele Unternehmen nehmen Bewerbungen inzwischen ausschließlich über digitale Plattformen entgegen. Bewerber können dort ihre Unterlagen hochladen und persönliche Angaben direkt in Formulare eintragen. Für Personalabteilungen wird es dadurch einfacher, Bewerbungen zu verwalten und miteinander zu vergleichen.
+
+Allerdings kann die technische Vereinfachung auch neue Probleme verursachen. Wenn Formulare unübersichtlich gestaltet sind oder bestimmte Dateiformate nicht akzeptieren, kann der Bewerbungsprozess unnötig kompliziert werden. Außerdem besteht die Gefahr, dass Bewerber mit geringeren digitalen Kenntnissen benachteiligt werden.
+
+Unternehmen sollten deshalb darauf achten, dass ihre Bewerbungsplattformen verständlich und möglichst barrierearm gestaltet sind. Eine gute digitale Lösung spart nicht nur Zeit, sondern ermöglicht auch einen fairen Zugang zum Bewerbungsverfahren.`,
+    question: "Was sollten Unternehmen bei digitalen Bewerbungsplattformen beachten?",
+    a: "Die Plattformen sollten leicht verständlich und für möglichst viele Menschen zugänglich sein.",
+    b: "Die Plattformen sollten ausschließlich von Personen mit guten Computerkenntnissen genutzt werden können.",
+    answer: "A",
+    evidence: "Unternehmen sollten deshalb darauf achten, dass ihre Bewerbungsplattformen verständlich und möglichst barrierearm gestaltet sind.",
+    explanation: "Ein digitales Bewerbungsverfahren sollte den Prozess vereinfachen und nicht bestimmte Bewerbergruppen ausschließen.",
+    explanation_vi: "Quy trình ứng tuyển trực tuyến nên giúp quá trình tuyển dụng đơn giản hơn, chứ không được loại trừ một số nhóm ứng viên.",
+    wrong_reason: "B ist falsch, weil der Text gerade darauf hinweist, dass Menschen mit geringeren digitalen Kenntnissen nicht benachteiligt werden sollten.",
+    wrong_reason_vi: "B sai vì bài đọc nhấn mạnh rằng không nên gây bất lợi cho những người có kỹ năng sử dụng công nghệ còn hạn chế."
+  },
+  {
+    title: "Aufgabe 37 – Haustiere und Verantwortung",
+    text: `Haustiere können das Leben ihrer Besitzer bereichern. Hunde, Katzen und andere Tiere bieten Gesellschaft und können den Alltag abwechslungsreicher gestalten. Besonders für Menschen, die allein leben, kann ein Tier eine wichtige emotionale Bedeutung haben.
+
+Allerdings wird manchmal unterschätzt, wie viel Verantwortung mit einem Haustier verbunden ist. Tiere benötigen regelmäßig Futter, Pflege und ausreichend Bewegung. Außerdem können Tierarztkosten entstehen, die nicht immer vorhersehbar sind. Wer beruflich viel unterwegs ist, muss ebenfalls sicherstellen, dass das Tier gut versorgt wird.
+
+Tierschutzorganisationen empfehlen deshalb, vor der Anschaffung eines Haustiers die eigenen Lebensbedingungen realistisch einzuschätzen. Die Entscheidung sollte nicht allein aus einem spontanen Wunsch heraus getroffen werden. Schließlich bedeutet die Aufnahme eines Tieres eine langfristige Verpflichtung.`,
+    question: "Was empfehlen Tierschutzorganisationen vor der Anschaffung eines Haustiers?",
+    a: "Man sollte zunächst prüfen, ob man dauerhaft für das Tier sorgen kann.",
+    b: "Man sollte sich vor allem nach der aktuellen Beliebtheit einer Tierart richten.",
+    answer: "A",
+    evidence: "Vor der Anschaffung eines Haustiers die eigenen Lebensbedingungen realistisch einzuschätzen.",
+    explanation: "Ein Haustier braucht langfristig Zeit, Geld und Pflege. Deshalb sollte die Entscheidung gut überlegt sein.",
+    explanation_vi: "Thú cưng cần được chăm sóc lâu dài, tốn thời gian và chi phí. Vì vậy, quyết định nuôi thú cưng cần được cân nhắc kỹ.",
+    wrong_reason: "B ist falsch, weil die Beliebtheit einer Tierart nichts darüber aussagt, ob man ihr gerecht werden kann.",
+    wrong_reason_vi: "B sai vì mức độ phổ biến của một loài thú cưng không cho biết liệu người nuôi có thể chăm sóc và đáp ứng tốt nhu cầu của nó hay không."
+  },
+  {
+    title: "Aufgabe 38 – Klimafreundliches Reisen",
+    text: `Immer mehr Reisende beschäftigen sich mit den ökologischen Folgen ihrer Urlaubsplanung. Besonders Flugreisen stehen in der Diskussion, weil sie mit vergleichsweise hohen Treibhausgasemissionen verbunden sein können. Einige Menschen entscheiden sich deshalb häufiger für Zugreisen oder Urlaubsziele in der näheren Umgebung.
+
+Ein klimafreundlicher Urlaub hängt jedoch nicht allein vom Verkehrsmittel ab. Auch die Unterkunft, der Energieverbrauch vor Ort und die Aktivitäten während der Reise spielen eine Rolle. Ein Hotel mit hohem Ressourcenverbrauch kann beispielsweise die Umweltbilanz eines Urlaubs verschlechtern.
+
+Reiseexperten empfehlen, die gesamte Reise zu betrachten und bewusste Entscheidungen zu treffen. Dabei muss nicht jede Reise vollständig vermieden werden. Oft können bereits eine längere Aufenthaltsdauer und eine sorgfältige Auswahl der Unterkunft einen Unterschied machen.`,
+    question: "Welche Aussage über klimafreundliches Reisen ist richtig?",
+    a: "Die Wahl des Verkehrsmittels ist der einzige Faktor, der die Umweltbilanz beeinflusst.",
+    b: "Auch Unterkunft und Verhalten am Urlaubsort beeinflussen die Umweltbilanz.",
+    answer: "B",
+    evidence: "Auch die Unterkunft, der Energieverbrauch vor Ort und die Aktivitäten während der Reise spielen eine Rolle.",
+    explanation: "Für eine realistische Umweltbilanz muss man die gesamte Reise betrachten und nicht nur die An- und Abreise.",
+    explanation_vi: "Để đánh giá tác động môi trường một cách thực tế, cần xem xét toàn bộ chuyến đi chứ không chỉ hành trình đi và về.",
+    wrong_reason: "A ist falsch, weil der Text mehrere weitere Einflussfaktoren nennt.",
+    wrong_reason_vi: "A sai vì đoạn văn nêu thêm nhiều yếu tố khác ảnh hưởng đến tác động môi trường của chuyến đi."
+  },
+  {
+    title: "Aufgabe 39 – Konflikte im Team",
+    text: `In Teams treffen häufig Menschen mit unterschiedlichen Erfahrungen, Erwartungen und Arbeitsweisen aufeinander. Solche Unterschiede können zu Konflikten führen, müssen aber nicht grundsätzlich negativ sein. Wenn verschiedene Perspektiven offen ausgetauscht werden, können daraus sogar bessere Lösungen entstehen.
+
+Problematisch wird es vor allem dann, wenn Konflikte nicht angesprochen werden. Unausgesprochene Unzufriedenheit kann das Vertrauen innerhalb eines Teams schwächen und die Zusammenarbeit erschweren. Manche Mitarbeiter vermeiden schwierige Gespräche, weil sie befürchten, die Situation dadurch zu verschlimmern.
+
+Führungskräfte sollten deshalb eine Gesprächskultur fördern, in der Kritik sachlich geäußert werden kann. Wichtig ist dabei, nicht nur Probleme zu benennen, sondern gemeinsam nach Lösungen zu suchen. Ein respektvoller Umgang bedeutet nicht, dass alle einer Meinung sein müssen.`,
+    question: "Wie sollten Konflikte im Team laut Text behandelt werden?",
+    a: "Sie sollten offen und sachlich angesprochen werden, um gemeinsame Lösungen zu finden.",
+    b: "Sie sollten grundsätzlich vermieden werden, indem alle Mitarbeiter dieselbe Meinung vertreten.",
+    answer: "A",
+    evidence: "Wichtig ist dabei, nicht nur Probleme zu benennen, sondern gemeinsam nach Lösungen zu suchen.",
+    explanation: "Unterschiedliche Meinungen können hilfreich sein. Entscheidend ist, wie ein Team mit Konflikten umgeht.",
+    explanation_vi: "Những ý kiến khác nhau có thể mang lại lợi ích. Điều quan trọng là cách một nhóm xử lý các xung đột.",
+    wrong_reason: "B ist falsch, weil der Text betont, dass nicht alle Teammitglieder einer Meinung sein müssen.",
+    wrong_reason_vi: "B sai vì bài đọc nhấn mạnh rằng các thành viên trong nhóm không nhất thiết phải có cùng một quan điểm."
+  },
+  {
+    title: "Aufgabe 40 – Museen im digitalen Zeitalter",
+    text: `Museen stehen vor der Aufgabe, ihre Sammlungen auch für ein digitales Publikum interessant zu machen. Viele Einrichtungen bieten inzwischen virtuelle Rundgänge, Online-Ausstellungen und digitale Kataloge an. Dadurch können Besucher Kunstwerke und historische Objekte entdecken, ohne persönlich vor Ort sein zu müssen.
+
+Digitale Angebote haben jedoch Grenzen. Ein Bildschirm kann zwar Informationen vermitteln, aber das unmittelbare Erlebnis eines Kunstwerks oder eines historischen Gegenstands nicht vollständig ersetzen. Besonders die Größe, die Materialität und die räumliche Wirkung eines Objekts lassen sich digital nur eingeschränkt darstellen.
+
+Museumsfachleute sehen digitale Formate deshalb nicht als Ersatz für den Museumsbesuch, sondern als zusätzliche Möglichkeit. Sie können Interesse wecken, den Zugang zu Sammlungen erleichtern und Besucher auf einen späteren Besuch vorbereiten.`,
+    question: "Wie beurteilen Museumsfachleute digitale Angebote?",
+    a: "Sie betrachten sie als vollständigen Ersatz für den Besuch vor Ort.",
+    b: "Sie sehen sie als Ergänzung, die den Zugang zu Sammlungen erleichtern kann.",
+    answer: "B",
+    evidence: "Museumsfachleute sehen digitale Formate deshalb nicht als Ersatz für den Museumsbesuch, sondern als zusätzliche Möglichkeit.",
+    explanation: "Digitale Angebote ermöglichen einen leichteren Zugang, können das direkte Erleben eines Objekts aber nicht vollständig ersetzen.",
+    explanation_vi: "Các dịch vụ kỹ thuật số giúp mọi người tiếp cận dễ dàng hơn, nhưng không thể thay thế hoàn toàn trải nghiệm trực tiếp với hiện vật.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich zwischen einer Ergänzung und einem vollständigen Ersatz unterscheidet.",
+    wrong_reason_vi: "A sai vì đoạn văn phân biệt rõ giữa việc bổ sung trải nghiệm trực tiếp bằng công nghệ số và việc thay thế hoàn toàn trải nghiệm đó."
+  },
+  {
+    title: "Aufgabe 41 – Arbeitszufriedenheit",
+    text: `Ein gutes Gehalt ist für viele Beschäftigte ein wichtiger Faktor bei der Wahl eines Arbeitsplatzes. Dennoch zeigen Befragungen, dass finanzielle Vorteile allein nicht unbedingt zu langfristiger Zufriedenheit führen. Auch das Verhältnis zu Kollegen, die Qualität der Führung und die Möglichkeit zur persönlichen Entwicklung spielen eine wichtige Rolle.
+
+Besonders problematisch ist es, wenn Mitarbeiter das Gefühl haben, dass ihre Leistung nicht anerkannt wird. Fehlende Rückmeldungen können dazu führen, dass sie sich weniger mit ihrer Arbeit identifizieren. Regelmäßige Gespräche zwischen Führungskräften und Beschäftigten können helfen, Erwartungen zu klären und Entwicklungsmöglichkeiten zu erkennen.
+
+Unternehmen sollten daher nicht nur auf finanzielle Anreize setzen. Eine wertschätzende Arbeitsatmosphäre und transparente Entscheidungen können ebenfalls dazu beitragen, Mitarbeiter langfristig zu halten.`,
+    question: "Was trägt laut Text neben dem Gehalt zur Arbeitszufriedenheit bei?",
+    a: "Eine gute Zusammenarbeit und die Anerkennung der geleisteten Arbeit.",
+    b: "Der vollständige Verzicht auf Gespräche zwischen Mitarbeitern und Führungskräften.",
+    answer: "A",
+    evidence: "Auch das Verhältnis zu Kollegen, die Qualität der Führung und die Möglichkeit zur persönlichen Entwicklung spielen eine wichtige Rolle.",
+    explanation: "Arbeitszufriedenheit entsteht durch verschiedene Faktoren. Neben dem Gehalt sind auch Anerkennung, Führung und Entwicklungsmöglichkeiten wichtig.",
+    explanation_vi: "Sự hài lòng trong công việc được hình thành từ nhiều yếu tố. Ngoài tiền lương, sự ghi nhận, cách quản lý và cơ hội phát triển cũng rất quan trọng.",
+    wrong_reason: "B ist falsch, denn der Text empfiehlt regelmäßige Gespräche, um Erwartungen und Entwicklungsmöglichkeiten zu klären.",
+    wrong_reason_vi: "B sai vì bài đọc khuyến nghị tổ chức các cuộc trao đổi thường xuyên để làm rõ kỳ vọng và cơ hội phát triển."
+  },
+  {
+    title: "Aufgabe 42 – Lernen durch Reisen",
+    text: `Reisen wird häufig als Möglichkeit betrachtet, neue Kulturen kennenzulernen und den eigenen Horizont zu erweitern. Wer sich längere Zeit in einem anderen Land aufhält, kann den Alltag der Menschen dort aus einer anderen Perspektive erleben. Besonders der persönliche Kontakt mit Einheimischen ermöglicht Erfahrungen, die Reiseführer allein nicht vermitteln können.
+
+Allerdings bedeutet eine Reise nicht automatisch, dass man eine fremde Kultur wirklich versteht. Wer nur bekannte Sehenswürdigkeiten besucht und hauptsächlich mit anderen Touristen zusammen ist, erhält möglicherweise nur einen begrenzten Eindruck vom Leben vor Ort.
+
+Reiseexperten empfehlen deshalb, sich vor einer Reise mit den gesellschaftlichen und kulturellen Besonderheiten des Ziellandes zu beschäftigen. Gleichzeitig sollte man offen bleiben und eigene Vorstellungen hinterfragen. Interkulturelles Lernen erfordert Zeit und die Bereitschaft, sich auf andere Sichtweisen einzulassen.`,
+    question: "Was kann dazu führen, dass Reisende nur einen begrenzten Eindruck einer Kultur erhalten?",
+    a: "Wenn sie hauptsächlich touristische Orte besuchen und kaum Kontakt zur lokalen Bevölkerung haben.",
+    b: "Wenn sie sich vor der Reise über kulturelle Besonderheiten informieren.",
+    answer: "A",
+    evidence: "Wer nur bekannte Sehenswürdigkeiten besucht und hauptsächlich mit anderen Touristen zusammen ist, erhält möglicherweise nur einen begrenzten Eindruck vom Leben vor Ort.",
+    explanation: "Ein tieferes Verständnis entsteht häufig durch persönliche Begegnungen und den Kontakt mit dem Alltag der Menschen vor Ort.",
+    explanation_vi: "Sự thấu hiểu sâu sắc thường hình thành thông qua những cuộc gặp gỡ trực tiếp và việc tiếp xúc với đời sống thường ngày của người dân địa phương.",
+    wrong_reason: "B ist falsch, weil der Text die Vorbereitung auf kulturelle Besonderheiten ausdrücklich empfiehlt.",
+    wrong_reason_vi: "B sai vì đoạn văn khuyến nghị rõ ràng việc chuẩn bị trước để hiểu những đặc điểm văn hóa khác biệt."
+  },
+  {
+    title: "Aufgabe 43 – Datenschutz in sozialen Netzwerken",
+    text: `Soziale Netzwerke ermöglichen es Menschen, persönliche Erlebnisse, Fotos und Meinungen mit anderen zu teilen. Gleichzeitig sammeln die Plattformen zahlreiche Daten über das Verhalten ihrer Nutzer. Dazu gehören beispielsweise Informationen darüber, welche Beiträge angesehen, kommentiert oder angeklickt werden.
+
+Viele Nutzer wissen nur ungefähr, welche Daten tatsächlich gespeichert und weiterverarbeitet werden. Die Einstellungen zum Datenschutz sind zudem häufig umfangreich und nicht immer leicht verständlich. Dadurch kann es passieren, dass persönliche Informationen einem größeren Personenkreis zugänglich sind als ursprünglich beabsichtigt.
+
+Verbraucherschützer empfehlen deshalb, regelmäßig die eigenen Privatsphäre-Einstellungen zu überprüfen und sparsam mit persönlichen Angaben umzugehen. Besonders bei Fotos und Informationen über andere Personen sollte man vor einer Veröffentlichung sorgfältig überlegen, ob diese tatsächlich öffentlich geteilt werden sollten.`,
+    question: "Welche Maßnahme empfehlen Verbraucherschützer?",
+    a: "Man sollte möglichst viele persönliche Informationen veröffentlichen.",
+    b: "Man sollte die Privatsphäre-Einstellungen regelmäßig kontrollieren.",
+    answer: "B",
+    evidence: "Verbraucherschützer empfehlen deshalb, regelmäßig die eigenen Privatsphäre-Einstellungen zu überprüfen und sparsam mit persönlichen Angaben umzugehen.",
+    explanation: "Nutzer sollten bewusst entscheiden, welche Informationen sie teilen und wer darauf zugreifen darf.",
+    explanation_vi: "Người dùng nên chủ động quyết định mình chia sẻ thông tin nào và ai được phép truy cập những thông tin đó.",
+    wrong_reason: "A ist falsch, weil der Text gerade zu einem vorsichtigen Umgang mit persönlichen Daten rät.",
+    wrong_reason_vi: "A sai vì bài đọc khuyên người dùng cần thận trọng khi xử lý và chia sẻ dữ liệu cá nhân."
+  },
+  {
+    title: "Aufgabe 44 – Kulturelle Veranstaltungen",
+    text: `Kulturelle Veranstaltungen wie Konzerte, Theateraufführungen und Lesungen sind ein wichtiger Bestandteil des öffentlichen Lebens. Sie bieten Künstlern eine Möglichkeit, ihre Arbeit zu präsentieren, und schaffen Orte für Begegnungen zwischen Menschen mit unterschiedlichen Interessen.
+
+In kleineren Städten ist das kulturelle Angebot jedoch häufig eingeschränkter als in großen Metropolen. Veranstalter müssen mit begrenzten finanziellen Mitteln planen und können nicht immer sicher sein, ob genügend Besucher kommen. Öffentliche Förderprogramme können dabei helfen, Veranstaltungen auch außerhalb großer Kulturzentren zu ermöglichen.
+
+Einige Kommunen setzen außerdem auf Kooperationen zwischen Schulen, Vereinen und lokalen Künstlern. Dadurch können neue Formate entstehen, die stärker auf die Interessen der Bevölkerung zugeschnitten sind. Entscheidend ist, dass Kulturangebote nicht nur für ein kleines, bereits interessiertes Publikum zugänglich sind.`,
+    question: "Welche Möglichkeit kann das kulturelle Angebot in kleineren Städten verbessern?",
+    a: "Die Zusammenarbeit zwischen verschiedenen lokalen Einrichtungen und Künstlern.",
+    b: "Die Konzentration sämtlicher Veranstaltungen auf große Metropolen.",
+    answer: "A",
+    evidence: "Einige Kommunen setzen außerdem auf Kooperationen zwischen Schulen, Vereinen und lokalen Künstlern.",
+    explanation: "Durch Zusammenarbeit können neue Veranstaltungen entstehen, die besser zu den Bedürfnissen der örtlichen Bevölkerung passen.",
+    explanation_vi: "Thông qua hợp tác, có thể tạo ra những sự kiện mới phù hợp hơn với nhu cầu của người dân địa phương.",
+    wrong_reason: "B ist falsch, weil der Text gerade Möglichkeiten beschreibt, Kulturangebote außerhalb großer Städte zu stärken.",
+    wrong_reason_vi: "B sai vì đoạn văn mô tả những cách thức có thể giúp tăng cường các hoạt động văn hóa ở những khu vực ngoài các thành phố lớn."
+  },
+  {
+    title: "Aufgabe 45 – Ernährung in Schulen",
+    text: `Die Ernährung von Kindern und Jugendlichen spielt eine wichtige Rolle für ihre Entwicklung und Konzentrationsfähigkeit. Deshalb beschäftigen sich immer mehr Schulen mit der Qualität ihres Essensangebots. Neben warmen Mahlzeiten werden auch Obst, Gemüse und ausreichend Trinkwasser angeboten.
+
+Eine ausgewogene Schulverpflegung lässt sich allerdings nicht allein durch gesunde Speisepläne erreichen. Entscheidend ist auch, ob die angebotenen Gerichte den Geschmack der Schüler treffen. Wenn Mahlzeiten regelmäßig abgelehnt werden, landet ein großer Teil des Essens im Müll.
+
+Ernährungsfachleute empfehlen deshalb, Schüler an der Gestaltung des Speiseplans zu beteiligen. Gleichzeitig können Unterrichtsprojekte erklären, welche Bedeutung verschiedene Lebensmittel für den Körper haben. So lässt sich gesundes Essen nicht nur anbieten, sondern auch verständlich vermitteln.`,
+    question: "Warum sollten Schüler bei der Gestaltung des Speiseplans mitwirken?",
+    a: "Damit die angebotenen Mahlzeiten eher ihren Bedürfnissen und ihrem Geschmack entsprechen.",
+    b: "Damit Schulen auf eine ausgewogene Ernährung vollständig verzichten können.",
+    answer: "A",
+    evidence: "Wenn Mahlzeiten regelmäßig abgelehnt werden, landet ein großer Teil des Essens im Müll.",
+    explanation: "Die Beteiligung der Schüler kann helfen, Speisen anzubieten, die sie tatsächlich essen. Dadurch lässt sich auch Lebensmittelverschwendung vermeiden.",
+    explanation_vi: "Việc để học sinh tham gia đóng góp ý kiến có thể giúp nhà trường cung cấp những món ăn mà các em thực sự muốn ăn. Nhờ đó, tình trạng lãng phí thực phẩm cũng có thể giảm.",
+    wrong_reason: "B ist falsch, weil der Text weiterhin eine ausgewogene Schulverpflegung als wichtiges Ziel beschreibt.",
+    wrong_reason_vi: "B sai vì bài đọc vẫn xem việc cung cấp bữa ăn học đường cân bằng dinh dưỡng là một mục tiêu quan trọng."
+  },
+  {
+    title: "Aufgabe 46 – Automatisierung in der Industrie",
+    text: `In vielen Industriebetrieben übernehmen Maschinen und computergesteuerte Systeme zunehmend Aufgaben, die früher von Menschen ausgeführt wurden. Automatisierte Anlagen können bestimmte Arbeitsschritte schneller und mit gleichbleibender Präzision erledigen. Dadurch lassen sich Produktionsprozesse effizienter gestalten.
+
+Gleichzeitig verändert sich die Rolle der Beschäftigten. Sie müssen häufiger Maschinen überwachen, technische Probleme erkennen und Produktionsdaten auswerten. Für manche Arbeitnehmer bedeutet das, dass sie neue Kenntnisse erwerben müssen. Andere Tätigkeiten können durch die Automatisierung tatsächlich wegfallen.
+
+Experten betonen deshalb die Bedeutung beruflicher Weiterbildung. Unternehmen sollten ihre Mitarbeiter frühzeitig auf Veränderungen vorbereiten und ihnen Möglichkeiten bieten, neue Kompetenzen zu entwickeln. Die technische Entwicklung betrifft somit nicht nur die Produktion, sondern auch die Qualifikationen, die auf dem Arbeitsmarkt benötigt werden.`,
+    question: "Wie verändert die Automatisierung die Arbeit der Beschäftigten?",
+    a: "Alle Beschäftigten verlieren automatisch ihre Arbeitsplätze.",
+    b: "Viele Beschäftigte müssen neue technische Fähigkeiten erwerben.",
+    answer: "B",
+    evidence: "Sie müssen häufiger Maschinen überwachen, technische Probleme erkennen und Produktionsdaten auswerten.",
+    explanation: "Automatisierung verändert die Aufgabenprofile. Beschäftigte übernehmen teilweise andere Tätigkeiten und benötigen dafür neue Kenntnisse.",
+    explanation_vi: "Tự động hóa làm thay đổi tính chất công việc. Người lao động đôi khi đảm nhận những nhiệm vụ khác và cần có kiến thức mới để thực hiện chúng.",
+    wrong_reason: "A ist falsch, weil der Text zwar den Wegfall bestimmter Tätigkeiten erwähnt, aber keineswegs behauptet, dass alle Beschäftigten ihre Arbeit verlieren.",
+    wrong_reason_vi: "A sai vì đoạn văn có đề cập đến việc một số nhiệm vụ nhất định biến mất, nhưng không hề khẳng định rằng tất cả người lao động đều mất việc."
+  },
+  {
+    title: "Aufgabe 47 – Freie Zeit und Erholung",
+    text: `Viele Menschen haben im Alltag das Gefühl, ständig beschäftigt zu sein. Berufliche Aufgaben, familiäre Verpflichtungen und private Termine lassen häufig wenig Raum für Erholung. Selbst in der Freizeit werden Nachrichten gelesen oder soziale Netzwerke überprüft, sodass eine echte Pause manchmal ausbleibt.
+
+Psychologen weisen darauf hin, dass Erholung nicht unbedingt mit aufwendigen Aktivitäten verbunden sein muss. Schon ein Spaziergang, eine kurze Pause ohne digitale Geräte oder ein ruhiges Gespräch können helfen, Abstand vom Alltag zu gewinnen.
+
+Wichtig ist außerdem, die eigene Freizeit nicht vollständig mit Verpflichtungen zu füllen. Wer jede freie Stunde verplant, hat möglicherweise Schwierigkeiten, spontan auf die eigenen Bedürfnisse zu reagieren. Fachleute empfehlen deshalb, bewusst Zeiträume ohne feste Aufgaben einzuplanen.`,
+    question: "Was empfehlen Psychologen für eine bessere Erholung?",
+    a: "Auch freie Zeiträume ohne feste Verpflichtungen einzuplanen.",
+    b: "Jede freie Stunde mit möglichst vielen Aktivitäten zu füllen.",
+    answer: "A",
+    evidence: "Fachleute empfehlen deshalb, bewusst Zeiträume ohne feste Aufgaben einzuplanen.",
+    explanation: "Erholung braucht nicht immer ein bestimmtes Programm. Unverplante Zeit kann dabei helfen, sich zu entspannen und eigene Bedürfnisse wahrzunehmen.",
+    explanation_vi: "Nghỉ ngơi không phải lúc nào cũng cần một chương trình cụ thể. Khoảng thời gian không bị lên lịch có thể giúp con người thư giãn và nhận biết nhu cầu của bản thân.",
+    wrong_reason: "B ist falsch, weil der Text gerade vor einer vollständig verplanten Freizeit warnt.",
+    wrong_reason_vi: "B sai vì bài đọc cảnh báo việc sắp xếp kín toàn bộ thời gian rảnh bằng các hoạt động."
+  },
+  {
+    title: "Aufgabe 48 – Nachhaltige Architektur",
+    text: `Bei der Planung neuer Gebäude spielt Nachhaltigkeit eine immer größere Rolle. Architekten berücksichtigen zunehmend, wie viel Energie ein Haus während seiner Nutzung benötigt und welche Materialien bei der Herstellung verwendet werden. Eine gute Wärmedämmung, moderne Heizsysteme und eine effiziente Beleuchtung können den Energieverbrauch deutlich reduzieren.
+
+Darüber hinaus gewinnt die Frage an Bedeutung, wie lange ein Gebäude genutzt werden kann. Flexible Grundrisse ermöglichen es beispielsweise, Räume später an veränderte Bedürfnisse anzupassen. Dadurch kann vermieden werden, dass Gebäude bereits nach wenigen Jahrzehnten vollständig umgebaut oder abgerissen werden müssen.
+
+Nachhaltige Architektur bedeutet deshalb mehr als nur den Einsatz energiesparender Technik. Auch die Lebensdauer, die Reparierbarkeit und die spätere Nutzung eines Gebäudes sollten von Anfang an berücksichtigt werden.`,
+    question: "Was gehört laut Text ebenfalls zu nachhaltiger Architektur?",
+    a: "Gebäude sollten möglichst schnell durch neue ersetzt werden.",
+    b: "Gebäude sollten so geplant werden, dass sie langfristig an veränderte Bedürfnisse angepasst werden können.",
+    answer: "B",
+    evidence: "Flexible Grundrisse ermöglichen es beispielsweise, Räume später an veränderte Bedürfnisse anzupassen.",
+    explanation: "Nachhaltige Architektur berücksichtigt nicht nur den Energieverbrauch, sondern auch die langfristige Nutzbarkeit eines Gebäudes.",
+    explanation_vi: "Kiến trúc bền vững không chỉ tính đến mức tiêu thụ năng lượng mà còn xem xét khả năng sử dụng lâu dài của công trình.",
+    wrong_reason: "A ist falsch, weil der Text gerade eine möglichst lange Nutzungsdauer als wichtiges Ziel beschreibt.",
+    wrong_reason_vi: "A sai vì đoạn văn nhấn mạnh rằng thời gian sử dụng công trình càng lâu càng tốt là một mục tiêu quan trọng."
+  },
+  {
+    title: "Aufgabe 49 – Freiwillige digitale Bildung",
+    text: `Digitale Kompetenzen werden in vielen Lebensbereichen immer wichtiger. Online-Banking, elektronische Behördendienste und digitale Kommunikationsangebote gehören inzwischen für zahlreiche Menschen zum Alltag. Wer mit solchen Anwendungen nicht vertraut ist, kann bei wichtigen Aufgaben auf Schwierigkeiten stoßen.
+
+Einige Städte und gemeinnützige Organisationen bieten deshalb kostenlose Kurse für Menschen an, die ihre digitalen Fähigkeiten verbessern möchten. Dabei lernen die Teilnehmer beispielsweise, sichere Passwörter zu erstellen, Informationen im Internet zu suchen oder digitale Formulare auszufüllen.
+
+Die Kurse richten sich nicht ausschließlich an ältere Menschen. Auch Personen, die aus beruflichen oder privaten Gründen bisher wenig mit digitalen Anwendungen zu tun hatten, können davon profitieren. Entscheidend ist, dass die Angebote verständlich gestaltet sind und genügend Raum für individuelle Fragen lassen.`,
+    question: "An wen richten sich die beschriebenen digitalen Lernangebote?",
+    a: "Ausschließlich an Menschen im Rentenalter.",
+    b: "An unterschiedliche Menschen, die ihre digitalen Fähigkeiten verbessern möchten.",
+    answer: "B",
+    evidence: "Die Kurse richten sich nicht ausschließlich an ältere Menschen.",
+    explanation: "Die Angebote stehen verschiedenen Gruppen offen. Entscheidend ist nicht das Alter, sondern der Bedarf an digitalen Kenntnissen.",
+    explanation_vi: "Các chương trình được mở cho nhiều nhóm đối tượng. Yếu tố quyết định không phải tuổi tác mà là nhu cầu về kiến thức kỹ thuật số.",
+    wrong_reason: "A ist falsch, weil der Text ausdrücklich erklärt, dass sich die Kurse nicht nur an ältere Menschen richten.",
+    wrong_reason_vi: "A sai vì bài đọc giải thích rõ rằng các khóa học không chỉ dành riêng cho người cao tuổi."
+  },
+  {
+    title: "Aufgabe 50 – Vertrauen in die Wissenschaft",
+    text: `Wissenschaftliche Erkenntnisse beeinflussen politische Entscheidungen und den Alltag vieler Menschen. Dennoch ist das Vertrauen in Forschung und wissenschaftliche Institutionen nicht überall gleich groß. Ein Grund dafür kann sein, dass wissenschaftliche Aussagen manchmal kompliziert wirken oder sich im Laufe der Zeit verändern.
+
+Wenn neue Forschungsergebnisse ältere Annahmen korrigieren, verstehen manche Menschen dies als Zeichen mangelnder Zuverlässigkeit. Tatsächlich gehört die Überprüfung bisheriger Erkenntnisse jedoch zu den grundlegenden Prinzipien wissenschaftlicher Arbeit. Wissen entwickelt sich weiter, wenn neue Daten vorliegen und frühere Ergebnisse kritisch untersucht werden.
+
+Wissenschaftskommunikation sollte deshalb nicht nur fertige Antworten präsentieren, sondern auch erklären, wie Erkenntnisse entstehen und warum sich Einschätzungen verändern können. Transparenz über Unsicherheiten kann langfristig dazu beitragen, Vertrauen aufzubauen.`,
+    question: "Warum können sich wissenschaftliche Aussagen im Laufe der Zeit verändern?",
+    a: "Weil neue Daten dazu führen können, dass bisherige Erkenntnisse überprüft und korrigiert werden.",
+    b: "Weil wissenschaftliche Forschung grundsätzlich keine zuverlässigen Ergebnisse liefert.",
+    answer: "A",
+    evidence: "Wissen entwickelt sich weiter, wenn neue Daten vorliegen und frühere Ergebnisse kritisch untersucht werden.",
+    explanation: "Wissenschaft ist ein fortlaufender Prozess. Neue Erkenntnisse können dazu führen, dass frühere Annahmen angepasst werden müssen.",
+    explanation_vi: "Khoa học là một quá trình liên tục. Những phát hiện mới có thể khiến các giả định trước đây cần được điều chỉnh.",
+    wrong_reason: "B ist falsch, weil der Text die Überprüfung und Weiterentwicklung von Wissen als grundlegendes Prinzip wissenschaftlicher Arbeit beschreibt.",
+    wrong_reason_vi: "B sai vì đoạn văn xem việc kiểm chứng và phát triển kiến thức là nguyên tắc nền tảng của hoạt động khoa học."
+  }
+];
+// ==========================================
+// 1. TỪ ĐIỂN TIẾNG ĐỨC TÍCH HỢP
+// ==========================================
+
+const vocabulary = {
+  "die Anforderung": ["yêu cầu", "Danh từ", "die Anforderungen"],
+  "die Ausstattung": ["trang thiết bị", "Danh từ", "die Ausstattungen"],
+  "die Belastung": ["sự căng thẳng, gánh nặng", "Danh từ", "die Belastungen"],
+  "die Beschäftigung": ["công việc, sự Beschäftigung", "Danh từ", "die Beschäftigungen"],
+  "die Bevölkerung": ["dân cư, dân số", "Danh từ", "—"],
+  "die Entscheidung": ["quyết định", "Danh từ", "die Entscheidungen"],
+  "die Entwicklung": ["sự phát triển", "Danh từ", "die Entwicklungen"],
+  "die Erfahrung": ["kinh nghiệm", "Danh từ", "die Erfahrungen"],
+  "die Ernährung": ["dinh dưỡng", "Danh từ", "die Ernährungen"],
+  "die Erreichbarkeit": ["khả năng liên lạc được", "Danh từ", "—"],
+  "die Forschung": ["nghiên cứu", "Danh từ", "die Forschungen"],
+  "die Fähigkeit": ["khả năng, năng lực", "Danh từ", "die Fähigkeiten"],
+  "die Förderung": ["sự hỗ trợ, thúc đẩy", "Danh từ", "die Förderungen"],
+  "die Grundlage": ["nền tảng, cơ sở", "Danh từ", "die Grundlagen"],
+  "die Herausforderung": ["thách thức", "Danh từ", "die Herausforderungen"],
+  "die Nachhaltigkeit": ["tính bền vững", "Danh từ", "—"],
+  "die Maßnahme": ["biện pháp", "Danh từ", "die Maßnahmen"],
+  "die Möglichkeit": ["khả năng, cơ hội", "Danh từ", "die Möglichkeiten"],
+  "die Öffentlichkeit": ["công chúng", "Danh từ", "—"],
+  "die Voraussetzung": ["điều kiện tiên quyết", "Danh từ", "die Voraussetzungen"],
+  "die Verantwortung": ["trách nhiệm", "Danh từ", "die Verantwortungen"],
+  "die Veränderung": ["sự thay đổi", "Danh từ", "die Veränderungen"],
+  "die Verfügung": ["sự cung cấp, quyền sử dụng", "Danh từ", "die Verfügungen"],
+  "die Verbesserung": ["sự cải thiện", "Danh từ", "die Verbesserungen"],
+  "die Verschwendung": ["sự lãng phí", "Danh từ", "die Verschwendungen"],
+  "die Verpflichtung": ["nghĩa vụ", "Danh từ", "die Verpflichtungen"],
+  "die Voraussetzung": ["điều kiện", "Danh từ", "die Voraussetzungen"],
+  "die Zusammenarbeit": ["sự hợp tác", "Danh từ", "—"],
+  "der Alltag": ["cuộc sống hằng ngày", "Danh từ", "die Alltage"],
+  "der Austausch": ["sự trao đổi", "Danh từ", "die Austausche"],
+  "der Aufwand": ["sự tốn công, chi phí", "Danh từ", "die Aufwände"],
+  "der Beitrag": ["sự đóng góp", "Danh từ", "die Beiträge"],
+  "der Beschäftigte": ["người lao động", "Danh từ", "die Beschäftigten"],
+  "der Einfluss": ["ảnh hưởng", "Danh từ", "die Einflüsse"],
+  "der Eindruck": ["ấn tượng", "Danh từ", "die Eindrücke"],
+  "der Einsatz": ["sự sử dụng, sự nỗ lực", "Danh từ", "die Einsätze"],
+  "der Fortschritt": ["sự tiến bộ", "Danh từ", "die Fortschritte"],
+  "der Zusammenhang": ["mối liên hệ", "Danh từ", "die Zusammenhänge"],
+  "der Zugang": ["quyền truy cập, lối tiếp cận", "Danh từ", "die Zugänge"],
+  "das Angebot": ["sự cung cấp, đề nghị", "Danh từ", "die Angebote"],
+  "das Bedürfnis": ["nhu cầu", "Danh từ", "die Bedürfnisse"],
+  "das Bewusstsein": ["ý thức, nhận thức", "Danh từ", "—"],
+  "das Einkommen": ["thu nhập", "Danh từ", "die Einkommen"],
+  "das Engagement": ["sự cống hiến, tham gia", "Danh từ", "die Engagements"],
+  "das Ergebnis": ["kết quả", "Danh từ", "die Ergebnisse"],
+  "das Verhalten": ["hành vi, cách cư xử", "Danh từ", "—"],
+  "das Verhältnis": ["mối quan hệ, tỷ lệ", "Danh từ", "die Verhältnisse"],
+  "das Verfahren": ["quy trình, phương pháp", "Danh từ", "die Verfahren"],
+  "das Vertrauen": ["niềm tin", "Danh từ", "—"],
+  "das Vorhaben": ["dự định, kế hoạch", "Danh từ", "die Vorhaben"],
+  "abnehmen": ["giảm xuống", "Động từ", ""],
+  "anpassen": ["điều chỉnh, thích nghi", "Động từ", ""],
+  "berücksichtigen": ["xem xét, cân nhắc", "Động từ", ""],
+  "ermöglichen": ["tạo điều kiện, cho phép", "Động từ", ""],
+  "erfordern": ["đòi hỏi, yêu cầu", "Động từ", ""],
+  "vermeiden": ["tránh", "Động từ", ""],
+  "verursachen": ["gây ra", "Động từ", ""],
+  "verzichten": ["từ bỏ, không sử dụng", "Động từ", ""],
+  "zuverlässig": ["đáng tin cậy", "Tính từ", ""],
+  "nachhaltig": ["bền vững", "Tính từ", ""],
+  "unabhängig": ["độc lập, không phụ thuộc", "Tính từ", ""],
+  "unterschiedlich": ["khác nhau", "Tính từ", ""],
+  "verfügbar": ["có sẵn", "Tính từ", ""],
+  "notwendig": ["cần thiết", "Tính từ", ""],
+  "allerdings": ["tuy nhiên", "Trạng từ", ""],
+  "außerdem": ["ngoài ra", "Trạng từ", ""],
+  "dennoch": ["mặc dù vậy", "Trạng từ", ""],
+  "hingegen": ["ngược lại", "Trạng từ", ""],
+  "inzwischen": ["trong thời gian đó, hiện nay", "Trạng từ", ""],
+  "zunehmend": ["ngày càng tăng", "Trạng từ", ""]
+};
+
+// ==========================================
+// 2. CÁC BIẾN VÀ HÀM TIỆN ÍCH
+// ==========================================
+
+let currentTasks = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let wordCache = {};
+
+try {
+  wordCache = JSON.parse(localStorage.getItem("lesenB2_wordCache") || "{}");
+} catch (e) {
+  wordCache = {};
+}
+
+function getElement(...ids) {
+  for (const id of ids) {
+    const element = document.getElementById(id);
+    if (element) return element;
+  }
+  return null;
+}
+
+function setText(element, value) {
+  if (element) element.textContent = value;
+}
+
+function shuffle(array) {
+  const result = [...array];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+// ==========================================
+// 3. HIỂN THỊ BÀI ĐỌC
+// ==========================================
+
+function renderPassage(text) {
+  const passageElement = getElement(
+    "passage-text",
+    "passage",
+    "reading-text"
+  );
+
+  if (!passageElement) {
+    console.error("Không tìm thấy vùng hiển thị bài đọc.");
+    return;
+  }
+
+  passageElement.innerHTML = "";
+
+  const parts = text.split(/(\p{L}+(?:[-’'][\p{L}]+)*)/gu);
+
+  parts.forEach(part => {
+    if (/^\p{L}+(?:[-’'][\p{L}]+)*$/u.test(part)) {
+      const span = document.createElement("span");
+      span.className = "passage-word";
+      span.textContent = part;
+      span.dataset.word = part;
+      span.title = "Bấm để tra nghĩa";
+      span.addEventListener("click", () => lookupWord(part, span));
+      passageElement.appendChild(span);
+    } else {
+      passageElement.appendChild(document.createTextNode(part));
+    }
+  });
+}
+
+// ==========================================
+// 4. TRA TỪ VỰNG
+// ==========================================
+
+function normalizeWord(word) {
+  return word
+    .toLowerCase()
+    .replace(/[.,!?;:()[\]„“"»«]/g, "")
+    .trim();
+}
+
+function findLocalWord(word) {
+  const normalized = normalizeWord(word);
+
+  if (vocabulary[normalized]) {
+    return vocabulary[normalized];
+  }
+
+  // Thử tìm danh từ theo dạng có mạo từ
+  for (const key of Object.keys(vocabulary)) {
+    const keyWithoutArticle = key.replace(/^(der|die|das)\s+/i, "");
+
+    if (keyWithoutArticle === normalized) {
+      return vocabulary[key];
+    }
+  }
+
+  return null;
+}
+
+async function lookupWord(word) {
+  const popup = getElement("word-popup");
+  if (!popup) return;
+
+  popup.style.display = "flex";
+  setText(getElement("popup-word"), word);
+  setText(getElement("popup-meaning"), "Đang tra từ điển...");
+  setText(getElement("popup-pos"), "");
+  setText(getElement("popup-plural"), "");
+  setText(getElement("popup-status"), "Vui lòng chờ một chút nhé.");
+
+  const normalized = normalizeWord(word);
+  const localResult = findLocalWord(normalized);
+
+  if (localResult) {
+    showWordResult(word, {
+      meaning: localResult[0],
+      type: localResult[1],
+      plural: localResult[2] || "Không áp dụng"
+    });
+    return;
+  }
+
+  if (wordCache[normalized]) {
+    showWordResult(word, wordCache[normalized]);
+    return;
+  }
+
+  try {
+    const result = await lookupOnline(word);
+    wordCache[normalized] = result;
+
+    try {
+      localStorage.setItem("lesenB2_wordCache", JSON.stringify(wordCache));
+    } catch (e) {}
+
+    showWordResult(word, result);
+  } catch (error) {
+    setText(getElement("popup-meaning"), "Chưa tìm được nghĩa của từ này.");
+    setText(getElement("popup-pos"), "Từ loại: Chưa xác định");
+    setText(getElement("popup-plural"), "Số nhiều: Chưa xác định");
+    setText(getElement("popup-status"), "Cậu hãy kiểm tra kết nối Internet nhé.");
+  }
+}
+
+async function lookupOnline(word) {
+  let meaning = "Chưa tìm thấy nghĩa tiếng Việt.";
+  let type = "Chưa xác định";
+  let plural = "Chưa xác định";
+
+  try {
+    const url =
+      "https://api.mymemory.translated.net/get?q=" +
+      encodeURIComponent(word) +
+      "&langpair=de|vi";
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Không thể tra bản dịch");
+    const data = await response.json();
+    const translation = data?.responseData?.translatedText;
+
+    if (translation && !translation.toLowerCase().includes("mymemory warning")) {
+      meaning = translation;
+    }
+  } catch (e) {}
+
+  try {
+    const url =
+      "https://de.wiktionary.org/w/api.php?action=parse&page=" +
+      encodeURIComponent(word) +
+      "&prop=wikitext&format=json&origin=*";
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Không thể tra Wiktionary");
+    const data = await response.json();
+    const wikiText = data?.parse?.wikitext?.["*"] || "";
+
+    if (/==\s*Substantiv\s*==/i.test(wikiText)) type = "Danh từ";
+    else if (/==\s*Verb\s*==/i.test(wikiText)) type = "Động từ";
+    else if (/==\s*Adjektiv\s*==/i.test(wikiText)) type = "Tính từ";
+    else if (/==\s*Adverb\s*==/i.test(wikiText)) type = "Trạng từ";
+
+    const pluralMatch = wikiText.match(/\|\s*Plural\s*=\s*([^\n|]+)/i);
+    if (pluralMatch) plural = pluralMatch[1].trim();
+  } catch (e) {}
+
+  return { meaning, type, plural };
+}
+
+function showWordResult(word, result) {
+  setText(getElement("popup-word"), word);
+  setText(getElement("popup-meaning"), result.meaning || "Chưa tìm thấy nghĩa.");
+  setText(getElement("popup-pos"), "Từ loại: " + (result.type || "Chưa xác định"));
+  setText(getElement("popup-plural"), "Số nhiều: " + (result.plural || "Chưa xác định"));
+  setText(getElement("popup-status"), "");
+  const popup = getElement("word-popup");
+  if (popup) popup.style.display = "flex";
+}
+
+function closeWordPopup() {
+  const popup = getElement("word-popup");
+  if (popup) popup.style.display = "none";
+}
+
+function closePopup() {
+  closeWordPopup();
+}
+
+function closePopupOutside(event) {
+  if (event.target && event.target.id === "word-popup") {
+    closeWordPopup();
+  }
+}
+
+document.addEventListener("click", event => {
+  const popup = getElement("word-popup");
+
+  if (
+    popup &&
+    !popup.contains(event.target) &&
+    !event.target.classList.contains("passage-word")
+  ) {
+    closeWordPopup();
+  }
+});
+
+// ==========================================
+// 5. KHỞI ĐỘNG BÀI THI
+// ==========================================
+
+function startQuiz() {
+  currentTasks = shuffle(allTasks);
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+
+  const quizArea = getElement("quiz-area");
+  const resultCard = getElement("result");
+
+  if (quizArea) quizArea.style.display = "block";
+  if (resultCard) resultCard.style.display = "none";
+
+  showQuestion();
+}
+
+function showQuestion() {
+  if (currentIndex >= currentTasks.length) {
+    showResult();
+    return;
+  }
+
+  answered = false;
+  const task = currentTasks[currentIndex];
+
+  setText(getElement("topic"), task.title);
+  setText(getElement("question"), task.question);
+  renderPassage(task.text);
+
+  const optionA = getElement("choice-A");
+  const optionB = getElement("choice-B");
+  const feedback = getElement("feedback");
+  const nextButton = getElement("next-button");
+
+  setText(optionA, "A. " + task.a);
+  setText(optionB, "B. " + task.b);
+
+  [optionA, optionB].forEach(button => {
+    if (!button) return;
+    button.disabled = false;
+    button.classList.remove("correct", "wrong");
+  });
+
+  if (feedback) {
+    feedback.style.display = "none";
+  }
+
+  if (nextButton) {
+    nextButton.disabled = true;
+    nextButton.style.display = "block";
+    nextButton.textContent = "Chọn đáp án trước nhé";
+  }
+
+  updateProgress();
+}
+
+// ==========================================
+// 6. KIỂM TRA ĐÁP ÁN
+// ==========================================
+
+function selectAnswer(selected) {
+  if (answered) return;
+
+  const task = currentTasks[currentIndex];
+  if (!task) return;
+
+  answered = true;
+  const correct = selected === task.answer;
+  if (correct) score++;
+
+  const optionA = getElement("choice-A");
+  const optionB = getElement("choice-B");
+  const selectedElement = selected === "A" ? optionA : optionB;
+  const correctElement = task.answer === "A" ? optionA : optionB;
+
+  if (optionA) optionA.disabled = true;
+  if (optionB) optionB.disabled = true;
+
+  if (correctElement) correctElement.classList.add("correct");
+  if (!correct && selectedElement) selectedElement.classList.add("wrong");
+
+  const feedback = getElement("feedback");
+  setText(
+    getElement("feedback-title"),
+    correct ? "✓ Chính xác! Sehr gut!" : "✗ Chưa chính xác!"
+  );
+  setText(
+    getElement("correct-answer"),
+    "Đáp án đúng: " + task.answer + ". " +
+      (task.answer === "A" ? task.a : task.b)
+  );
+  setText(getElement("evidence-text"), task.evidence);
+  setText(
+    getElement("explanation"),
+    "Giải thích (tiếng Đức): " + task.explanation +
+      "\nNghĩa tiếng Việt: " + (task.explanation_vi || "Chưa có bản dịch.")
+  );
+  setText(
+    getElement("other-answer"),
+    "Vì sao đáp án còn lại sai? " + task.wrong_reason +
+      "\nNghĩa tiếng Việt: " + (task.wrong_reason_vi || "Chưa có bản dịch.")
+  );
+
+  if (feedback) feedback.style.display = "block";
+
+  const nextButton = getElement("next-button");
+  if (nextButton) {
+    nextButton.disabled = false;
+    nextButton.textContent =
+      currentIndex === currentTasks.length - 1
+        ? "Xem kết quả"
+        : "Câu tiếp theo →";
+  }
+
+  updateProgress();
+}
+
+// ==========================================
+// 7. CÂU TIẾP THEO
+// ==========================================
+
+function nextQuestion() {
+  if (!answered) return;
+
+  currentIndex++;
+  if (currentIndex < currentTasks.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+// ==========================================
+// 8. THANH TIẾN ĐỘ
+// ==========================================
+
+function updateProgress() {
+  const total = currentTasks.length || allTasks.length;
+  const completed = answered ? currentIndex + 1 : currentIndex;
+
+  const progressBar = getElement("progress-fill");
+  const progressText = getElement("progress-text");
+  const scoreText = getElement("score-text");
+
+  if (progressBar) {
+    progressBar.style.width = Math.round((completed / total) * 100) + "%";
+  }
+
+  setText(progressText, `Câu ${Math.min(currentIndex + 1, total)} / ${total}`);
+  setText(scoreText, `Đúng: ${score}`);
+}
+
+// ==========================================
+// 9. KẾT QUẢ CUỐI CÙNG
+// ==========================================
+
+function showResult() {
+  const quizArea = getElement("quiz-area");
+  const resultCard = getElement("result");
+  if (quizArea) quizArea.style.display = "none";
+  if (resultCard) resultCard.style.display = "block";
+
+  const total = currentTasks.length;
+  const percent = total ? Math.round((score / total) * 100) : 0;
+
+  setText(getElement("final-score"), `${score}/${total} câu đúng – ${percent}%`);
+
+  let message;
+  if (percent >= 90) {
+    message = "Xuất sắc! Cậu đã làm rất tốt trình độ B2.";
+  } else if (percent >= 75) {
+    message = "Rất tốt! Cậu đã nắm được phần lớn nội dung.";
+  } else if (percent >= 60) {
+    message = "Khá tốt! Cậu hãy tiếp tục luyện tập nhé.";
+  } else if (percent >= 40) {
+    message = "Cậu cần luyện thêm kỹ năng đọc hiểu và tìm bằng chứng.";
+  } else {
+    message = "Đừng nản nhé! Hãy đọc kỹ bài và thử làm lại.";
+  }
+
+  setText(getElement("result-detail"), message);
+}
+
+// Không gắn addEventListener cho các nút đáp án/chuyển câu:
+// HTML đã gọi selectAnswer() và nextQuestion() bằng onclick.
+
+startQuiz();
+</script>
+</body>
+</html>
