@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tiếng Đức cùng humbert.vo</title>
+<title>Tiếng Đức cùng Artificial Intelligence</title>
 
 <!-- FONT CHỮ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -797,6 +797,155 @@ body {
     }
 }
 
+
+/* SCHREIBEN: dinh dang cac dong Goethe va telc theo Windows Classic */
+@media (min-width: 601px) {
+    .schreiben-menu > .submenu {
+        bottom: 0;
+        top: auto;
+        left: 100%;
+        margin: 0;
+    }
+
+    .schreiben-menu > .submenu > .menu-item {
+        position: relative;
+    }
+
+    .schreiben-menu > .submenu > .menu-item > .submenu-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 39px;
+        padding: 10px 13px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: white;
+        text-decoration: none;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .schreiben-menu > .submenu > .menu-item > .submenu-trigger:hover {
+        background: rgba(43, 61, 91, 0.97);
+    }
+
+    .schreiben-menu > .submenu > .menu-item > .submenu-trigger::after {
+        content: "›";
+        margin-left: 14px;
+        font-size: 21px;
+        line-height: 1;
+    }
+
+    .schreiben-menu > .submenu > .menu-item > .submenu {
+        top: auto;
+        bottom: 0;
+        left: 100%;
+        margin: 0;
+    }
+}
+
+
+/* =========================
+   BON THU MUA CHO 4 THU MUC LON A1-A2-B1-B2
+   Chi tac dong den 4 level-card; khong thay doi menu con
+========================= */
+
+.level-card.season-spring {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255,224,238,.24), transparent 34%),
+        linear-gradient(145deg, rgba(117,180,132,.34), rgba(53,112,91,.25));
+    border-color: rgba(203,245,205,.72);
+    box-shadow: 0 8px 28px rgba(35,91,60,.22), inset 0 0 18px rgba(224,255,225,.07);
+}
+
+.level-card.season-spring::after {
+    content: "";
+    color: rgba(231,255,229,.86);
+}
+
+.level-card.season-summer {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255,218,112,.42), transparent 35%),
+        linear-gradient(145deg, rgba(230,126,42,.48), rgba(190,75,42,.34));
+    border-color: rgba(255,204,132,.88);
+    box-shadow: 0 8px 28px rgba(155,75,24,.26), inset 0 0 18px rgba(255,230,180,.10);
+}
+
+.level-card.season-summer::after {
+    content: "";
+    color: rgba(255,246,211,.90);
+}
+
+.level-card.season-autumn {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255,197,126,.28), transparent 35%),
+        linear-gradient(145deg, rgba(174,99,55,.38), rgba(111,70,65,.30));
+    border-color: rgba(255,203,157,.76);
+    box-shadow: 0 8px 28px rgba(105,55,30,.22), inset 0 0 18px rgba(255,224,190,.07);
+}
+
+.level-card.season-autumn::after {
+    content: "";
+    color: rgba(255,229,205,.90);
+}
+
+.level-card.season-winter {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(235,250,255,.48), transparent 36%),
+        linear-gradient(145deg, rgba(126,190,230,.46), rgba(48,91,158,.48));
+    border-color: rgba(226,248,255,.94);
+    box-shadow: 0 8px 28px rgba(28,72,132,.30), inset 0 0 20px rgba(235,250,255,.16);
+}
+
+.level-card.season-winter::after {
+    content: "";
+    color: rgba(236,249,255,.92);
+}
+
+/* Nhan mua nho nam ben trong goc duoi cua tung thu muc lon */
+.level-card.season-spring::after,
+.level-card.season-summer::after,
+.level-card.season-autumn::after,
+.level-card.season-winter::after {
+    position: absolute;
+    right: 7px;
+    bottom: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 6px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1;
+    pointer-events: none;
+    opacity: .9;
+}
+
+/* Hieu ung hover rieng cho 4 thu muc lon, khong anh huong submenu */
+.level-card.season-spring:hover {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255,224,238,.36), transparent 34%),
+        linear-gradient(145deg, rgba(133,198,146,.48), rgba(60,133,106,.38));
+}
+
+.level-card.season-summer:hover {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255,226,132,.52), transparent 35%),
+        linear-gradient(145deg, rgba(245,139,42,.60), rgba(204,76,39,.48));
+}
+
+.level-card.season-autumn:hover {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255,197,126,.40), transparent 35%),
+        linear-gradient(145deg, rgba(190,112,65,.52), rgba(128,79,71,.40));
+}
+
+.level-card.season-winter:hover {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(244,253,255,.58), transparent 36%),
+        linear-gradient(145deg, rgba(150,213,245,.62), rgba(55,105,183,.58));
+}
+
 </style>
 </head>
 
@@ -807,7 +956,7 @@ body {
 ========================= -->
 
 <header class="header">
-    <h1>Tiếng Đức cùng humbert.vo</h1>
+    <h1>Tiếng Đức cùng Artificial Intelligence</h1>
 </header>
 
 
@@ -817,13 +966,32 @@ body {
 
 <main class="main">
     <div class="level-list">
-        <div class="level-card" id="levelA1">
+        <div class="level-card season-spring" id="levelA1">
             <div class="level-title">A1</div>
             <div class="menu">
                 <a href="A1/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
                 <a href="A1/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
                 <a href="A1/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <a href="A1/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <div class="menu-item schreiben-menu" id="schreibenA1">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
+                    <div class="submenu">
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
+                            <div class="submenu">
+                                <a href="A1/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
+                                <a href="A1/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
+                                <a href="A1/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
+                            </div>
+                        </div>
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
+                            <div class="submenu">
+                                <a href="A1/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
+                                <a href="A1/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <a href="A1/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
                 <a href="A1/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
                 <div class="menu-item" id="wortschatzA1">
@@ -839,13 +1007,32 @@ body {
                 </div>
             </div>
         </div>
-        <div class="level-card" id="levelA2">
+        <div class="level-card season-summer" id="levelA2">
             <div class="level-title">A2</div>
             <div class="menu">
                 <a href="A2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
                 <a href="A2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
                 <a href="A2/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <a href="A2/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <div class="menu-item schreiben-menu" id="schreibenA2">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
+                    <div class="submenu">
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
+                            <div class="submenu">
+                                <a href="A2/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
+                                <a href="A2/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
+                                <a href="A2/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
+                            </div>
+                        </div>
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
+                            <div class="submenu">
+                                <a href="A2/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
+                                <a href="A2/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <a href="A2/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
                 <a href="A2/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
                 <div class="menu-item" id="wortschatzA2">
@@ -861,13 +1048,32 @@ body {
                 </div>
             </div>
         </div>
-        <div class="level-card" id="levelB1">
+        <div class="level-card season-autumn" id="levelB1">
             <div class="level-title">B1</div>
             <div class="menu">
                 <a href="B1/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
                 <a href="B1/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
                 <a href="B1/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <a href="B1/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <div class="menu-item schreiben-menu" id="schreibenB1">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
+                    <div class="submenu">
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
+                            <div class="submenu">
+                                <a href="B1/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
+                                <a href="B1/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
+                                <a href="B1/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
+                            </div>
+                        </div>
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
+                            <div class="submenu">
+                                <a href="B1/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
+                                <a href="B1/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <a href="B1/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
                 <a href="B1/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
                 <div class="menu-item" id="wortschatzB1">
@@ -883,13 +1089,32 @@ body {
                 </div>
             </div>
         </div>
-        <div class="level-card" id="levelB2">
+        <div class="level-card season-winter" id="levelB2">
             <div class="level-title">B2</div>
             <div class="menu">
                 <a href="B2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
                 <a href="B2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
                 <a href="B2/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <a href="B2/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <div class="menu-item schreiben-menu" id="schreibenB2">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
+                    <div class="submenu">
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
+                            <div class="submenu">
+                                <a href="B2/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
+                                <a href="B2/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
+                                <a href="B2/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
+                            </div>
+                        </div>
+                        <div class="menu-item">
+                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
+                            <div class="submenu">
+                                <a href="B2/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
+                                <a href="B2/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <a href="B2/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
                 <a href="B2/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
                 <div class="menu-item" id="wortschatzB2">
@@ -952,21 +1177,23 @@ window.addEventListener("resize", alignLevelMenusToB2);
 // Tren may tinh: hover vao tung cap do de mo menu.
 // Tren dien thoai: cham vao ten cap do de mo/dong menu.
 levelCards.forEach((card) => {
-    const trigger = card.querySelector(".submenu-trigger");
-    const submenuItem = trigger.closest(".menu-item");
-
     card.addEventListener("click", function(event) {
         if (touchDevice.matches && !event.target.closest("a")) {
             card.classList.toggle("open");
         }
     });
 
-    trigger.addEventListener("click", function(event) {
-        event.preventDefault();
-        if (touchDevice.matches) {
-            const isOpen = submenuItem.classList.toggle("submenu-open");
-            trigger.setAttribute("aria-expanded", String(isOpen));
-        }
+    // Tren dien thoai, moi muc co submenu deu co the mo bang cham.
+    card.querySelectorAll(".submenu-trigger").forEach((trigger) => {
+        const submenuItem = trigger.closest(".menu-item");
+
+        trigger.addEventListener("click", function(event) {
+            event.preventDefault();
+            if (touchDevice.matches) {
+                const isOpen = submenuItem.classList.toggle("submenu-open");
+                trigger.setAttribute("aria-expanded", String(isOpen));
+            }
+        });
     });
 });
 
@@ -977,10 +1204,12 @@ document.addEventListener("keydown", function(event) {
     if (event.key === "Escape") {
         levelCards.forEach((card) => {
             card.classList.remove("open");
-            const submenuItem = card.querySelector(".menu-item");
-            const trigger = card.querySelector(".submenu-trigger");
-            submenuItem.classList.remove("submenu-open");
-            trigger.setAttribute("aria-expanded", "false");
+            card.querySelectorAll(".menu-item.submenu-open").forEach((item) => {
+                item.classList.remove("submenu-open");
+            });
+            card.querySelectorAll(".submenu-trigger").forEach((trigger) => {
+                trigger.setAttribute("aria-expanded", "false");
+            });
         });
     }
 });
