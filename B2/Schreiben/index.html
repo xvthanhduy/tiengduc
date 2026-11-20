@@ -1,380 +1,470 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#061b49">
-<title>Schreiben B2 | German Learning AI</title>
+<meta name="theme-color" content="#245b91">
+<title>German Learning AI – Schreiben</title>
 <style>
 :root{
-  --navy:#061b49;
-  --blue:#0b3472;
-  --blue2:#14539a;
-  --ice:#eaf4ff;
-  --line:rgba(180,215,255,.28);
-  --glass:rgba(4,20,55,.78);
-  --muted:#c5d8f1;
-  --white:#f8fbff;
-  --accent:#8dd7ff;
+  --window:#d4d0c8;--panel:#f2f1ed;--white:#fff;--ink:#202020;
+  --blue:#245b91;--blue-dark:#153d68;--line:#9b9b9b;
+  --soft:#e7edf4;--muted:#555;--green:#dff0df;--red:#f8e1df;
 }
 *{box-sizing:border-box}
-html{min-height:100%;scroll-behavior:smooth}
-body{
-  margin:0;min-height:100vh;color:var(--white);
-  font-family:Arial,Helvetica,sans-serif;
-  background:
-    linear-gradient(90deg,rgba(2,13,44,.76) 0%,rgba(3,20,57,.56) 47%,rgba(2,15,43,.30) 100%),
-    url("../../11.jpg") center center/cover fixed no-repeat,
-    #061b49;
-}
+html,body{margin:0;width:100%;min-height:100%;font-family:Tahoma,Arial,sans-serif;color:var(--ink);background:#7c96ad}
+body{min-height:100vh}
 button,select,textarea{font:inherit}
-.page{width:min(1180px,calc(100% - 36px));margin:0 auto;padding:30px 0 48px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
-.back{color:#d8ebff;text-decoration:none;font-size:14px}
-.back:hover{text-decoration:underline}
-.level-tag{border:1px solid var(--line);background:rgba(4,25,65,.55);border-radius:999px;padding:8px 14px;color:#d9efff;font-size:12px;letter-spacing:1.5px}
-.hero{margin:18px 0 24px;max-width:760px}
-.eyebrow{font-size:12px;letter-spacing:3px;color:#9bdcff;font-weight:700}
-h1{font-size:clamp(30px,5vw,48px);letter-spacing:2px;margin:10px 0 8px;text-shadow:0 3px 18px rgba(0,0,0,.3)}
-.subtitle{color:#d1e3fa;line-height:1.6;margin:0}
-.controls{
- display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;
- padding:16px;background:rgba(3,18,51,.72);border:1px solid var(--line);
- border-radius:14px;backdrop-filter:blur(12px);margin:24px 0 18px
-}
-.control label{display:block;color:#c5ddf7;font-size:12px;margin:0 0 7px}
-select{
- width:100%;padding:12px 13px;border-radius:9px;border:1px solid rgba(190,220,255,.32);
- background:#0a285b;color:white;outline:none
-}
-button{cursor:pointer;border:0;border-radius:9px;padding:11px 15px;font-weight:700;transition:background .18s,transform .18s}
-button:hover{transform:translateY(-1px)}
-button:disabled{opacity:.65;cursor:wait;transform:none}
-.primary{background:#9bdcff;color:#05214f}
-.primary:hover{background:#c0eaff}
-.secondary{background:rgba(115,170,225,.17);border:1px solid rgba(180,215,255,.35);color:#eff8ff}
-.secondary:hover{background:rgba(115,170,225,.28)}
-.danger{background:rgba(255,120,120,.13);border:1px solid rgba(255,170,170,.3);color:#ffe2e2}
-.panels{display:grid;grid-template-columns:1fr;gap:16px}
-.panel{
- background:var(--glass);border:1px solid var(--line);border-radius:15px;
- padding:20px;backdrop-filter:blur(13px);box-shadow:0 12px 35px rgba(0,0,0,.13)
-}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
-.panel h2{font-size:17px;margin:0;letter-spacing:.5px}
-.number{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:rgba(141,215,255,.17);color:#a8e1ff;margin-right:8px;font-size:13px}
-.small-tag{font-size:11px;color:#c6e7ff;border:1px solid var(--line);border-radius:999px;padding:5px 9px;white-space:nowrap}
-.hint{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 12px}
-textarea{
- display:block;width:100%;resize:vertical;min-height:160px;padding:14px;
- color:#f8fbff;background:rgba(2,13,39,.66);border:1px solid rgba(180,215,255,.28);
- border-radius:10px;outline:none;line-height:1.65
-}
-textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,215,255,.12)}
-#task{min-height:150px}
-#answer{min-height:230px}
-#correction{min-height:260px}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px;align-items:center}
-.word-count{margin-left:auto;color:#bcd4ee;font-size:12px}
-.status{min-height:20px;color:#aee4ff;font-size:12px;margin-top:9px}
-.footer-note{margin:18px 2px 0;color:#b7cce6;font-size:12px;line-height:1.6}
+button{cursor:pointer}
+.app{min-height:100vh;width:min(1180px,100%);margin:0 auto 0 0;background:var(--window);display:flex;flex-direction:column;border:1px solid #fff}
+.titlebar{height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 7px 0 10px;color:white;font-weight:bold;font-size:13px;background:linear-gradient(90deg,#174477,#5c91c2 58%,#245b91);text-shadow:1px 1px #17324d}
+.title-left{display:flex;align-items:center;gap:8px}
+.app-icon{width:18px;height:18px;border:1px solid #dbe8f4;background:linear-gradient(135deg,#eaf5ff 0 45%,#3981bd 46%);display:grid;place-items:center;color:#16436c;text-shadow:none;font-size:11px}
+.window-controls{display:flex;gap:3px}
+.window-controls span{width:22px;height:20px;display:grid;place-items:center;border:1px solid #dce7f1;background:linear-gradient(#f8f8f8,#c7d5e3);color:#173d61;text-shadow:none;font-size:12px}
+.statusbar{height:25px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border-top:1px solid #aaa;background:#efeee9;font-size:11px;color:#444}
+.workspace{flex:1;display:grid;grid-template-columns:275px minmax(0,1fr);min-height:0}
+.sidebar{background:#e9e7e1;border-right:1px solid #999;padding:12px;overflow:auto}
+.side-heading{font-size:13px;font-weight:bold;color:#244d73;border-bottom:1px solid #aaa;padding:4px 2px 8px;margin-bottom:10px}
+.group{margin-bottom:13px}
+.group label{display:block;font-size:11px;font-weight:bold;color:#444;margin:0 0 5px}
+select{width:100%;height:30px;border:1px solid #888;background:#fff;padding:3px 7px;color:#222;border-radius:0}
+.side-note{font-size:11px;line-height:1.5;color:#555;background:#f8f7f3;border:1px solid #c1beb6;padding:8px;margin-top:14px}
+.primary{background:linear-gradient(#6fa5d5,#2d659b);border:1px solid #174775;color:white;padding:8px 13px;font-weight:bold}
+.primary:hover{background:linear-gradient(#82b6e4,#3978af)}
+.secondary{background:linear-gradient(#fff,#e3e1db);border:1px solid #888;color:#222;padding:7px 11px}
+.secondary:hover{background:#fff}
+.danger{background:linear-gradient(#fff,#f2dfdc);border:1px solid #aa7771;color:#702c25;padding:7px 11px}
+button:disabled{opacity:.55;cursor:wait}
+.main{padding:13px;overflow:auto;min-width:0;background:#f5f4f0}
+.section{border:1px solid #999;background:#fff;margin-bottom:12px;box-shadow:1px 1px 0 #fff}
+.section-head{height:31px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:linear-gradient(#f8f8f8,#e1e0dc);border-bottom:1px solid #aaa}
+.section-head strong{font-size:12px;color:#244d73}
+.section-head small{font-size:10px;color:#555}
+.section-body{padding:10px}
+.task-display{min-height:90px;max-height:220px;overflow:auto;white-space:pre-wrap;line-height:1.48;font-size:12px;background:#fff;border:1px solid #c3c3c3;padding:9px;color:#222;user-select:text}
+.placeholder{color:#888;font-style:italic}
+textarea{width:100%;resize:vertical;border:1px solid #999;border-radius:0;background:#fff;padding:11px;line-height:1.6;font-size:13px;color:#222;outline:none}
+textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
+#answer{min-height:180px}
+.result{min-height:180px;max-height:620px;overflow:auto;padding:11px;background:#fff;border:1px solid #c3c3c3;font-size:12px;line-height:1.52;white-space:pre-wrap;overflow-wrap:anywhere}
+.result.empty{color:#888;font-style:italic}
+
+.score-panel{border:1px solid #9aa9b8;background:#f7f9fb;margin:0;padding:9px;overflow-x:auto;min-width:0}
+.score-panel h3{margin:0 0 8px;font-size:13px;color:#244d73}
+.score-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}
+.score-table th,.score-table td{border:1px solid #b7c1cb;padding:6px;text-align:left}
+.score-table th{background:#e5edf5;color:#244d73}
+.score-table td.score{text-align:center;font-weight:bold;white-space:nowrap}
+.score-table tr.total-row{background:#eaf2fa;font-weight:bold}
+.score-pass{color:#216b35}.score-below{color:#a12d25}
+.score-note{font-size:10px;line-height:1.4;color:#555;margin-top:7px}
+.correction-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start}
+.correction-content{min-width:0}
+.correction-content .result{margin:0;padding:12px 14px;line-height:1.65;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.score-panel h3{font-size:12px}
+
+.action-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:9px}
+.counter{margin-left:auto;font-size:11px;color:#555}
+.status{min-height:18px;font-size:11px;color:#245b91;margin-top:7px}
+.status.error{color:#a12d25}
+.status.success{color:#246b32}
 .hidden{display:none!important}
-@media(min-width:900px){
- .panels{grid-template-columns:1fr 1fr}
- .panel:first-child{grid-column:1/-1}
- .panel:first-child textarea{min-height:130px}
-}
-@media(max-width:700px){
- .page{width:min(100% - 22px,620px);padding-top:18px}
- .topbar{align-items:flex-start}
- .controls{grid-template-columns:1fr 1fr}
- .controls .control:last-of-type{grid-column:1/-1}
- .controls>.primary{grid-column:1/-1}
- .panel{padding:15px}
- .panel-head{align-items:flex-start}
- .word-count{width:100%;margin-left:0}
+@media(max-width:760px){
+ .workspace{grid-template-columns:1fr}
+ .sidebar{border-right:0;border-bottom:1px solid #999}
+ .main{padding:9px}
+ .titlebar{height:32px}
+ .menubar{gap:14px}
+ .task-display{max-height:360px}
 }
 </style>
 </head>
 <body>
-<main class="page">
-  <div class="topbar">
-    <a class="back" href="../../home.html">← Zurück / Quay lại trang chủ</a>
-    <span class="level-tag">DEUTSCH · B2</span>
-  </div>
-
-  <header class="hero">
-    <div class="eyebrow">DEUTSCH · B2 · SCHREIBTRAINING</div>
-    <h1>SCHREIBEN B2</h1>
-    <p class="subtitle">Luyện viết tiếng Đức trình độ B2 cùng AI — tạo đề, viết bài và nhận góp ý bằng tiếng Việt.</p>
+<div class="app">
+  <header class="titlebar">
+    <div class="title-left"><span class="app-icon">G</span><span>German Learning AI – Schreiben</span></div>
+    <div class="window-controls" aria-hidden="true"><span>—</span><span>□</span><span>×</span></div>
   </header>
 
-  <section class="controls" aria-label="Thiết lập đề">
-    <div class="control" style="grid-column:1/-1">
-      <label for="taskStyle">Chủ đề đề luyện B2</label>
-      <select id="taskStyle">
-        <option value="Ngẫu nhiên, đa dạng chủ đề B2">Ngẫu nhiên</option>
-        <option value="Công việc và nghề nghiệp">Công việc & nghề nghiệp</option>
-        <option value="Giáo dục và học tập">Giáo dục & học tập</option>
-        <option value="Công nghệ và mạng xã hội">Công nghệ & mạng xã hội</option>
-        <option value="Môi trường và giao thông">Môi trường & giao thông</option>
-        <option value="Sức khỏe và lối sống">Sức khỏe & lối sống</option>
-        <option value="Xã hội và đời sống">Xã hội & đời sống</option>
-        <option value="Văn hóa, du lịch và hội nhập">Văn hóa, du lịch & hội nhập</option>
-      </select>
-    </div>
-    <button class="primary" id="makeTaskPrompt">Tạo đề B2 trực tiếp</button>
-  </section>
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="side-heading">EINSTELLUNGEN / THIẾT LẬP</div>
 
-  <section class="panels">
-    <article class="panel">
-      <div class="panel-head">
-        <h2><span class="number">01</span>AUFGABE – ĐỀ BÀI</h2>
-        <span class="small-tag">Khung 1 · Đề do AI tạo</span>
+      <div class="group">
+        <label for="topic">CHỦ ĐỀ</label>
+        <select id="topic">
+          <option value="Ngẫu nhiên, đa dạng chủ đề">Ngẫu nhiên</option>
+          <option value="Công việc và nghề nghiệp">Công việc & nghề nghiệp</option>
+          <option value="Giáo dục và học tập">Giáo dục & học tập</option>
+          <option value="Công nghệ và mạng xã hội">Công nghệ & mạng xã hội</option>
+          <option value="Môi trường và giao thông">Môi trường & giao thông</option>
+          <option value="Sức khỏe và lối sống">Sức khỏe & lối sống</option>
+          <option value="Xã hội và đời sống">Xã hội & đời sống</option>
+          <option value="Văn hóa, du lịch và hội nhập">Văn hóa, du lịch & hội nhập</option>
+          <option value="Gia đình và quan hệ cá nhân">Gia đình & quan hệ cá nhân</option>
+          <option value="Mua sắm và tiêu dùng">Mua sắm & tiêu dùng</option>
+        </select>
       </div>
-      <p class="hint">Chọn chủ đề phía trên rồi nhấn “Tạo đề B2 trực tiếp”. Đề sẽ được tạo tự động và đưa vào khung này. Cậu cũng có thể dùng các nút bên dưới để tạo đề thủ công qua ChatGPT.</p>
-      <textarea id="task" placeholder="Đề bài tiếng Đức sẽ được dán vào đây..."></textarea>
-      <div class="actions">
-        <button class="secondary" id="copyTaskPrompt">Sao chép yêu cầu tạo đề</button>
-        <button class="secondary" id="openChatTask">Mở ChatGPT</button>
-        <button class="secondary" id="clearTask">Xóa đề</button>
-      </div>
-      <div class="status" id="taskStatus" aria-live="polite"></div>
-    </article>
 
-    <article class="panel">
-      <div class="panel-head">
-        <h2><span class="number">02</span>MEIN TEXT – BÀI VIẾT</h2>
-        <span class="small-tag">Khung 2 · Bài làm của cậu</span>
+      <div class="group">
+        <label for="level">TRÌNH ĐỘ</label>
+        <select id="level">
+          <option value="A1">A1</option><option value="A2">A2</option>
+          <option value="B1">B1</option><option value="B2" selected>B2</option>
+        </select>
       </div>
-      <p class="hint">Viết bài tiếng Đức của cậu tại đây. Sau đó nhấn nút gửi bài để AI chấm và sửa trực tiếp.</p>
-      <textarea id="answer" placeholder="Schreibe deinen Text hier auf Deutsch..."></textarea>
-      <div class="actions">
-        <button class="primary" id="makeGradePrompt">Gửi bài & chấm sửa trực tiếp</button>
-        <button class="secondary" id="copyAnswer">Sao chép bài viết</button>
-        <span class="word-count" id="wordCount">0 từ</span>
-      </div>
-      <div class="status" id="gradeStatus" aria-live="polite"></div>
-    </article>
 
-    <article class="panel">
-      <div class="panel-head">
-        <h2><span class="number">03</span>KI-KORREKTUR – BÀI ĐÃ SỬA</h2>
-        <span class="small-tag">Khung 3 · Kết quả AI</span>
+      <div class="group">
+        <label for="exam">KỲ THI</label>
+        <select id="exam">
+          <option value="Goethe">Goethe</option>
+          <option value="telc">telc</option>
+        </select>
       </div>
-      <p class="hint">Sau khi nhấn “Gửi bài & chấm sửa trực tiếp”, AI sẽ chấm điểm, giải thích lỗi và viết lại bài của cậu ngay tại đây.</p>
-      <textarea id="correction" placeholder="Kết quả chấm điểm, sửa lỗi và bài viết đã chỉnh sửa sẽ xuất hiện ở đây..."></textarea>
-      <div class="actions">
-        <button class="secondary" id="copyCorrection">Sao chép kết quả</button>
-        <button class="secondary" id="saveAll">Lưu bài luyện</button>
-        <button class="danger" id="clearAll">Xóa cả 3 khung</button>
-      </div>
-      <div class="status" id="saveStatus" aria-live="polite"></div>
-    </article>
-  </section>
 
-  <p class="footer-note">
-    Lưu ý: Tạo đề và chấm sửa bài được thực hiện thông qua AI và máy chủ trung gian. Bài luyện và kết quả lưu bằng bộ nhớ của trình duyệt trên thiết bị hiện tại.
-  </p>
-</main>
+      <div class="group">
+        <label for="part">TEIL / AUFGABE</label>
+        <select id="part"></select>
+      </div>
+
+      <button class="primary" id="generateButton" style="width:100%;margin-top:5px">✦ TẠO ĐỀ BÀI</button>
+
+    </aside>
+
+    <main class="main">
+      <section class="section">
+        <div class="section-head">
+          <strong>01 – AUFGABE / ĐỀ BÀI</strong>
+          <small>AUFGABENSTELLUNG</small>
+        </div>
+        <div class="section-body">
+          
+          <div id="taskDisplay" class="task-display"><span class="placeholder">Chọn chủ đề, trình độ, kỳ thi và Teil/Aufgabe ở bên trái, sau đó nhấn “TẠO ĐỀ BÀI”.</span></div>
+          <div class="action-row">
+            <button class="secondary" id="copyTaskButton">▣ Sao chép đề bài</button>
+            <button class="secondary" id="clearTaskButton">Xóa đề</button>
+            <span class="counter" id="taskMeta">Chưa có đề</span>
+          </div>
+          <div class="status" id="taskStatus" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <strong>02 – MEIN TEXT / BÀI VIẾT</strong>
+          <small>TEXT EINGABE</small>
+        </div>
+        <div class="section-body">
+          <textarea id="answer" placeholder="Schreibe deinen Text hier auf Deutsch..."></textarea>
+          <div class="action-row">
+            <button class="primary" id="gradeButton">➤ GỬI BÀI & CHẤM SỬA</button>
+            <button class="secondary" id="copyAnswerButton">Sao chép bài viết</button>
+            <span class="counter" id="wordCount">0 từ</span>
+          </div>
+          <div class="status" id="gradeStatus" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <strong>03 – KI-KORREKTUR / KẾT QUẢ CHẤM VÀ SỬA BÀI</strong>
+          <small>AI AUSWERTUNG</small>
+        </div>
+        <div class="section-body">
+          <div class="correction-layout">
+            <div class="correction-content">
+              <div id="correction" class="result empty">Nhận xét lỗi và bài viết đã chỉnh sửa sẽ xuất hiện ở đây.</div>
+              <div class="action-row">
+                <button class="secondary" id="copyCorrectionButton">▣ Sao chép kết quả</button>
+                <button class="secondary" id="saveButton">💾 Lưu bài luyện</button>
+                <button class="danger" id="clearAllButton">Xóa cả 3 phần</button>
+              </div>
+            </div>
+          </div>
+          <div class="status" id="saveStatus" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="statusbar">
+    <span id="appStatus">Bereit / Sẵn sàng</span>
+    <span>German Learning AI · Goethe & telc A1–B2</span>
+  </footer>
+</div>
 
 <script>
-const $ = (id) => document.getElementById(id);
-let lastPrompt = "";
-
+const $ = id => document.getElementById(id);
 const AI_WORKER_URL = "https://german-schreiben-ai.xv-thanhduy.workers.dev";
+let currentTask = "";
+let currentCorrection = "";
 
-async function generateTaskDirectly(){
-  const button = $("makeTaskPrompt");
-  const status = $("taskStatus");
-  const taskBox = $("task");
+const PARTS = {
+  Goethe: {
+    A1: [
+      ["Teil 1","Formular ausfüllen – Điền biểu mẫu"],
+      ["Teil 2","Kurze Mitteilung – Viết tin nhắn ngắn"]
+    ],
+    A2: [
+      ["Teil 1","SMS – Tin nhắn ngắn (20–30 từ)"],
+      ["Teil 2","E-Mail – Thư điện tử (30–40 từ)"]
+    ],
+    B1: [
+      ["Aufgabe 1","Persönliche E-Mail – Email cá nhân"],
+      ["Aufgabe 2","Forumsbeitrag – Bài viết diễn đàn"],
+      ["Aufgabe 3","Formelle oder persönliche Nachricht – Thư/tin nhắn"]
+    ],
+    B2: [
+      ["Teil 1","Forumsbeitrag – Bài viết diễn đàn"],
+      ["Teil 2","Formelle Nachricht – Thư, tin nhắn trang trọng"]
+    ]
+  },
+  telc: {
+    A1: [
+      ["Teil 1","Formular ausfüllen – Điền biểu mẫu (5 thông tin)"],
+      ["Teil 2","Kurze Mitteilung – Viết tin nhắn ngắn"]
+    ],
+    A2: [
+      ["Teil 1","Formular ausfüllen – Điền biểu mẫu (5 thông tin)"],
+      ["Teil 2","Kurzer Brief – Thư ngắn khoảng 40 từ, chọn 3/4 ý"]
+    ],
+    B1: [
+      ["Schreibaufgabe","Schriftliche Kommunikation – Email/thư theo tình huống"]
+    ],
+    B2: [
+      ["Schreibaufgabe","Schriftliche Kommunikation – Email/thư phản hồi theo tình huống"]
+    ]
+  }
+};
 
+function updateParts(){
+  const exam = $("exam").value;
+  const level = $("level").value;
+  const parts = PARTS[exam][level];
+  const select = $("part");
+  select.innerHTML = "";
+  parts.forEach((item,index)=>{
+    const option = document.createElement("option");
+    option.value = item[0];
+    option.textContent = item[0] + " – " + item[1];
+    select.appendChild(option);
+  });
+  $("appStatus").textContent = `${exam} ${level} · ${parts.length} lựa chọn`;
+}
+$("exam").addEventListener("change",updateParts);
+$("level").addEventListener("change",updateParts);
+updateParts();
+
+function selectedConfig(){
+  const partOption = $("part").selectedOptions[0];
+  return {
+    topic: $("topic").value,
+    level: $("level").value,
+    exam: $("exam").value,
+    part: $("part").value,
+    partLabel: partOption ? partOption.textContent : $("part").value
+  };
+}
+
+function setStatus(id,message,type=""){
+  const el = $(id);
+  el.textContent = message;
+  el.className = "status" + (type ? " " + type : "");
+}
+
+async function callWorker(payload){
+  const response = await fetch(AI_WORKER_URL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+  const data = await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(data.details || data.error || `Lỗi máy chủ (${response.status})`);
+  return data;
+}
+
+async function generateTask(){
+  const button = $("generateButton");
   button.disabled = true;
-  button.textContent = "Đang tạo đề...";
-  status.textContent = "AI đang tạo đề B2. Cậu đợi một chút nhé.";
-
+  button.textContent = "ĐANG TẠO ĐỀ...";
+  setStatus("taskStatus","AI đang tạo đề theo đúng lựa chọn của cậu...");
+  $("appStatus").textContent = "AI đang tạo đề...";
   try{
-    const response = await fetch(AI_WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: $("taskStyle").value })
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if(!response.ok){
-      throw new Error(data.details || data.error || `Lỗi máy chủ (${response.status})`);
-    }
-
-    if(!data.task || typeof data.task !== "string"){
-      throw new Error("AI chưa trả về nội dung đề bài. Cậu thử lại nhé.");
-    }
-
-    taskBox.value = data.task.trim();
-    status.textContent = "Đã tạo đề B2 thành công! Cậu có thể bắt đầu viết rồi.";
-    taskBox.focus();
-    taskBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    const config = selectedConfig();
+    const data = await callWorker({action:"task",...config});
+    if(typeof data.task !== "string" || !data.task.trim()) throw new Error("AI chưa trả về đề bài.");
+    currentTask = data.task.trim().replace(/\*\*/g, "");
+    $("taskDisplay").textContent = currentTask;
+    $("taskDisplay").classList.remove("placeholder");
+    $("taskMeta").textContent = `${config.exam} ${config.level} · ${config.part}`;
+    setStatus("taskStatus","Đã tạo đề thành công.","success");
+    $("appStatus").textContent = "Đã tạo đề · Sẵn sàng viết bài";
   }catch(error){
-    status.textContent = "Chưa tạo được đề: " + error.message;
+    setStatus("taskStatus","Không tạo được đề: " + error.message,"error");
+    $("appStatus").textContent = "Có lỗi khi tạo đề";
   }finally{
     button.disabled = false;
-    button.textContent = "Tạo đề B2 trực tiếp";
+    button.textContent = "✦ TẠO ĐỀ BÀI";
   }
 }
 
-function buildTaskPrompt(){
-  const style = $("taskStyle").value;
-  return `Bạn là giáo viên tiếng Đức chuyên luyện viết trình độ B2.
-
-Hãy tạo MỘT đề luyện viết tiếng Đức mới ở trình độ B2.
-
-Chủ đề mong muốn: ${style}.
-
-Yêu cầu:
-- Tạo một đề viết B2 thực tế, có độ khó phù hợp với người học trình độ B2.
-- Không chia theo Goethe, telc hoặc Teil; đây là bài luyện viết B2 tổng quát.
-- Nêu rõ tình huống, mục đích viết, người nhận hoặc đối tượng độc giả nếu phù hợp.
-- Đưa ra các ý cần triển khai để người học có thể phát triển nội dung.
-- Đề bài chính phải được viết bằng tiếng Đức.
-- Gợi ý độ dài bài viết và thời gian làm bài phù hợp.
-- Đây là đề luyện tập, không phải đề thi chính thức.
-- Sau đề tiếng Đức, thêm hướng dẫn ngắn bằng tiếng Việt.
-- Chỉ tạo một đề, không đưa bài mẫu hoặc đáp án ngay.`;
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[ch]));
 }
 
-async function generateGradeDirectly(){
-  const button = $("makeGradePrompt");
-  const status = $("gradeStatus");
-  const task = $("task").value.trim();
+function cleanCorrectionText(value){
+  return String(value || "")
+    .replace(/\*\*/g, "")
+    .replace(/\|/g, " · ")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function buildEvaluationSection(evaluation,exam,level){
+  const criteria = Array.isArray(evaluation.criteria) ? evaluation.criteria : [];
+  const lines = ["", "", "7. ĐIỂM THEO TỪNG TIÊU CHÍ – " + exam + " " + level];
+  criteria.forEach((item,index)=>{
+    const score = Number(item.score);
+    const scoreText = Number.isFinite(score) ? Math.max(0,Math.min(10,score)).toFixed(1) : "—";
+    lines.push(`${index+1}. ${item.name_de || "Tiêu chí"}${item.name_vi ? " – " + item.name_vi : ""}: ${scoreText}/10`);
+    if(item.reason) lines.push("   Nhận xét: " + item.reason);
+  });
+  const average = Number(evaluation.raw_average);
+  const finalScore = Number(evaluation.conservative_score);
+  if(Number.isFinite(average)) lines.push("Điểm trung bình: " + average.toFixed(1) + "/10");
+  if(Number.isFinite(finalScore)) lines.push("Điểm đánh giá tổng hợp: " + finalScore.toFixed(1) + "/10");
+  if(evaluation.adjustment_reason) lines.push("Lý do đánh giá tổng hợp: " + evaluation.adjustment_reason);
+  if(evaluation.scoring_note) lines.push("Lưu ý: " + evaluation.scoring_note);
+  return lines.join("\n");
+}
+
+async function gradeAnswer(){
+  const task = currentTask.trim();
   const answer = $("answer").value.trim();
+  if(!task){setStatus("gradeStatus","Cậu hãy tạo đề trước nhé.","error");return;}
+  if(!answer){setStatus("gradeStatus","Cậu chưa nhập bài viết.","error");$("answer").focus();return;}
 
-  if(!task){
-    status.textContent = "Cậu hãy tạo hoặc nhập đề bài ở khung 1 trước nhé.";
-    $("task").focus();
-    return;
-  }
-
-  if(!answer){
-    status.textContent = "Cậu chưa nhập bài viết ở khung 2.";
-    $("answer").focus();
-    return;
-  }
-
+  const button = $("gradeButton");
   button.disabled = true;
-  button.textContent = "AI đang chấm bài...";
-  status.textContent = "Bài viết đang được gửi đến AI. Quá trình này có thể mất một chút thời gian.";
-
+  button.textContent = "AI ĐANG CHẤM...";
+  setStatus("gradeStatus","Bài viết đang được gửi đến AI. Quá trình có thể mất một chút thời gian.");
+  $("appStatus").textContent = "AI đang phân tích bài viết...";
   try{
-    const response = await fetch(AI_WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "grade",
-        task: task,
-        answer: answer
-      })
+    const config = selectedConfig();
+    const data = await callWorker({
+      action:"grade",task,answer,
+      topic:config.topic,level:config.level,exam:config.exam,
+      part:config.part,partLabel:config.partLabel
     });
-
-    const data = await response.json().catch(() => ({}));
-
-    if(!response.ok){
-      throw new Error(data.details || data.error || `Lỗi máy chủ (${response.status})`);
+    if(typeof data.correction !== "string" || !data.correction.trim()) throw new Error("AI chưa trả về kết quả sửa bài.");
+    currentCorrection = cleanCorrectionText(data.correction);
+    if(data.evaluation && Array.isArray(data.evaluation.criteria)){
+      currentCorrection += buildEvaluationSection(data.evaluation,config.exam,config.level);
+    } else {
+      currentCorrection += "\n\n7. ĐIỂM THEO TỪNG TIÊU CHÍ\nAI chưa trả về dữ liệu điểm. Cậu hãy thử chấm lại bài.";
     }
-
-    if(!data.correction || typeof data.correction !== "string"){
-      throw new Error("AI chưa trả về kết quả sửa bài. Cậu thử lại nhé.");
-    }
-
-    $("correction").value = data.correction.trim();
-    status.textContent = "Đã chấm và sửa bài thành công! Kết quả ở khung 3.";
-    $("correction").focus();
-    $("correction").scrollIntoView({ behavior: "smooth", block: "center" });
+    $("correction").textContent = currentCorrection;
+    $("correction").classList.remove("empty");
+    setStatus("gradeStatus","Đã chấm và sửa bài thành công! Kết quả hiển thị ở khung 3.","success");
+    $("appStatus").textContent = "Hoàn tất chấm và sửa bài";
   }catch(error){
-    status.textContent = "Chưa chấm được bài: " + error.message;
+    setStatus("gradeStatus","Không chấm được bài: " + error.message,"error");
+    $("appStatus").textContent = "Có lỗi khi chấm bài";
   }finally{
     button.disabled = false;
-    button.textContent = "Gửi bài & chấm sửa trực tiếp";
+    button.textContent = "➤ GỬI BÀI & CHẤM SỬA";
   }
 }
 
-async function copyText(text,statusEl){
+async function copyText(text,statusId){
+  if(!text){setStatus(statusId,"Chưa có nội dung để sao chép.","error");return;}
   try{
     await navigator.clipboard.writeText(text);
-    statusEl.textContent = "Đã sao chép thành công.";
+    setStatus(statusId,"Đã sao chép vào clipboard.","success");
   }catch(e){
-    statusEl.textContent = "Trình duyệt không cho sao chép tự động. Cậu hãy chọn và sao chép thủ công nhé.";
+    setStatus(statusId,"Trình duyệt không cho sao chép tự động. Cậu hãy chọn nội dung và nhấn Ctrl+C.","error");
   }
 }
 
-$("makeTaskPrompt").addEventListener("click", generateTaskDirectly);
-
-$("copyTaskPrompt").addEventListener("click", async ()=>{
-  lastPrompt = buildTaskPrompt();
-  await copyText(lastPrompt, $("taskStatus"));
-});
-
-$("openChatTask").addEventListener("click", ()=>{
-  window.open("https://chatgpt.com/","_blank","noopener");
-});
-
-$("makeGradePrompt").addEventListener("click", generateGradeDirectly);
-
-$("copyAnswer").addEventListener("click", ()=>{
-  copyText($("answer").value, $("gradeStatus"));
-});
-
-$("copyCorrection").addEventListener("click", ()=>{
-  copyText($("correction").value, $("saveStatus"));
-});
-
-$("answer").addEventListener("input", ()=>{
-  const text = $("answer").value.trim();
-  const count = text ? text.split(/\s+/).length : 0;
-  $("wordCount").textContent = count + " từ";
-});
-
-$("clearTask").addEventListener("click", ()=>{
-  if(confirm("Cậu muốn xóa đề bài trong khung 1?")){
-    $("task").value = "";
-  }
-});
-
-$("clearAll").addEventListener("click", ()=>{
-  if(confirm("Cậu muốn xóa nội dung cả 3 khung?")){
-    $("task").value = "";
-    $("answer").value = "";
-    $("correction").value = "";
-    $("wordCount").textContent = "0 từ";
-    $("saveStatus").textContent = "Đã xóa nội dung trên trang.";
-  }
-});
-
-$("saveAll").addEventListener("click", ()=>{
+function savePractice(){
   const data = {
-    style: $("taskStyle").value,
-    task: $("task").value,
-    answer: $("answer").value,
-    correction: $("correction").value,
-    savedAt: new Date().toISOString()
+    config:selectedConfig(),
+    task:currentTask,
+    answer:$("answer").value,
+    correction:currentCorrection,
+    savedAt:new Date().toISOString()
   };
-
   try{
-    localStorage.setItem("schreibenB2Practice", JSON.stringify(data));
-    $("saveStatus").textContent = "Đã lưu bài luyện trên trình duyệt này.";
+    localStorage.setItem("schreibenPractice",JSON.stringify(data));
+    setStatus("saveStatus","Đã lưu bài luyện trên trình duyệt này.","success");
   }catch(e){
-    $("saveStatus").textContent = "Không thể lưu trên trình duyệt. Cậu hãy sao chép nội dung để dự phòng.";
+    setStatus("saveStatus","Không thể lưu dữ liệu trên trình duyệt.","error");
   }
+}
+
+function clearAll(){
+  if(!confirm("Cậu muốn xóa đề bài, bài viết và kết quả sửa bài?"))return;
+  currentTask = "";
+  currentCorrection = "";
+  $("taskDisplay").textContent = "Chọn thiết lập bên trái và nhấn TẠO ĐỀ BÀI để bắt đầu.";
+  $("taskDisplay").classList.add("placeholder");
+  $("taskMeta").textContent = "Chưa có đề";
+  $("answer").value = "";
+  $("correction").textContent = "Kết quả chấm điểm, phân tích lỗi và bài viết đã chỉnh sửa sẽ xuất hiện ở đây.";
+  $("correction").classList.add("empty");
+  $("wordCount").textContent = "0 từ";
+  setStatus("taskStatus","");
+  setStatus("gradeStatus","");
+  setStatus("saveStatus","Đã xóa nội dung trên trang.","success");
+  $("appStatus").textContent = "Bereit / Sẵn sàng";
+}
+
+$("generateButton").addEventListener("click",generateTask);
+$("gradeButton").addEventListener("click",gradeAnswer);
+$("copyTaskButton").addEventListener("click",()=>copyText(currentTask,"taskStatus"));
+$("copyAnswerButton").addEventListener("click",()=>copyText($("answer").value,"gradeStatus"));
+$("copyCorrectionButton").addEventListener("click",()=>copyText(currentCorrection,"saveStatus"));
+$("saveButton").addEventListener("click",savePractice);
+$("clearAllButton").addEventListener("click",clearAll);
+$("clearTaskButton").addEventListener("click",()=>{
+  if(!confirm("Cậu muốn xóa đề hiện tại?"))return;
+  currentTask="";
+  $("taskDisplay").textContent="Chưa có đề bài.";
+  $("taskDisplay").classList.add("placeholder");
+  $("taskMeta").textContent="Chưa có đề";
+  setStatus("taskStatus","Đã xóa đề.");
+});
+$("answer").addEventListener("input",()=>{
+  const value=$("answer").value.trim();
+  $("wordCount").textContent=(value?value.split(/\s+/).length:0)+" từ";
 });
 
 try{
-  const saved = JSON.parse(localStorage.getItem("schreibenB2Practice") || "null");
-
+  const saved=JSON.parse(localStorage.getItem("schreibenPractice")||"null");
   if(saved){
-    $("taskStyle").value = saved.style || "Ngẫu nhiên, đa dạng chủ đề B2";
-    $("task").value = saved.task || "";
-    $("answer").value = saved.answer || "";
-    $("correction").value = saved.correction || "";
+    if(saved.config){
+      $("topic").value=saved.config.topic||$("topic").value;
+      $("level").value=saved.config.level||"B2";
+      $("exam").value=saved.config.exam||"Goethe";
+      updateParts();
+      $("part").value=saved.config.part||$("part").options[0]?.value;
+    }
+    currentTask=saved.task||"";
+    currentCorrection=saved.correction||"";
+    if(currentTask){
+      $("taskDisplay").textContent=currentTask;
+      $("taskDisplay").classList.remove("placeholder");
+      $("taskMeta").textContent=`${saved.config?.exam||""} ${saved.config?.level||""} · ${saved.config?.part||""}`;
+    }
+    $("answer").value=saved.answer||"";
+    if(currentCorrection){
+      $("correction").textContent=currentCorrection;
+      $("correction").classList.remove("empty");
+    }
     $("answer").dispatchEvent(new Event("input"));
   }
 }catch(e){}
