@@ -18,7 +18,7 @@ body {
     align-items: center;
     background-color: #080f20;
     background-image:
-        linear-gradient(rgba(8,15,32,0.28), rgba(8,15,32,0.28)),
+        linear-gradient(rgba(8,15,32,0.12), rgba(8,15,32,0.12)),
         url("../../../11.jpg");
     background-position: center;
     background-size: cover;
@@ -35,118 +35,85 @@ body {
     padding: 30px;
     border: 1px solid #24375b;
     border-radius: 22px;
-    background: linear-gradient(145deg, #14213d, #0d172c);
-    box-shadow: 0 18px 55px rgba(0,0,0,0.35);
+    background: linear-gradient(145deg, #20365f, #142542);
+    box-shadow: 0 18px 55px rgba(0,0,0,0.30), 0 0 22px rgba(117,160,255,.10);
     text-align: center;
 }
 
-/* BỐ CỤC: KHUNG HỌC BÊN TRÁI + ĐÈN LED BÊN PHẢI */
-
+/* BỐ CỤC KHUNG HỌC */
 .quiz-layout {
     width: 100%;
-    max-width: 850px;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: clamp(10px, 2vw, 24px);
+    max-width: 650px;
+    margin: 0 auto 0 0;
+    display: block;
 }
 
 .container {
-    flex: 1 1 auto;
-    min-width: 0;
-    width: auto;
+    width: 100%;
     max-width: 650px;
+    padding-bottom: 66px;
 }
 
-.lamp-panel {
-    flex: 0 0 62px;
-    display: flex;
-    flex-direction: column;
+/* BIỂU TƯỢNG ĐÈN TÍCH HỢP Ở GÓC DƯỚI BÊN PHẢI */
+.lamp-toggle {
+    position: absolute;
+    right: 17px;
+    bottom: 13px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 17px;
-}
-
-/* BÓNG ĐÈN DẠNG THANH DÀI */
-
-.lamp-tube {
-    position: relative;
-    width: 18px;
-    height: 320px;
-    border: 2px solid rgba(255,255,255,.8);
-    border-radius: 999px;
-    background: linear-gradient(90deg, #9da9b8, #f5f7fa 48%, #aab5c2);
-    box-shadow: inset 0 0 7px rgba(255,255,255,.7), 0 0 7px rgba(255,255,255,.16);
-    transition: background .35s ease, box-shadow .35s ease;
-}
-
-.lamp-tube::before {
-    content: "";
-    position: absolute;
-    top: 7px;
-    bottom: 7px;
-    left: 4px;
-    right: 4px;
-    border-radius: inherit;
-    background: rgba(255,255,255,.38);
-    transition: background .35s ease;
-}
-
-.lamp-cap {
-    width: 28px;
-    height: 12px;
-    margin-top: -17px;
-    border: 1px solid rgba(220,235,255,.55);
-    border-radius: 4px 4px 7px 7px;
-    background: linear-gradient(90deg, #59677d, #c5cfdb, #59677d);
-}
-
-.lamp-switch {
-    width: 58px;
-    min-height: 34px;
-    border: 1px solid #627a9f;
-    border-radius: 999px;
-    background: #263f68;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .5px;
+    gap: 6px;
+    min-width: 68px;
+    min-height: 38px;
+    padding: 5px 9px;
+    border: 1px solid rgba(157,184,245,.35);
+    border-radius: 8px;
+    background: rgba(26,43,75,.72);
+    color: #aab9d5;
+    font: inherit;
+    font-size: 13px;
     cursor: pointer;
-    transition: .25s ease;
+    transition: color .25s ease, background .25s ease, box-shadow .25s ease, border-color .25s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
-.lamp-switch:hover {
-    background: #35588d;
-    border-color: #fff;
+.lamp-icon {
+    display: inline-block;
+    font-size: 21px;
+    line-height: 1;
+    filter: grayscale(1);
+    opacity: .72;
+    transition: filter .25s ease, opacity .25s ease, text-shadow .25s ease, transform .25s ease;
 }
 
-/* ĐÈN BẬT: ÁNH SÁNG TRẮNG */
-
-body.lamp-on .lamp-tube {
-    background: linear-gradient(90deg, #e6edf5, #fff 48%, #e6edf5);
-    box-shadow:
-        0 0 12px 3px rgba(255,255,255,.9),
-        0 0 30px 9px rgba(255,255,255,.55),
-        0 0 65px 18px rgba(255,255,255,.24),
-        inset 0 0 10px #fff;
+.lamp-toggle:hover {
+    border-color: #8ab1ff;
+    background: #243d68;
+    color: #fff;
 }
 
-body.lamp-on .lamp-tube::before {
-    background: #fff;
+body.lamp-on .lamp-toggle {
+    border-color: rgba(255,255,255,.8);
+    background: rgba(237,242,248,.14);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,.16);
 }
 
-body.lamp-on .lamp-switch {
-    background: #edf2f8;
-    color: #14213d;
-    border-color: #fff;
-    box-shadow: 0 0 14px rgba(255,255,255,.45);
+body.lamp-on .lamp-icon {
+    filter: none;
+    opacity: 1;
+    text-shadow: 0 0 7px #fff, 0 0 16px rgba(255,255,255,.95), 0 0 28px rgba(255,255,255,.65);
+    transform: scale(1.08);
 }
 
 body.lamp-on .container {
+    background: linear-gradient(145deg, #2b4778, #1b3156);
+    border-color: rgba(220,235,255,.72);
     box-shadow:
-        0 18px 55px rgba(0,0,0,.35),
-        0 0 34px rgba(255,255,255,.12);
+        0 18px 55px rgba(0,0,0,.28),
+        0 0 34px rgba(255,255,255,.30),
+        0 0 72px rgba(190,215,255,.20);
 }
 
 /* GIAO DIỆN ĐIỆN THOẠI */
@@ -167,29 +134,17 @@ body.lamp-on .container {
         border-radius: 17px;
     }
 
-    .lamp-panel {
-        flex-basis: 36px;
-        gap: 13px;
+    .container { padding-bottom: 62px; }
+
+    .lamp-toggle {
+        right: 10px;
+        bottom: 9px;
+        min-width: 62px;
+        min-height: 35px;
+        font-size: 12px;
     }
 
-    .lamp-tube {
-        width: 12px;
-        height: clamp(170px, 48vh, 245px);
-        border-width: 1px;
-    }
-
-    .lamp-cap {
-        width: 21px;
-        height: 9px;
-        margin-top: -13px;
-    }
-
-    .lamp-switch {
-        width: 38px;
-        min-height: 29px;
-        padding: 4px 2px;
-        font-size: 9px;
-    }
+    .lamp-icon { font-size: 19px; }
 
     h1 { font-size: 21px; }
     .word { font-size: clamp(19px, 5vw, 25px); }
@@ -200,8 +155,6 @@ body.lamp-on .container {
 }
 
 @media (max-width: 360px) {
-    .lamp-panel { flex-basis: 32px; }
-    .lamp-switch { width: 34px; font-size: 8px; }
     .container { padding-left: 9px; padding-right: 9px; }
 }
 
@@ -437,19 +390,19 @@ h1 {
         </button>
     </section>
 
-</main>
-
-<aside class="lamp-panel" aria-label="Đèn chiếu sáng">
-    <div class="lamp-tube" aria-hidden="true"></div>
-    <div class="lamp-cap" aria-hidden="true"></div>
     <button
-        class="lamp-switch"
-        id="lampSwitch"
+        class="lamp-toggle"
+        id="lampToggle"
         type="button"
+        aria-label="Bật đèn"
         aria-pressed="false"
-        onclick="toggleLamp()">OFF</button>
-</aside>
+        title="Đèn"
+        onclick="toggleLamp()">
+        <span class="lamp-icon" aria-hidden="true">💡</span>
+        <span>Đèn</span>
+    </button>
 
+</main>
 </div>
 
 <script>
@@ -910,10 +863,11 @@ if ("speechSynthesis" in window) {
 
 function toggleLamp() {
     const isOn = document.body.classList.toggle("lamp-on");
-    const switchButton = document.getElementById("lampSwitch");
+    const lampButton = document.getElementById("lampToggle");
 
-    switchButton.textContent = isOn ? "ON" : "OFF";
-    switchButton.setAttribute("aria-pressed", String(isOn));
+    lampButton.setAttribute("aria-pressed", String(isOn));
+    lampButton.setAttribute("aria-label", isOn ? "Tắt đèn" : "Bật đèn");
+    lampButton.title = isOn ? "Tắt đèn" : "Bật đèn";
 }
 
 // KHỞI CHẠY QUIZ
