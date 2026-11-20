@@ -1090,6 +1090,193 @@ body {
     }
 }
 
+
+
+/* =========================
+   HIEU UNG BON MUA CHO A1-A2-B1-B2
+   Chi them hoa tiet chuyen dong; giu nguyen bo cuc va chuc nang
+========================= */
+
+.level-card {
+    overflow: visible;
+}
+
+/* Hoa tiet mua an di khi chua hover */
+.level-card::before,
+.level-card::after {
+    position: absolute;
+    right: 7px;
+    top: 4px;
+    z-index: 2;
+    pointer-events: none;
+    line-height: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* Chi hien hoa tiet mua khi di chuot vao thu muc */
+.level-card:hover::before,
+.level-card:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* A1 - MUA XUAN: canh hoa rung nhe */
+.level-card.season-spring::before {
+    content: "🌸";
+    font-size: 15px;
+    animation: none;
+}
+
+.level-card.season-spring::after {
+    content: "✿" !important;
+    display: block !important;
+    right: 22px;
+    top: 13px;
+    color: #fff4d9;
+    font-size: 9px;
+    animation: none;
+}
+
+/* A2 - MUA HE: mat troi toa nang */
+.level-card.season-summer::before {
+    content: "☀️";
+    font-size: 16px;
+    transform-origin: center;
+    animation: none;
+}
+
+.level-card.season-summer::after {
+    content: "✦" !important;
+    display: block !important;
+    right: 23px;
+    top: 14px;
+    color: #fff6d8;
+    font-size: 9px;
+    animation: none;
+}
+
+/* B1 - MUA THU: la vang roi nhe */
+.level-card.season-autumn::before {
+    content: "🍂";
+    font-size: 16px;
+    animation: none;
+}
+
+.level-card.season-autumn::after {
+    content: "🍁" !important;
+    display: block !important;
+    right: 24px;
+    top: 15px;
+    font-size: 10px;
+    animation: none;
+}
+
+/* B2 - MUA DONG: bong tuyet lanh */
+.level-card.season-winter::before {
+    content: "❄";
+    color: #ffffff;
+    font-size: 17px;
+    animation: none;
+}
+
+.level-card.season-winter::after {
+    content: "✧" !important;
+    display: block !important;
+    right: 24px;
+    top: 14px;
+    color: #ffffff;
+    font-size: 11px;
+    animation: none;
+}
+
+
+
+/* Chi chay hieu ung mua khi di chuot vao tung thu muc */
+.level-card.season-spring:hover::before {
+    animation: springFlowerFloat 3s ease-in-out infinite;
+}
+.level-card.season-spring:hover::after {
+    animation: springPetalDrift 3.8s ease-in-out infinite;
+}
+
+.level-card.season-summer:hover::before {
+    animation: summerSunPulse 3s ease-in-out infinite;
+}
+.level-card.season-summer:hover::after {
+    animation: summerSparkle 2.4s ease-in-out infinite;
+}
+
+.level-card.season-autumn:hover::before {
+    animation: autumnLeafFall 3.6s ease-in-out infinite;
+}
+.level-card.season-autumn:hover::after {
+    animation: autumnLeafDrift 4.2s ease-in-out infinite;
+}
+
+.level-card.season-winter:hover::before {
+    animation: winterSnowTurn 4s linear infinite;
+}
+.level-card.season-winter:hover::after {
+    animation: winterSnowTwinkle 2s ease-in-out infinite;
+}
+
+/* Chuyen dong rieng cho tung mua */
+@keyframes springFlowerFloat {
+    0%, 100% { transform: translateY(0) rotate(-8deg); }
+    50% { transform: translateY(-4px) rotate(8deg); }
+}
+
+@keyframes springPetalDrift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: .65; }
+    50% { transform: translate(-3px, 4px) rotate(35deg); opacity: 1; }
+}
+
+@keyframes summerSunPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.16) rotate(12deg); }
+}
+
+@keyframes summerSparkle {
+    0%, 100% { transform: scale(.75); opacity: .45; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes autumnLeafFall {
+    0%, 100% { transform: translate(0, 0) rotate(-8deg); }
+    50% { transform: translate(-3px, 5px) rotate(24deg); }
+}
+
+@keyframes autumnLeafDrift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: .7; }
+    50% { transform: translate(-4px, 5px) rotate(-30deg); opacity: 1; }
+}
+
+@keyframes winterSnowTurn {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(45deg) scale(1.12); }
+}
+
+@keyframes winterSnowTwinkle {
+    0%, 100% { transform: scale(.7); opacity: .45; }
+    50% { transform: scale(1.25); opacity: 1; }
+}
+
+/* Ton trong cai dat giam chuyen dong cua thiet bi */
+@media (prefers-reduced-motion: reduce) {
+    .level-card.season-spring::before,
+    .level-card.season-spring::after,
+    .level-card.season-summer::before,
+    .level-card.season-summer::after,
+    .level-card.season-autumn::before,
+    .level-card.season-autumn::after,
+    .level-card.season-winter::before,
+    .level-card.season-winter::after {
+        animation: none !important;
+    }
+}
+
 </style>
 </head>
 
