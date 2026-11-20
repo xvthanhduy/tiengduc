@@ -1103,6 +1103,160 @@ body {
     .ai-restore { left:12px; right:auto; bottom:12px; }
 }
 
+
+/* =========================================
+   WINDOW CONTROLS UPDATE
+   Không còn phóng to/thu nhỏ; chỉ bật/tắt.
+========================================= */
+.music-player.minimized,
+.music-player.maximized {
+    width: 370px;
+    right: 25px;
+    left: auto;
+    bottom: 25px;
+    transform: none;
+}
+.music-player.minimized #youtubePlayer,
+.music-player.minimized .track-name,
+.music-player.minimized .volume-row,
+.music-player.minimized .player-footer,
+.music-player.minimized .player-status,
+.music-player.minimized .playlist { display: initial; }
+.music-player.minimized .player-content,
+.music-player.maximized .player-content { padding: 16px; }
+.music-player.maximized #youtubePlayer { height: 208px; }
+.ai-mini.minimized,
+.ai-mini.maximized {
+    width: 350px; height: 490px; max-height: min(72vh, 650px);
+}
+.ai-mini.minimized .ai-content { display: flex; }
+.ai-restore {
+    left: 25px; right: auto; bottom: 25px;
+    z-index: 10002;
+}
+/* Heartbeat chuyển sang biểu tượng khôi phục AI khi cửa sổ bị tắt. */
+.ai-restore.show {
+    animation: ai-heartbeat-glow 1.8s ease-in-out infinite;
+    border-color: rgba(91, 159, 224, .55);
+}
+.ai-restore.show::first-letter {
+    animation: ai-heartbeat-mark 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .ai-restore.show { animation: none; }
+}
+@media (max-width: 600px) {
+    .music-player, .music-player.minimized, .music-player.maximized {
+        right: 10px; left: 10px; bottom: 10px; width: auto;
+        max-width: none; max-height: calc(100dvh - 20px); overflow-y: auto;
+    }
+    .ai-restore { left: 12px; right: auto; bottom: 12px; }
+    .ai-mini.minimized, .ai-mini.maximized {
+        width: min(350px, calc(100vw - 20px));
+        height: min(490px, 72vh);
+    }
+}
+
+
+
+/* =========================================
+   CLASSIC RESTORE BUTTONS + AI HEARTBEAT
+   Hai nut khoi phuc dong bo kich thuoc va nen trang.
+========================================= */
+.ai-restore,
+.restore-button {
+    box-sizing: border-box;
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px;
+    min-height: 52px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #d9dde2 !important;
+    border-radius: 13px !important;
+    color: #343a40 !important;
+    background: #ffffff !important;
+    box-shadow: 0 3px 12px rgba(25, 32, 42, .12) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 22px !important;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.ai-restore.show,
+.restore-button.show {
+    display: flex;
+}
+.ai-restore:hover,
+.restore-button:hover {
+    color: #20252b !important;
+    background: #f7f8fa !important;
+    border-color: #bfc5cc !important;
+    transform: none !important;
+    box-shadow: 0 4px 14px rgba(25, 32, 42, .16) !important;
+}
+.ai-restore {
+    z-index: 10002;
+    overflow: visible;
+    position: fixed;
+}
+.restore-button {
+    z-index: 10000;
+    position: fixed;
+}
+/* Nhịp tim chỉ xuất hiện trên nút AI sau khi cửa sổ AI được đóng bằng X. */
+.ai-restore.show {
+    animation: classic-ai-heartbeat 1.8s ease-in-out infinite;
+    border-color: #b9c9d9 !important;
+}
+.ai-restore.show::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px solid rgba(105, 145, 185, .45);
+    border-radius: 16px;
+    pointer-events: none;
+    animation: classic-ai-ring 1.8s ease-out infinite;
+}
+@keyframes classic-ai-heartbeat {
+    0%, 100% { transform: scale(1); box-shadow: 0 3px 12px rgba(25,32,42,.12), 0 0 0 0 rgba(105,145,185,0); }
+    10% { transform: scale(1.07); box-shadow: 0 3px 12px rgba(25,32,42,.12), 0 0 12px 2px rgba(105,145,185,.22); }
+    19% { transform: scale(1); }
+    29% { transform: scale(1.045); box-shadow: 0 3px 12px rgba(25,32,42,.12), 0 0 9px 1px rgba(105,145,185,.17); }
+    40% { transform: scale(1); }
+}
+@keyframes classic-ai-ring {
+    0%, 40%, 100% { opacity: 0; transform: scale(.96); }
+    10% { opacity: .65; transform: scale(1.02); }
+    25% { opacity: .18; transform: scale(1.13); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ai-restore.show,
+    .ai-restore.show::after { animation: none !important; }
+}
+@media (max-width: 600px) {
+    .ai-restore, .restore-button { width: 52px !important; height: 52px !important; }
+}
+
+/* Nhãn Trợ lí AI dùng cùng kiểu chữ Segoe UI của giao diện website. */
+.ai-restore {
+    font-family: "Segoe UI", Arial, sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 650 !important;
+    letter-spacing: -0.25px;
+}
+.ai-restore-label {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+    line-height: 1;
+}
+
 </style>
 </head>
 
@@ -1132,29 +1286,13 @@ body {
         </div>
 
         <div class="window-controls">
-
-            <button
-                onclick="minimizePlayer()"
-                title="Thu nhỏ"
-                aria-label="Thu nhỏ">
-                —
-            </button>
-
-            <button
-                onclick="maximizePlayer()"
-                title="Phóng to / Thu gọn"
-                aria-label="Phóng to hoặc thu gọn">
-                □
-            </button>
-
             <button
                 class="close-button"
                 onclick="hidePlayer()"
-                title="Ẩn trình phát"
-                aria-label="Ẩn trình phát">
+                title="Tắt trình phát"
+                aria-label="Tắt trình phát">
                 ×
             </button>
-
         </div>
 
     </div>
@@ -1262,9 +1400,7 @@ body {
       <span class="ai-brand-copy">Trợ lí AI</span>
     </div>
     <div class="ai-window-controls">
-      <button type="button" onclick="aiMinimize()" title="Thu nhỏ" aria-label="Thu nhỏ">−</button>
-      <button type="button" onclick="aiMaximize()" title="Phóng to / thu gọn" aria-label="Phóng to">□</button>
-      <button type="button" class="ai-close" onclick="aiHide()" title="Ẩn trợ lý" aria-label="Ẩn">×</button>
+      <button type="button" class="ai-close" onclick="aiHide()" title="Tắt trợ lý" aria-label="Tắt trợ lý">×</button>
     </div>
   </header>
   <div class="ai-content">
@@ -1276,7 +1412,7 @@ body {
     <div class="ai-foot">Lịch sử trò chuyện được lưu trên trình duyệt này</div>
   </div>
 </section>
-<button class="ai-restore" id="aiRestore" type="button" onclick="aiShow()" title="Mở trợ lý AI" aria-label="Mở trợ lý AI">AI</button>
+<button class="ai-restore" id="aiRestore" type="button" onclick="aiShow()" title="Mở Trợ lí AI" aria-label="Mở Trợ lí AI"><span class="ai-restore-label">Trợ lí AI</span></button>
 
 
 <!-- FLOATING RESTORE BUTTON -->
@@ -1690,66 +1826,32 @@ function toggleRepeat() {
 
 
 // ======================================
-// 14. MINIMIZE
-// ======================================
-
-function minimizePlayer() {
-
-    musicPlayer.classList.remove("maximized");
-
-    musicPlayer.classList.add("minimized");
-
-}
-
-
-// ======================================
-// 15. MAXIMIZE / RESTORE SIZE
-// ======================================
-
-function maximizePlayer() {
-
-    if (
-        musicPlayer.classList.contains("maximized")
-    ) {
-
-        musicPlayer.classList.remove("maximized");
-
-    } else {
-
-        musicPlayer.classList.remove("minimized");
-
-        musicPlayer.classList.add("maximized");
-
-    }
-
-}
-
-
-// ======================================
 // 16. HIDE WINDOW
 // ======================================
 
 function hidePlayer() {
-
     musicPlayer.style.display = "none";
-
     restoreButton.classList.add("show");
-
+    updateAIRestorePosition();
 }
 
-
 // ======================================
-// 17. RESTORE WINDOW
+// RESTORE PLAYER — chỉ bật/tắt, không đổi kích thước
 // ======================================
 
 function restorePlayer() {
-
     musicPlayer.style.display = "block";
-
-    musicPlayer.classList.remove("minimized");
-
     restoreButton.classList.remove("show");
+    updateAIRestorePosition();
+}
 
+// Khi trình phát đang mở, đặt nút khôi phục AI ở góc trái.
+// Khi trình phát bị tắt, xếp biểu tượng AI ngay phía trên biểu tượng nhạc.
+function updateAIRestorePosition() {
+    const playerIsHidden = musicPlayer.style.display === "none";
+    aiRestoreButton.style.left = playerIsHidden ? "auto" : "25px";
+    aiRestoreButton.style.right = playerIsHidden ? "25px" : "auto";
+    aiRestoreButton.style.bottom = playerIsHidden ? "88px" : "25px";
 }
 
 
@@ -1785,6 +1887,7 @@ const aiInput = document.getElementById("aiInput");
 const aiSend = document.getElementById("aiSend");
 const AI_STORAGE_KEY = "deutschLernen_ai_chat_v1";
 let aiHistory = [];
+updateAIRestorePosition();
 
 try {
   const saved = JSON.parse(localStorage.getItem(AI_STORAGE_KEY) || "[]");
@@ -1811,21 +1914,13 @@ function aiRenderHistory() {
   }
   aiHistory.forEach(m => aiAddMessage(m.role, m.content));
 }
-function aiMinimize() {
-  aiWindow.classList.remove("maximized");
-  aiWindow.classList.add("minimized");
-}
-function aiMaximize() {
-  if (aiWindow.classList.contains("maximized")) aiWindow.classList.remove("maximized");
-  else { aiWindow.classList.remove("minimized"); aiWindow.classList.add("maximized"); }
-}
 function aiHide() {
   aiWindow.style.display = "none";
   aiRestoreButton.classList.add("show");
+  updateAIRestorePosition();
 }
 function aiShow() {
   aiWindow.style.display = "flex";
-  aiWindow.classList.remove("minimized");
   aiRestoreButton.classList.remove("show");
 }
 
