@@ -107,7 +107,7 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
   <header class="hero">
     <div class="eyebrow">DEUTSCH · B2 · SCHREIBTRAINING</div>
     <h1>SCHREIBEN B2</h1>
-    <p class="subtitle">Luyện viết tiếng Đức trình độ B2 cùng ChatGPT — tạo đề, viết bài và nhận góp ý bằng tiếng Việt.</p>
+    <p class="subtitle">Luyện viết tiếng Đức trình độ B2 cùng AI — tạo đề, viết bài và nhận góp ý bằng tiếng Việt.</p>
   </header>
 
   <section class="controls" aria-label="Thiết lập đề">
@@ -148,10 +148,10 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
         <h2><span class="number">02</span>MEIN TEXT – BÀI VIẾT</h2>
         <span class="small-tag">Khung 2 · Bài làm của cậu</span>
       </div>
-      <p class="hint">Viết bài tiếng Đức của cậu tại đây. Hãy dán đề vào khung 1 trước khi tạo yêu cầu chấm bài để ChatGPT đánh giá đúng trọng tâm.</p>
+      <p class="hint">Viết bài tiếng Đức của cậu tại đây. Sau đó nhấn nút gửi bài để AI chấm và sửa trực tiếp.</p>
       <textarea id="answer" placeholder="Schreibe deinen Text hier auf Deutsch..."></textarea>
       <div class="actions">
-        <button class="primary" id="makeGradePrompt">Chuẩn bị yêu cầu chấm & sửa bài</button>
+        <button class="primary" id="makeGradePrompt">Gửi bài & chấm sửa trực tiếp</button>
         <button class="secondary" id="copyAnswer">Sao chép bài viết</button>
         <span class="word-count" id="wordCount">0 từ</span>
       </div>
@@ -161,10 +161,10 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
     <article class="panel">
       <div class="panel-head">
         <h2><span class="number">03</span>KI-KORREKTUR – BÀI ĐÃ SỬA</h2>
-        <span class="small-tag">Khung 3 · Kết quả từ ChatGPT</span>
+        <span class="small-tag">Khung 3 · Kết quả AI</span>
       </div>
-      <p class="hint">Sau khi nhận kết quả chấm và sửa bài từ ChatGPT, cậu có thể dán vào đây. Cậu cũng có thể lưu kết quả trên trình duyệt của mình.</p>
-      <textarea id="correction" placeholder="Kết quả chấm điểm, sửa lỗi và bài mẫu sẽ xuất hiện ở đây sau khi cậu dán từ ChatGPT..."></textarea>
+      <p class="hint">Sau khi nhấn “Gửi bài & chấm sửa trực tiếp”, AI sẽ chấm điểm, giải thích lỗi và viết lại bài của cậu ngay tại đây.</p>
+      <textarea id="correction" placeholder="Kết quả chấm điểm, sửa lỗi và bài viết đã chỉnh sửa sẽ xuất hiện ở đây..."></textarea>
       <div class="actions">
         <button class="secondary" id="copyCorrection">Sao chép kết quả</button>
         <button class="secondary" id="saveAll">Lưu bài luyện</button>
@@ -175,7 +175,7 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
   </section>
 
   <p class="footer-note">
-    Lưu ý: Tạo đề trực tiếp sử dụng AI thông qua máy chủ trung gian. Chức năng chấm bài hiện vẫn dùng quy trình ChatGPT thủ công. Bài luyện và kết quả lưu bằng bộ nhớ của trình duyệt trên thiết bị hiện tại.
+    Lưu ý: Tạo đề và chấm sửa bài được thực hiện thông qua AI và máy chủ trung gian. Bài luyện và kết quả lưu bằng bộ nhớ của trình duyệt trên thiết bị hiện tại.
   </p>
 </main>
 
@@ -183,7 +183,6 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
 const $ = (id) => document.getElementById(id);
 let lastPrompt = "";
 
-// Địa chỉ Cloudflare Worker của cậu
 const AI_WORKER_URL = "https://german-schreiben-ai.xv-thanhduy.workers.dev";
 
 async function generateTaskDirectly(){
@@ -213,7 +212,6 @@ async function generateTaskDirectly(){
     }
 
     taskBox.value = data.task.trim();
-    taskBox.dispatchEvent(new Event("input"));
     status.textContent = "Đã tạo đề B2 thành công! Cậu có thể bắt đầu viết rồi.";
     taskBox.focus();
     taskBox.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -225,14 +223,8 @@ async function generateTaskDirectly(){
   }
 }
 
-function currentExamInfo(){
-  return {
-    style: $("taskStyle").value
-  };
-}
-
 function buildTaskPrompt(){
-  const {style} = currentExamInfo();
+  const style = $("taskStyle").value;
   return `Bạn là giáo viên tiếng Đức chuyên luyện viết trình độ B2.
 
 Hãy tạo MỘT đề luyện viết tiếng Đức mới ở trình độ B2.
@@ -246,123 +238,143 @@ Yêu cầu:
 - Đưa ra các ý cần triển khai để người học có thể phát triển nội dung.
 - Đề bài chính phải được viết bằng tiếng Đức.
 - Gợi ý độ dài bài viết và thời gian làm bài phù hợp.
-- Không tự nhận đây là đề thi chính thức hoặc sao chép đề có bản quyền; đây là đề luyện tập.
+- Đây là đề luyện tập, không phải đề thi chính thức.
 - Sau đề tiếng Đức, thêm hướng dẫn ngắn bằng tiếng Việt.
 - Chỉ tạo một đề, không đưa bài mẫu hoặc đáp án ngay.`;
 }
 
-function buildGradePrompt(){
+async function generateGradeDirectly(){
+  const button = $("makeGradePrompt");
+  const status = $("gradeStatus");
   const task = $("task").value.trim();
   const answer = $("answer").value.trim();
-  if(!task){ $("gradeStatus").textContent="Cậu hãy dán đề bài vào khung 1 trước nhé."; $("task").focus(); return ""; }
-  if(!answer){ $("gradeStatus").textContent="Cậu chưa nhập bài viết ở khung 2."; $("answer").focus(); return ""; }
 
-  return `Bạn là giáo viên tiếng Đức giàu kinh nghiệm, hỗ trợ người học luyện viết trình độ B2.
+  if(!task){
+    status.textContent = "Cậu hãy tạo hoặc nhập đề bài ở khung 1 trước nhé.";
+    $("task").focus();
+    return;
+  }
 
-Thông tin:
-- Trình độ: B2.
-- Đây là bài luyện viết tổng quát, không gắn với riêng kỳ thi Goethe, telc hay một Teil cụ thể.
-- Hãy đánh giá theo các tiêu chí phù hợp với một bài viết tiếng Đức B2 và giải thích rõ đây là đánh giá tham khảo của AI, không phải điểm thi chính thức.
+  if(!answer){
+    status.textContent = "Cậu chưa nhập bài viết ở khung 2.";
+    $("answer").focus();
+    return;
+  }
 
-ĐỀ BÀI:
-${task}
+  button.disabled = true;
+  button.textContent = "AI đang chấm bài...";
+  status.textContent = "Bài viết đang được gửi đến AI. Quá trình này có thể mất một chút thời gian.";
 
-BÀI VIẾT CỦA HỌC VIÊN:
-${answer}
+  try{
+    const response = await fetch(AI_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "grade",
+        task: task,
+        answer: answer
+      })
+    });
 
-Hãy đánh giá và sửa bài bằng tiếng Việt, giữ nguyên ý định và quan điểm của người viết. Trình bày theo đúng các mục sau:
+    const data = await response.json().catch(() => ({}));
 
-1. ĐÁNH GIÁ TỔNG QUAN
-- Mức độ hoàn thành yêu cầu đề.
-- Điểm mạnh và điểm cần cải thiện.
-- Đưa ra đánh giá tham khảo theo thang điểm 0–100 và giải thích rõ cách đánh giá. Không khẳng định đây là điểm chính thức của Goethe/telc.
+    if(!response.ok){
+      throw new Error(data.details || data.error || `Lỗi máy chủ (${response.status})`);
+    }
 
-2. SỬA LỖI CHI TIẾT
-Lập bảng gồm: Câu/đoạn gốc | Phiên bản sửa | Giải thích bằng tiếng Việt.
-Chỉ ra lỗi ngữ pháp, chính tả, giống/số/cách, chia động từ, trật tự từ, giới từ và dấu câu nếu có.
-Nếu câu đã đúng, không tự tạo lỗi.
+    if(!data.correction || typeof data.correction !== "string"){
+      throw new Error("AI chưa trả về kết quả sửa bài. Cậu thử lại nhé.");
+    }
 
-3. TỪ VỰNG VÀ DIỄN ĐẠT
-- Đánh giá độ phong phú và chính xác.
-- Đề xuất cách diễn đạt tự nhiên hơn ở trình độ B2.
-- Giải thích sắc thái của các từ/cụm từ quan trọng.
-
-4. CẤU TRÚC VÀ LIÊN KẾT
-- Đánh giá bố cục, mạch lập luận, liên từ và tính liên kết.
-- Gợi ý cách cải thiện cụ thể.
-
-5. BÀI VIẾT ĐÃ CHỈNH SỬA HOÀN CHỈNH
-Viết lại toàn bộ bài bằng tiếng Đức B2 tự nhiên, đúng đề. Giữ lại nội dung và ý kiến của học viên, không thêm thông tin không có căn cứ.
-
-6. 5 ĐIỂM CẦN GHI NHỚ
-Nêu năm lỗi hoặc điểm học tập quan trọng nhất, kèm ví dụ ngắn.
-
-Hãy trung thực, cụ thể, thân thiện. Không bịa lỗi và không đánh giá vượt quá những gì bài viết thể hiện.`;
+    $("correction").value = data.correction.trim();
+    status.textContent = "Đã chấm và sửa bài thành công! Kết quả ở khung 3.";
+    $("correction").focus();
+    $("correction").scrollIntoView({ behavior: "smooth", block: "center" });
+  }catch(error){
+    status.textContent = "Chưa chấm được bài: " + error.message;
+  }finally{
+    button.disabled = false;
+    button.textContent = "Gửi bài & chấm sửa trực tiếp";
+  }
 }
 
 async function copyText(text,statusEl){
   try{
     await navigator.clipboard.writeText(text);
-    statusEl.textContent="Đã sao chép. Cậu mở ChatGPT và dán nội dung nhé.";
+    statusEl.textContent = "Đã sao chép thành công.";
   }catch(e){
-    statusEl.textContent="Trình duyệt không cho sao chép tự động. Cậu hãy chọn và sao chép nội dung thủ công.";
+    statusEl.textContent = "Trình duyệt không cho sao chép tự động. Cậu hãy chọn và sao chép thủ công nhé.";
   }
 }
 
 $("makeTaskPrompt").addEventListener("click", generateTaskDirectly);
-$("copyTaskPrompt").addEventListener("click", async ()=>{
-  lastPrompt=buildTaskPrompt();
-  await copyText(lastPrompt,$("taskStatus"));
-});
-$("openChatTask").addEventListener("click",()=>window.open("https://chatgpt.com/","_blank","noopener"));
 
-$("makeGradePrompt").addEventListener("click", async ()=>{
-  const prompt=buildGradePrompt();
-  if(!prompt) return;
-  lastPrompt=prompt;
-  await copyText(prompt,$("gradeStatus"));
+$("copyTaskPrompt").addEventListener("click", async ()=>{
+  lastPrompt = buildTaskPrompt();
+  await copyText(lastPrompt, $("taskStatus"));
+});
+
+$("openChatTask").addEventListener("click", ()=>{
   window.open("https://chatgpt.com/","_blank","noopener");
 });
-$("copyAnswer").addEventListener("click",()=>copyText($("answer").value,$("gradeStatus")));
-$("copyCorrection").addEventListener("click",()=>copyText($("correction").value,$("saveStatus")));
 
-$("answer").addEventListener("input",()=>{
-  const text=$("answer").value.trim();
-  const count=text ? text.split(/\s+/).length : 0;
-  $("wordCount").textContent=count+" từ";
+$("makeGradePrompt").addEventListener("click", generateGradeDirectly);
+
+$("copyAnswer").addEventListener("click", ()=>{
+  copyText($("answer").value, $("gradeStatus"));
 });
 
-$("clearTask").addEventListener("click",()=>{
-  if(confirm("Cậu muốn xóa đề bài trong khung 1?")) $("task").value="";
+$("copyCorrection").addEventListener("click", ()=>{
+  copyText($("correction").value, $("saveStatus"));
 });
-$("clearAll").addEventListener("click",()=>{
-  if(confirm("Cậu muốn xóa nội dung cả 3 khung?")){
-    $("task").value=""; $("answer").value=""; $("correction").value="";
-    $("wordCount").textContent="0 từ";
-    $("saveStatus").textContent="Đã xóa nội dung trên trang.";
+
+$("answer").addEventListener("input", ()=>{
+  const text = $("answer").value.trim();
+  const count = text ? text.split(/\s+/).length : 0;
+  $("wordCount").textContent = count + " từ";
+});
+
+$("clearTask").addEventListener("click", ()=>{
+  if(confirm("Cậu muốn xóa đề bài trong khung 1?")){
+    $("task").value = "";
   }
 });
-$("saveAll").addEventListener("click",()=>{
-  const data={
-    style:$("taskStyle").value,
-    task:$("task").value,answer:$("answer").value,correction:$("correction").value,
-    savedAt:new Date().toISOString()
+
+$("clearAll").addEventListener("click", ()=>{
+  if(confirm("Cậu muốn xóa nội dung cả 3 khung?")){
+    $("task").value = "";
+    $("answer").value = "";
+    $("correction").value = "";
+    $("wordCount").textContent = "0 từ";
+    $("saveStatus").textContent = "Đã xóa nội dung trên trang.";
+  }
+});
+
+$("saveAll").addEventListener("click", ()=>{
+  const data = {
+    style: $("taskStyle").value,
+    task: $("task").value,
+    answer: $("answer").value,
+    correction: $("correction").value,
+    savedAt: new Date().toISOString()
   };
+
   try{
-    localStorage.setItem("schreibenB2Practice",JSON.stringify(data));
-    $("saveStatus").textContent="Đã lưu bài luyện trên trình duyệt này.";
+    localStorage.setItem("schreibenB2Practice", JSON.stringify(data));
+    $("saveStatus").textContent = "Đã lưu bài luyện trên trình duyệt này.";
   }catch(e){
-    $("saveStatus").textContent="Không thể lưu trên trình duyệt. Cậu hãy sao chép nội dung để dự phòng.";
+    $("saveStatus").textContent = "Không thể lưu trên trình duyệt. Cậu hãy sao chép nội dung để dự phòng.";
   }
 });
 
 try{
-  const saved=JSON.parse(localStorage.getItem("schreibenB2Practice")||"null");
+  const saved = JSON.parse(localStorage.getItem("schreibenB2Practice") || "null");
+
   if(saved){
-    $("taskStyle").value=saved.style||"Ngẫu nhiên, đa dạng chủ đề B2";
-    $("task").value=saved.task||"";
-    $("answer").value=saved.answer||"";
-    $("correction").value=saved.correction||"";
+    $("taskStyle").value = saved.style || "Ngẫu nhiên, đa dạng chủ đề B2";
+    $("task").value = saved.task || "";
+    $("answer").value = saved.answer || "";
+    $("correction").value = saved.correction || "";
     $("answer").dispatchEvent(new Event("input"));
   }
 }catch(e){}
