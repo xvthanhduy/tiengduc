@@ -995,6 +995,64 @@ body {
     }
 }
 
+
+/* =========================================
+   AI MINI PLAYER — độc lập với iframe
+========================================= */
+.ai-mini {
+    position: fixed; left: 25px; right: auto; bottom: 25px; z-index: 10001;
+    width: 360px; height: 510px; max-height: min(72vh, 650px);
+    display: flex; flex-direction: column; overflow: hidden;
+    color: #effff6; background: linear-gradient(145deg, rgba(25,48,48,.97), rgba(13,25,34,.98));
+    border: 1px solid rgba(140,238,190,.35); border-radius: 17px;
+    box-shadow: 0 18px 55px rgba(0,0,0,.42), 0 0 24px rgba(70,220,150,.10);
+    backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+    transition: height .22s ease, width .22s ease, opacity .2s ease;
+}
+.ai-mini.ai-left { right: auto; left: 25px; }
+.ai-head { min-height: 45px; display:flex; align-items:center; justify-content:space-between;
+    padding: 0 10px 0 14px; background:rgba(255,255,255,.06);
+    border-bottom:1px solid rgba(255,255,255,.1); cursor:move; user-select:none; }
+.ai-brand { display:flex; align-items:center; gap:9px; font-size:13px; font-weight:650; }
+.ai-brand-mark { width:25px;height:25px;display:grid;place-items:center;border-radius:9px;
+    color:#10251d;background:#8be6b5;font-size:15px; }
+.ai-window-controls { display:flex; gap:4px; }
+.ai-window-controls button { width:29px;height:29px;border:0;border-radius:7px;
+    color:#eafff2;background:rgba(255,255,255,.08);cursor:pointer;font-size:16px; }
+.ai-window-controls button:hover { background:rgba(255,255,255,.17); }
+.ai-window-controls .ai-close:hover { background:#a94450; }
+.ai-content { flex:1; min-height:0; display:flex; flex-direction:column; }
+.ai-intro { padding:12px 13px 8px; color:#b9d7c8; font-size:12px; line-height:1.5; }
+.ai-messages { flex:1; min-height:0; overflow:auto; padding:8px 12px 14px; display:flex; flex-direction:column; gap:10px; }
+.ai-msg { max-width:90%; padding:10px 12px; border-radius:13px; font-size:13px; line-height:1.55;
+    white-space:pre-wrap; overflow-wrap:anywhere; }
+.ai-msg.bot { align-self:flex-start; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.07); }
+.ai-msg.user { align-self:flex-end; background:rgba(94,190,139,.22); border:1px solid rgba(130,230,175,.2); }
+.ai-msg.error { color:#ffd5d5; border-color:rgba(255,130,130,.35); }
+.ai-compose { padding:10px; display:flex; gap:8px; border-top:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.12); }
+.ai-compose textarea { flex:1; min-width:0; min-height:42px; max-height:100px; resize:vertical;
+    padding:10px 11px; border:1px solid rgba(190,240,210,.2); border-radius:11px;
+    outline:none; color:#f2fff7; background:rgba(255,255,255,.075); font:13px "Segoe UI",Arial,sans-serif; }
+.ai-compose textarea:focus { border-color:#80dca8; }
+.ai-compose button { width:43px; flex:0 0 43px; border:0; border-radius:11px;
+    color:#10271c; background:#8be6b5; font-size:19px; cursor:pointer; }
+.ai-compose button:disabled { opacity:.5; cursor:wait; }
+.ai-foot { padding:0 12px 9px; color:#83a99a; font-size:10px; text-align:center; }
+.ai-mini.minimized { height:46px; width:225px; max-height:46px; }
+.ai-mini.minimized .ai-content { display:none; }
+.ai-mini.maximized { width:min(520px, calc(100vw - 30px)); height:min(720px, calc(100vh - 40px)); max-height:none; }
+.ai-restore { position:fixed; left:25px; right:auto; bottom:25px; z-index:10002; display:none;
+    width:52px;height:52px;border:1px solid rgba(140,238,190,.4);border-radius:16px;
+    color:#10271c;background:#8be6b5;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:23px;cursor:pointer; }
+.ai-restore.show { display:block; }
+.ai-typing { opacity:.75; font-style:italic; }
+@media(max-width:600px) {
+    .ai-mini { left:10px; right:auto; bottom:10px; width:min(360px, calc(100vw - 20px)); height:min(510px, 70vh); }
+    .ai-mini.ai-left { left:10px; right:auto; }
+    .ai-mini.maximized { width:calc(100vw - 20px); height:calc(100vh - 20px); }
+    .ai-restore { left:12px; right:auto; bottom:12px; }
+}
+
 </style>
 </head>
 
@@ -1140,6 +1198,33 @@ body {
     </div>
 
 </div>
+
+
+
+<!-- =====================================
+     AI MINI PLAYER — đặt ngoài iframe
+     nên không tải lại khi chuyển trang học
+===================================== -->
+<section class="ai-mini" id="aiMini" aria-label="Trợ lý AI tiếng Đức">
+  <header class="ai-head" id="aiDragHandle">
+    <div class="ai-brand"><span class="ai-brand-mark">✦</span><span>Deutsch AI Assistant</span></div>
+    <div class="ai-window-controls">
+      <button type="button" onclick="aiMinimize()" title="Thu nhỏ" aria-label="Thu nhỏ">—</button>
+      <button type="button" onclick="aiMaximize()" title="Phóng to / thu gọn" aria-label="Phóng to">□</button>
+      <button type="button" class="ai-close" onclick="aiHide()" title="Ẩn trợ lý" aria-label="Ẩn">×</button>
+    </div>
+  </header>
+  <div class="ai-content">
+    <div class="ai-intro">Hallo! Tớ là trợ lý học tiếng Đức của cậu. Cậu có thể hỏi về từ vựng, ngữ pháp, Lesen, Hören hoặc Schreiben.</div>
+    <div class="ai-messages" id="aiMessages" aria-live="polite"></div>
+    <form class="ai-compose" id="aiForm">
+      <textarea id="aiInput" rows="1" maxlength="4000" placeholder="Nhập câu hỏi bằng tiếng Việt hoặc tiếng Đức..." aria-label="Tin nhắn"></textarea>
+      <button id="aiSend" type="submit" title="Gửi" aria-label="Gửi tin nhắn">➤</button>
+    </form>
+    <div class="ai-foot">Trợ lý AI · Lịch sử trò chuyện được lưu trên trình duyệt này</div>
+  </div>
+</section>
+<button class="ai-restore" id="aiRestore" type="button" onclick="aiShow()" title="Mở trợ lý AI" aria-label="Mở trợ lý AI">✦</button>
 
 
 <!-- FLOATING RESTORE BUTTON -->
@@ -1634,6 +1719,127 @@ document.head.appendChild(youtubeScript);
 // ======================================
 
 renderPlaylist();
+
+
+// ======================================
+// AI MINI PLAYER — chat + lịch sử
+// ======================================
+const AI_WORKER_URL = "https://german-schreiben-ai.xv-thanhduy.workers.dev";
+const aiWindow = document.getElementById("aiMini");
+const aiRestoreButton = document.getElementById("aiRestore");
+const aiMessages = document.getElementById("aiMessages");
+const aiForm = document.getElementById("aiForm");
+const aiInput = document.getElementById("aiInput");
+const aiSend = document.getElementById("aiSend");
+const AI_STORAGE_KEY = "deutschLernen_ai_chat_v1";
+let aiHistory = [];
+
+try {
+  const saved = JSON.parse(localStorage.getItem(AI_STORAGE_KEY) || "[]");
+  if (Array.isArray(saved)) aiHistory = saved.slice(-40);
+} catch (e) { aiHistory = []; }
+
+function aiSaveHistory() {
+  try { localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(aiHistory.slice(-40))); }
+  catch (e) { console.warn("Không thể lưu lịch sử AI:", e); }
+}
+function aiAddMessage(role, content, extraClass = "") {
+  const item = document.createElement("div");
+  item.className = "ai-msg " + (role === "user" ? "user" : "bot") + (extraClass ? " " + extraClass : "");
+  item.textContent = content;
+  aiMessages.appendChild(item);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+  return item;
+}
+function aiRenderHistory() {
+  aiMessages.innerHTML = "";
+  if (!aiHistory.length) {
+    aiAddMessage("assistant", "Chào cậu! Cậu đang học phần nào? Tớ có thể giải thích ngữ pháp, sửa câu tiếng Đức hoặc cùng cậu luyện B2.");
+    return;
+  }
+  aiHistory.forEach(m => aiAddMessage(m.role, m.content));
+}
+function aiMinimize() {
+  aiWindow.classList.remove("maximized");
+  aiWindow.classList.add("minimized");
+}
+function aiMaximize() {
+  if (aiWindow.classList.contains("maximized")) aiWindow.classList.remove("maximized");
+  else { aiWindow.classList.remove("minimized"); aiWindow.classList.add("maximized"); }
+}
+function aiHide() {
+  aiWindow.style.display = "none";
+  aiRestoreButton.classList.add("show");
+}
+function aiShow() {
+  aiWindow.style.display = "flex";
+  aiWindow.classList.remove("minimized");
+  aiRestoreButton.classList.remove("show");
+}
+
+// Kéo cửa sổ bằng thanh tiêu đề; không chặn thao tác nút.
+(function aiEnableDrag() {
+  const handle = document.getElementById("aiDragHandle");
+  let dragging = false, startX = 0, startY = 0, startRight = 0, startBottom = 0;
+  handle.addEventListener("pointerdown", e => {
+    if (e.target.closest("button") || window.matchMedia("(max-width: 600px)").matches) return;
+    const rect = aiWindow.getBoundingClientRect();
+    dragging = true; startX = e.clientX; startY = e.clientY;
+    startRight = window.innerWidth - rect.right; startBottom = window.innerHeight - rect.bottom;
+    handle.setPointerCapture(e.pointerId);
+  });
+  handle.addEventListener("pointermove", e => {
+    if (!dragging) return;
+    const right = Math.max(5, Math.min(window.innerWidth - 80, startRight - (e.clientX - startX)));
+    const bottom = Math.max(5, Math.min(window.innerHeight - 45, startBottom - (e.clientY - startY)));
+    aiWindow.style.right = right + "px"; aiWindow.style.bottom = bottom + "px";
+    aiWindow.style.left = "auto";
+  });
+  handle.addEventListener("pointerup", () => dragging = false);
+  handle.addEventListener("pointercancel", () => dragging = false);
+})();
+
+async function aiSendMessage(text) {
+  const message = text.trim();
+  if (!message || aiSend.disabled) return;
+  aiHistory.push({ role: "user", content: message });
+  aiHistory = aiHistory.slice(-40);
+  aiSaveHistory();
+  aiAddMessage("user", message);
+  aiInput.value = "";
+  aiSend.disabled = true;
+  const typing = aiAddMessage("assistant", "Đang suy nghĩ...", "ai-typing");
+  const context = aiHistory.slice(-12).map(m => ({ role: m.role, content: m.content }));
+  try {
+    const response = await fetch(AI_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "chat", level: "B2", messages: context })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.reply) throw new Error(data.error || data.details || "Không nhận được phản hồi từ AI.");
+    typing.remove();
+    aiHistory.push({ role: "assistant", content: data.reply });
+    aiHistory = aiHistory.slice(-40);
+    aiSaveHistory();
+    aiAddMessage("assistant", data.reply);
+  } catch (error) {
+    typing.remove();
+    aiAddMessage("assistant", "Tớ chưa kết nối được với AI. Cậu kiểm tra Worker đã được cập nhật phiên bản có action chat chưa nhé.\nChi tiết: " + error.message, "error");
+  } finally {
+    aiSend.disabled = false;
+    aiInput.focus();
+  }
+}
+aiForm.addEventListener("submit", e => {
+  e.preventDefault();
+  aiSendMessage(aiInput.value);
+});
+aiInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); aiForm.requestSubmit(); }
+});
+aiRenderHistory();
+
 
 </script>
 
