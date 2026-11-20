@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -13,11 +12,11 @@
   --soft:#e7edf4;--muted:#555;--green:#dff0df;--red:#f8e1df;
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;min-height:100%;font-family:Tahoma,Arial,sans-serif;color:var(--ink);background:#7c96ad}
+html,body{margin:0;width:100%;min-height:100%;font-family:Tahoma,Arial,sans-serif;color:var(--ink);background:#7c96ad url("../../11.jpg") center center / cover fixed no-repeat}
 body{min-height:100vh}
 button,select,textarea{font:inherit}
 button{cursor:pointer}
-.app{min-height:100vh;width:min(1180px,100%);margin:0 auto 0 0;background:var(--window);display:flex;flex-direction:column;border:1px solid #fff}
+.app{min-height:100vh;width:min(1180px,100%);margin:0 auto 0 0;background:rgba(212,208,200,.90);display:flex;flex-direction:column;border:1px solid #fff}
 .titlebar{height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 7px 0 10px;color:white;font-weight:bold;font-size:13px;background:linear-gradient(90deg,#174477,#5c91c2 58%,#245b91);text-shadow:1px 1px #17324d}
 .title-left{display:flex;align-items:center;gap:8px}
 .app-icon{width:18px;height:18px;border:1px solid #dbe8f4;background:linear-gradient(135deg,#eaf5ff 0 45%,#3981bd 46%);display:grid;place-items:center;color:#16436c;text-shadow:none;font-size:11px}
@@ -25,7 +24,7 @@ button{cursor:pointer}
 .window-controls span{width:22px;height:20px;display:grid;place-items:center;border:1px solid #dce7f1;background:linear-gradient(#f8f8f8,#c7d5e3);color:#173d61;text-shadow:none;font-size:12px}
 .statusbar{height:25px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px;border-top:1px solid #aaa;background:#efeee9;font-size:11px;color:#444}
 .workspace{flex:1;display:grid;grid-template-columns:275px minmax(0,1fr);min-height:0}
-.sidebar{background:#e9e7e1;border-right:1px solid #999;padding:12px;overflow:auto}
+.sidebar{background:rgba(233,231,225,.90);border-right:1px solid #999;padding:12px;overflow:auto}
 .side-heading{font-size:13px;font-weight:bold;color:#244d73;border-bottom:1px solid #aaa;padding:4px 2px 8px;margin-bottom:10px}
 .group{margin-bottom:13px}
 .group label{display:block;font-size:11px;font-weight:bold;color:#444;margin:0 0 5px}
@@ -37,19 +36,20 @@ select{width:100%;height:30px;border:1px solid #888;background:#fff;padding:3px 
 .secondary:hover{background:#fff}
 .danger{background:linear-gradient(#fff,#f2dfdc);border:1px solid #aa7771;color:#702c25;padding:7px 11px}
 button:disabled{opacity:.55;cursor:wait}
-.main{padding:13px;overflow:auto;min-width:0;background:#f5f4f0}
+.main{padding:13px;overflow:auto;min-width:0;background:rgba(245,244,240,.88)}
 .section{border:1px solid #999;background:#fff;margin-bottom:12px;box-shadow:1px 1px 0 #fff}
 .section-head{height:31px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:linear-gradient(#f8f8f8,#e1e0dc);border-bottom:1px solid #aaa}
 .section-head strong{font-size:12px;color:#244d73}
 .section-head small{font-size:10px;color:#555}
 .section-body{padding:10px}
-.task-display{min-height:90px;max-height:220px;overflow:auto;white-space:pre-wrap;line-height:1.48;font-size:12px;background:#fff;border:1px solid #c3c3c3;padding:9px;color:#222;user-select:text}
+.task-display{min-height:90px;max-height:220px;overflow:auto;white-space:pre-wrap;line-height:1.6;font-size:15px;background:#fff;border:1px solid #c3c3c3;padding:12px;color:#222;user-select:text}
 .placeholder{color:#888;font-style:italic}
 textarea{width:100%;resize:vertical;border:1px solid #999;border-radius:0;background:#fff;padding:11px;line-height:1.6;font-size:13px;color:#222;outline:none}
 textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 #answer{min-height:180px}
 .result{min-height:180px;max-height:620px;overflow:auto;padding:11px;background:#fff;border:1px solid #c3c3c3;font-size:12px;line-height:1.52;white-space:pre-wrap;overflow-wrap:anywhere}
 .result.empty{color:#888;font-style:italic}
+
 .score-panel{border:1px solid #9aa9b8;background:#f7f9fb;margin:0;padding:9px;overflow-x:auto;min-width:0}
 .score-panel h3{margin:0 0 8px;font-size:13px;color:#244d73}
 .score-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}
@@ -63,6 +63,7 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 .correction-content{min-width:0}
 .correction-content .result{margin:0;padding:12px 14px;line-height:1.65;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .score-panel h3{font-size:12px}
+
 .action-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:9px}
 .counter{margin-left:auto;font-size:11px;color:#555}
 .status{min-height:18px;font-size:11px;color:#245b91;margin-top:7px}
@@ -128,6 +129,7 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
       </div>
 
       <button class="primary" id="generateButton" style="width:100%;margin-top:5px">✦ TẠO ĐỀ BÀI</button>
+
     </aside>
 
     <main class="main">
@@ -137,6 +139,7 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
           <small>AUFGABENSTELLUNG</small>
         </div>
         <div class="section-body">
+          
           <div id="taskDisplay" class="task-display"><span class="placeholder">Chọn chủ đề, trình độ, kỳ thi và Teil/Aufgabe ở bên trái, sau đó nhấn “TẠO ĐỀ BÀI”.</span></div>
           <div class="action-row">
             <button class="secondary" id="copyTaskButton">▣ Sao chép đề bài</button>
