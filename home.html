@@ -97,7 +97,7 @@ body {
     padding: 12px 22px;
 
     border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 16px;
+    border-radius: 0;
 
     background: rgba(255,255,255,0.13);
 
@@ -130,7 +130,7 @@ body {
     letter-spacing: 3px;
     white-space: nowrap;
 
-    text-align: center;
+    text-align: left;
     color: white;
 
     text-shadow: 0 2px 8px rgba(0,0,0,0.3);
@@ -493,6 +493,310 @@ body {
 
 }
 
+
+/* =========================
+   MENU PHONG CACH WINDOWS CLASSIC
+   Chi thay doi bo cuc, giu nguyen mau sac hien tai
+========================= */
+
+/* Khung menu chinh: cac muc nam lien tiep nhu context menu Windows */
+.menu {
+    width: 190px;
+    gap: 0;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.42);
+    background: rgba(19, 32, 55, 0.88);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+}
+
+/* Moi muc la mot dong ngang, can le trai */
+.menu > a,
+.menu-item > .submenu-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 43px;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-align: left;
+}
+
+/* Giu nguyen mau chu va mau nen hover da co */
+.menu > a:hover,
+.menu-item > .submenu-trigger:hover {
+    background: rgba(43, 61, 91, 0.97);
+}
+
+/* Hien thi tieu de tren mot dong; an dong mo ta de giong menu Windows */
+.menu h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.menu p {
+    display: none;
+}
+
+/* Mui ten ben phai cho muc co menu con */
+.menu-item > .submenu-trigger::after {
+    content: "›";
+    margin-left: 18px;
+    font-size: 23px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+/* Menu con: cac chu de xep thanh danh sach lien tuc */
+.submenu {
+    width: 194px;
+    gap: 0;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.42);
+    background: rgba(19, 32, 55, 0.90);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+}
+
+.submenu a {
+    min-height: 39px;
+    padding: 10px 13px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-align: left;
+    font-size: 13px;
+}
+
+/* Duong ngan cach giua cac muc, dung cung tong mau hien tai */
+.menu > a + .menu-item {
+    border-top: 1px solid rgba(255,255,255,0.28);
+}
+
+.submenu a + a {
+    border-top: 1px solid rgba(255,255,255,0.20);
+}
+
+/* Mobile: giu cach mo menu cam ung, chi chuyen danh sach xuong dong */
+@media (max-width: 600px) {
+    .menu {
+        width: 180px;
+        border: 1px solid rgba(255,255,255,0.42);
+    }
+
+    .menu > a,
+    .menu-item > .submenu-trigger {
+        min-height: 43px;
+        padding: 10px 12px;
+    }
+
+    .submenu {
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.42);
+    }
+
+    .submenu a {
+        min-height: 38px;
+        padding: 10px 12px;
+    }
+}
+
+
+/* =========================
+   MO RONG 4 CAP DO A1-A2-B1-B2
+   Giu nguyen tong mau va phong cach Windows Classic
+========================= */
+.main {
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.level-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.level-card {
+    width: 92px;
+    min-width: 92px;
+    padding: 10px 14px;
+}
+
+.level-title {
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.level-card:hover .menu,
+.level-card.open .menu {
+    max-height: 520px;
+}
+
+.menu-item > .submenu-trigger {
+    cursor: pointer;
+}
+
+/* Dấu phân cách cho mọi mục menu cấp độ */
+.menu > a + .menu-item,
+.menu > .menu-item + .menu-item {
+    border-top: 1px solid rgba(255,255,255,0.28);
+}
+
+/* Bố cục menu trên điện thoại */
+@media (max-width: 600px) {
+    .main {
+        justify-content: center;
+        padding-top: 115px;
+        padding-bottom: 100px;
+    }
+
+    .level-list {
+        width: 100%;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .level-card {
+        width: 92px;
+        min-width: 92px;
+        padding: 10px 14px;
+    }
+
+    .level-card:hover .menu,
+    .level-card.open .menu {
+        max-height: 1000px;
+    }
+
+    .menu {
+        width: 210px;
+    }
+}
+
+
+/* =========================
+   MENU CAP DO: MO NGANG SANG PHAI TREN MAY TINH
+   Giu nguyen mau sac va phong cach Windows Classic
+========================= */
+@media (min-width: 601px) {
+    .level-list {
+        overflow: visible;
+    }
+
+    .level-card {
+        position: relative;
+        overflow: visible;
+    }
+
+    /* Menu cua ca 4 cap do se mo ngang, voi mep duoi cung hang voi mep duoi B2. */
+    .level-card > .menu {
+        position: absolute;
+        top: 0; /* JavaScript tinh lai top de can mep duoi theo B2 */
+        left: calc(100% + 18px);
+        right: auto;
+        width: 230px;
+        max-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-12px);
+        transform-origin: left bottom;
+        z-index: 100;
+        transition: max-height .35s ease, opacity .25s ease,
+                    transform .25s ease, visibility .25s ease;
+    }
+
+    /* Menu con canh giua theo chinh hang A1, A2, B1 hoac B2 dang duoc hover.
+       Vi vay bang menu luon mo ngang sang phai, khong bi day xuong duoi. */
+    .level-card:hover > .menu,
+    .level-card.open > .menu,
+    .level-card:focus-within > .menu {
+        max-height: 600px;
+        overflow: visible;
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+    }
+
+    /* Moi muc co menu con deu mo tiep sang phai, canh theo dung hang cua muc do. */
+    /* Menu chu de Wortschatz mo sang phai va can mep duoi cung hang B2. */
+    .menu-item {
+        position: relative;
+    }
+
+    .menu-item > .submenu {
+        position: absolute;
+        top: auto;
+        bottom: 0;
+        left: 100%;
+        right: auto;
+        margin: 0;
+        z-index: 110;
+        transform: translateX(-12px);
+        transform-origin: left bottom;
+    }
+
+    .menu-item:hover > .submenu,
+    .menu-item:focus-within > .submenu,
+    .menu-item.submenu-open > .submenu {
+        transform: translateX(0);
+    }
+}
+
+/* Nhãn Wortschatz hiển thị rõ phần giải nghĩa tiếng Việt */
+.menu-item > .submenu-trigger h2 {
+    white-space: nowrap;
+}
+
+
+/* =========================
+   CAN CHINH KICH THUOC VA VI TRI MENU
+   Giu nguyen mau sac va cac chuc nang hien tai
+========================= */
+@media (min-width: 601px) {
+    /* Tang kich thuoc 4 thu muc cap do va tao them khoang cach */
+    .level-list {
+        gap: 16px;
+    }
+
+    .level-card {
+        width: 108px;
+        min-width: 108px;
+        padding: 13px 16px;
+    }
+
+    .level-title {
+        font-size: 27px;
+        letter-spacing: 2.5px;
+    }
+
+    /* Bo cac lech vi tri rieng tung cap do: tat ca dung chung mep duoi B2. */
+}
+
+@media (max-width: 600px) {
+    /* Tren dien thoai giu kich thuoc va khoang cach vua man hinh */
+    .level-list {
+        gap: 14px;
+    }
+
+    .level-card {
+        width: 100px;
+        min-width: 100px;
+        padding: 12px 14px;
+    }
+
+    .level-title {
+        font-size: 25px;
+    }
+}
+
 </style>
 </head>
 
@@ -512,44 +816,96 @@ body {
 ========================= -->
 
 <main class="main">
-
-    <div class="level-card" id="levelB2">
-
-        <div class="level-title">
-            B2
-        </div>
-
-        <div class="hint">
-            Di chuyển chuột vào đây
-        </div>
-
-        <div class="menu">
-
-            <a href="lesen.html">
-                <h2>Lesen</h2>
-                <p>Đọc</p>
-            </a>
-
-            <div class="menu-item" id="wortschatzMenu">
-                <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">
-                    <h2>Wortschatz</h2>
-                    <p>Từ vựng</p>
-                </a>
-
-                <div class="submenu">
-                    <a href="B2/Wortschatz/Alltag/index.html">Alltag</a>
-                    <a href="B2/Wortschatz/Technik/index.html">Technik</a>
-                    <a href="B2/Wortschatz/Medizin/index.html">Medizin</a>
-                    <a href="B2/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
-                    <a href="B2/Wortschatz/Umwelt/index.html">Umwelt</a>
-                    <a href="B2/Wortschatz/Beruf/index.html">Beruf</a>
+    <div class="level-list">
+        <div class="level-card" id="levelA1">
+            <div class="level-title">A1</div>
+            <div class="menu">
+                <a href="A1/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
+                <a href="A1/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
+                <a href="A1/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
+                <a href="A1/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <a href="A1/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
+                <a href="A1/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
+                <div class="menu-item" id="wortschatzA1">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
+                    <div class="submenu">
+                        <a href="A1/Wortschatz/Alltag/index.html">Alltag</a>
+                        <a href="A1/Wortschatz/Technik/index.html">Technik</a>
+                        <a href="A1/Wortschatz/Medizin/index.html">Medizin</a>
+                        <a href="A1/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
+                        <a href="A1/Wortschatz/Umwelt/index.html">Umwelt</a>
+                        <a href="A1/Wortschatz/Beruf/index.html">Beruf</a>
+                    </div>
                 </div>
             </div>
-
         </div>
-
+        <div class="level-card" id="levelA2">
+            <div class="level-title">A2</div>
+            <div class="menu">
+                <a href="A2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
+                <a href="A2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
+                <a href="A2/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
+                <a href="A2/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <a href="A2/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
+                <a href="A2/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
+                <div class="menu-item" id="wortschatzA2">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
+                    <div class="submenu">
+                        <a href="A2/Wortschatz/Alltag/index.html">Alltag</a>
+                        <a href="A2/Wortschatz/Technik/index.html">Technik</a>
+                        <a href="A2/Wortschatz/Medizin/index.html">Medizin</a>
+                        <a href="A2/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
+                        <a href="A2/Wortschatz/Umwelt/index.html">Umwelt</a>
+                        <a href="A2/Wortschatz/Beruf/index.html">Beruf</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="level-card" id="levelB1">
+            <div class="level-title">B1</div>
+            <div class="menu">
+                <a href="B1/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
+                <a href="B1/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
+                <a href="B1/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
+                <a href="B1/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <a href="B1/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
+                <a href="B1/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
+                <div class="menu-item" id="wortschatzB1">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
+                    <div class="submenu">
+                        <a href="B1/Wortschatz/Alltag/index.html">Alltag</a>
+                        <a href="B1/Wortschatz/Technik/index.html">Technik</a>
+                        <a href="B1/Wortschatz/Medizin/index.html">Medizin</a>
+                        <a href="B1/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
+                        <a href="B1/Wortschatz/Umwelt/index.html">Umwelt</a>
+                        <a href="B1/Wortschatz/Beruf/index.html">Beruf</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="level-card" id="levelB2">
+            <div class="level-title">B2</div>
+            <div class="menu">
+                <a href="B2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
+                <a href="B2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
+                <a href="B2/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
+                <a href="B2/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
+                <a href="B2/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
+                <a href="B2/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
+                <div class="menu-item" id="wortschatzB2">
+                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
+                    <div class="submenu">
+                        <a href="B2/Wortschatz/Alltag/index.html">Alltag</a>
+                        <a href="B2/Wortschatz/Technik/index.html">Technik</a>
+                        <a href="B2/Wortschatz/Medizin/index.html">Medizin</a>
+                        <a href="B2/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
+                        <a href="B2/Wortschatz/Umwelt/index.html">Umwelt</a>
+                        <a href="B2/Wortschatz/Beruf/index.html">Beruf</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </main>
 
 
@@ -567,40 +923,67 @@ body {
 ========================= -->
 
 <script>
-
-const levelB2 = document.getElementById("levelB2");
-const wortschatzMenu = document.getElementById("wortschatzMenu");
-const wortschatzTrigger = wortschatzMenu.querySelector(".submenu-trigger");
 const touchDevice = window.matchMedia("(hover: none)");
+const levelCards = document.querySelectorAll(".level-card");
 
-levelB2.addEventListener("click", function(event) {
-    // Trên thiết bị cảm ứng, chạm B2 để mở hoặc đóng menu cấp độ.
-    if (touchDevice.matches && !event.target.closest("a")) {
-        levelB2.classList.toggle("open");
-    }
+// Can mep duoi menu cap do va menu Wortschatz theo mep duoi cua thu muc B2.
+function alignLevelMenusToB2() {
+    if (touchDevice.matches || window.innerWidth <= 600) return;
+    const b2 = document.getElementById("levelB2");
+    if (!b2) return;
+    const b2Bottom = b2.getBoundingClientRect().bottom;
+
+    levelCards.forEach((card) => {
+        const menu = card.querySelector(":scope > .menu");
+        if (!menu) return;
+        const cardTop = card.getBoundingClientRect().top;
+        const menuHeight = menu.scrollHeight;
+        menu.style.top = `${b2Bottom - cardTop - menuHeight}px`;
+    });
+}
+
+// Cap nhat lai vi tri khi hover, focus hoac thay doi kich thuoc cua so.
+levelCards.forEach((card) => {
+    card.addEventListener("mouseenter", alignLevelMenusToB2);
+    card.addEventListener("focusin", alignLevelMenusToB2);
+});
+window.addEventListener("resize", alignLevelMenusToB2);
+
+// Tren may tinh: hover vao tung cap do de mo menu.
+// Tren dien thoai: cham vao ten cap do de mo/dong menu.
+levelCards.forEach((card) => {
+    const trigger = card.querySelector(".submenu-trigger");
+    const submenuItem = trigger.closest(".menu-item");
+
+    card.addEventListener("click", function(event) {
+        if (touchDevice.matches && !event.target.closest("a")) {
+            card.classList.toggle("open");
+        }
+    });
+
+    trigger.addEventListener("click", function(event) {
+        event.preventDefault();
+        if (touchDevice.matches) {
+            const isOpen = submenuItem.classList.toggle("submenu-open");
+            trigger.setAttribute("aria-expanded", String(isOpen));
+        }
+    });
 });
 
-// Trên điện thoại/máy tính bảng cảm ứng, chạm Wortschatz để mở danh sách chủ đề.
-wortschatzTrigger.addEventListener("click", function(event) {
-    if (touchDevice.matches) {
-        event.preventDefault();
-        const isOpen = wortschatzMenu.classList.toggle("submenu-open");
-        wortschatzTrigger.setAttribute("aria-expanded", String(isOpen));
-    } else {
-        // Trên máy tính, Wortschatz là nhãn mở menu con bằng cách rê chuột.
-        event.preventDefault();
-    }
-});
+window.addEventListener("load", alignLevelMenusToB2);
 
-// Đóng các menu khi nhấn phím Escape.
+// Dong tat ca menu khi nhan Escape.
 document.addEventListener("keydown", function(event) {
     if (event.key === "Escape") {
-        levelB2.classList.remove("open");
-        wortschatzMenu.classList.remove("submenu-open");
-        wortschatzTrigger.setAttribute("aria-expanded", "false");
+        levelCards.forEach((card) => {
+            card.classList.remove("open");
+            const submenuItem = card.querySelector(".menu-item");
+            const trigger = card.querySelector(".submenu-trigger");
+            submenuItem.classList.remove("submenu-open");
+            trigger.setAttribute("aria-expanded", "false");
+        });
     }
 });
-
 </script>
 
 </body>
