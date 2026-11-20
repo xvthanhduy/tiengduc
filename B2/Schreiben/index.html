@@ -50,6 +50,7 @@ select{
 }
 button{cursor:pointer;border:0;border-radius:9px;padding:11px 15px;font-weight:700;transition:background .18s,transform .18s}
 button:hover{transform:translateY(-1px)}
+button:disabled{opacity:.65;cursor:wait;transform:none}
 .primary{background:#9bdcff;color:#05214f}
 .primary:hover{background:#c0eaff}
 .secondary{background:rgba(115,170,225,.17);border:1px solid rgba(180,215,255,.35);color:#eff8ff}
@@ -123,16 +124,16 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
         <option value="Văn hóa, du lịch và hội nhập">Văn hóa, du lịch & hội nhập</option>
       </select>
     </div>
-    <button class="primary" id="makeTaskPrompt">Chuẩn bị yêu cầu tạo đề B2</button>
+    <button class="primary" id="makeTaskPrompt">Tạo đề B2 trực tiếp</button>
   </section>
 
   <section class="panels">
     <article class="panel">
       <div class="panel-head">
         <h2><span class="number">01</span>AUFGABE – ĐỀ BÀI</h2>
-        <span class="small-tag">Khung 1 · Dán đề ChatGPT tạo</span>
+        <span class="small-tag">Khung 1 · Đề do AI tạo</span>
       </div>
-      <p class="hint">Nhấn “Chuẩn bị yêu cầu tạo đề”, sau đó mở ChatGPT, dán yêu cầu và gửi. Khi ChatGPT trả đề, cậu sao chép đề và dán vào khung này.</p>
+      <p class="hint">Chọn chủ đề phía trên rồi nhấn “Tạo đề B2 trực tiếp”. Đề sẽ được tạo tự động và đưa vào khung này. Cậu cũng có thể dùng các nút bên dưới để tạo đề thủ công qua ChatGPT.</p>
       <textarea id="task" placeholder="Đề bài tiếng Đức sẽ được dán vào đây..."></textarea>
       <div class="actions">
         <button class="secondary" id="copyTaskPrompt">Sao chép yêu cầu tạo đề</button>
@@ -162,7 +163,7 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
         <h2><span class="number">03</span>KI-KORREKTUR – BÀI ĐÃ SỬA</h2>
         <span class="small-tag">Khung 3 · Kết quả từ ChatGPT</span>
       </div>
-      <p class="hint">Sau khi ChatGPT trả lời, sao chép toàn bộ kết quả và dán vào đây. Cậu có thể lưu kết quả trên trình duyệt của mình.</p>
+      <p class="hint">Sau khi nhận kết quả chấm và sửa bài từ ChatGPT, cậu có thể dán vào đây. Cậu cũng có thể lưu kết quả trên trình duyệt của mình.</p>
       <textarea id="correction" placeholder="Kết quả chấm điểm, sửa lỗi và bài mẫu sẽ xuất hiện ở đây sau khi cậu dán từ ChatGPT..."></textarea>
       <div class="actions">
         <button class="secondary" id="copyCorrection">Sao chép kết quả</button>
@@ -174,14 +175,55 @@ textarea:focus,select:focus{border-color:#8dd7ff;box-shadow:0 0 0 3px rgba(141,2
   </section>
 
   <p class="footer-note">
-    Lưu ý: Trang này hỗ trợ quy trình bán tự động, không kết nối trực tiếp với tài khoản ChatGPT.
-    Cậu cần tự gửi nội dung trong ChatGPT và dán kết quả trở lại. Bài luyện và kết quả lưu bằng bộ nhớ của trình duyệt trên thiết bị hiện tại.
+    Lưu ý: Tạo đề trực tiếp sử dụng AI thông qua máy chủ trung gian. Chức năng chấm bài hiện vẫn dùng quy trình ChatGPT thủ công. Bài luyện và kết quả lưu bằng bộ nhớ của trình duyệt trên thiết bị hiện tại.
   </p>
 </main>
 
 <script>
 const $ = (id) => document.getElementById(id);
 let lastPrompt = "";
+
+// Địa chỉ Cloudflare Worker của cậu
+const AI_WORKER_URL = "https://german-schreiben-ai.xv-thanhduy.workers.dev";
+
+async function generateTaskDirectly(){
+  const button = $("makeTaskPrompt");
+  const status = $("taskStatus");
+  const taskBox = $("task");
+
+  button.disabled = true;
+  button.textContent = "Đang tạo đề...";
+  status.textContent = "AI đang tạo đề B2. Cậu đợi một chút nhé.";
+
+  try{
+    const response = await fetch(AI_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: $("taskStyle").value })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if(!response.ok){
+      throw new Error(data.details || data.error || `Lỗi máy chủ (${response.status})`);
+    }
+
+    if(!data.task || typeof data.task !== "string"){
+      throw new Error("AI chưa trả về nội dung đề bài. Cậu thử lại nhé.");
+    }
+
+    taskBox.value = data.task.trim();
+    taskBox.dispatchEvent(new Event("input"));
+    status.textContent = "Đã tạo đề B2 thành công! Cậu có thể bắt đầu viết rồi.";
+    taskBox.focus();
+    taskBox.scrollIntoView({ behavior: "smooth", block: "center" });
+  }catch(error){
+    status.textContent = "Chưa tạo được đề: " + error.message;
+  }finally{
+    button.disabled = false;
+    button.textContent = "Tạo đề B2 trực tiếp";
+  }
+}
 
 function currentExamInfo(){
   return {
@@ -267,11 +309,7 @@ async function copyText(text,statusEl){
   }
 }
 
-$("makeTaskPrompt").addEventListener("click", async ()=>{
-  lastPrompt=buildTaskPrompt();
-  await copyText(lastPrompt,$("taskStatus"));
-  window.open("https://chatgpt.com/","_blank","noopener");
-});
+$("makeTaskPrompt").addEventListener("click", generateTaskDirectly);
 $("copyTaskPrompt").addEventListener("click", async ()=>{
   lastPrompt=buildTaskPrompt();
   await copyText(lastPrompt,$("taskStatus"));
