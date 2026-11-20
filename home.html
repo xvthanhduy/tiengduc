@@ -946,6 +946,96 @@ body {
         linear-gradient(145deg, rgba(150,213,245,.62), rgba(55,105,183,.58));
 }
 
+
+
+/* =========================
+   BANG MAU MOI: MAU MIN, PHANG, KHONG HIEU UNG BONG/PHAT SANG
+   Chi ghi de mau sac va hieu ung; giu nguyen cau truc va chuc nang.
+========================= */
+
+/* Loai bo bong do va bong chu */
+.level-card,
+.menu,
+.submenu,
+.menu > a,
+.menu-item > .submenu-trigger,
+.submenu a {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.header h1,
+.level-title,
+.footer {
+    text-shadow: none !important;
+}
+
+/* Menu cap 1 va cap 2: nen don sac, mau xanh than mem */
+.menu {
+    background: #26364b !important;
+    border-color: #53657a !important;
+}
+
+.submenu {
+    background: #2d4057 !important;
+    border-color: #60748a !important;
+}
+
+.menu > a:hover,
+.menu-item > .submenu-trigger:hover,
+.submenu a:hover {
+    background: #40566f !important;
+}
+
+.menu > a + .menu-item,
+.submenu a + a {
+    border-color: rgba(220, 232, 244, 0.20) !important;
+}
+
+/* A1 - xanh la pastel, mau phang */
+.level-card.season-spring,
+.level-card.season-spring:hover {
+    background: #a9cbb0 !important;
+    border-color: #d2e5d3 !important;
+}
+
+/* A2 - vang cam pastel, khong qua ruc */
+.level-card.season-summer,
+.level-card.season-summer:hover {
+    background: #e8bd83 !important;
+    border-color: #f4d7ad !important;
+}
+
+/* B1 - nau cam pastel */
+.level-card.season-autumn,
+.level-card.season-autumn:hover {
+    background: #c99d7d !important;
+    border-color: #e5c4a8 !important;
+}
+
+/* B2 - xanh bang pastel */
+.level-card.season-winter,
+.level-card.season-winter:hover {
+    background: #a9c7df !important;
+    border-color: #d2e4f1 !important;
+}
+
+/* Khong hien thi ky hieu/trang tri mua */
+.level-card.season-spring::after,
+.level-card.season-summer::after,
+.level-card.season-autumn::after,
+.level-card.season-winter::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Hover chi thay doi nhe, khong tao glow */
+.level-card:hover {
+    filter: brightness(0.97);
+}
+
 </style>
 </head>
 
