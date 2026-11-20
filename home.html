@@ -1036,6 +1036,60 @@ body {
     filter: brightness(0.97);
 }
 
+
+
+/* =========================
+   SLIDESHOW: A1 -> A2 -> B1 -> B2
+   Cac thu muc lan luot truot tu ben trai vao vi tri ban dau
+   Khong ghi de transform hover/menu hien co
+========================= */
+
+@keyframes levelSlideIn {
+    from {
+        opacity: 0;
+        translate: -100px 0;
+    }
+
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.level-list > #levelA1,
+.level-list > #levelA2,
+.level-list > #levelB1,
+.level-list > #levelB2 {
+    animation: levelSlideIn 0.8s ease-out both;
+}
+
+.level-list > #levelA1 {
+    animation-delay: 0.1s;
+}
+
+.level-list > #levelA2 {
+    animation-delay: 0.4s;
+}
+
+.level-list > #levelB1 {
+    animation-delay: 0.7s;
+}
+
+.level-list > #levelB2 {
+    animation-delay: 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .level-list > #levelA1,
+    .level-list > #levelA2,
+    .level-list > #levelB1,
+    .level-list > #levelB2 {
+        animation: none;
+        opacity: 1;
+        translate: none;
+    }
+}
+
 </style>
 </head>
 
