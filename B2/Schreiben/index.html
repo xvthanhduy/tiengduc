@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -49,7 +50,6 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 #answer{min-height:180px}
 .result{min-height:180px;max-height:620px;overflow:auto;padding:11px;background:#fff;border:1px solid #c3c3c3;font-size:12px;line-height:1.52;white-space:pre-wrap;overflow-wrap:anywhere}
 .result.empty{color:#888;font-style:italic}
-
 .score-panel{border:1px solid #9aa9b8;background:#f7f9fb;margin:0;padding:9px;overflow-x:auto;min-width:0}
 .score-panel h3{margin:0 0 8px;font-size:13px;color:#244d73}
 .score-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}
@@ -63,7 +63,6 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 .correction-content{min-width:0}
 .correction-content .result{margin:0;padding:12px 14px;line-height:1.65;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .score-panel h3{font-size:12px}
-
 .action-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:9px}
 .counter{margin-left:auto;font-size:11px;color:#555}
 .status{min-height:18px;font-size:11px;color:#245b91;margin-top:7px}
@@ -129,7 +128,6 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
       </div>
 
       <button class="primary" id="generateButton" style="width:100%;margin-top:5px">✦ TẠO ĐỀ BÀI</button>
-
     </aside>
 
     <main class="main">
@@ -139,7 +137,6 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
           <small>AUFGABENSTELLUNG</small>
         </div>
         <div class="section-body">
-          
           <div id="taskDisplay" class="task-display"><span class="placeholder">Chọn chủ đề, trình độ, kỳ thi và Teil/Aufgabe ở bên trái, sau đó nhấn “TẠO ĐỀ BÀI”.</span></div>
           <div class="action-row">
             <button class="secondary" id="copyTaskButton">▣ Sao chép đề bài</button>
@@ -317,6 +314,8 @@ function escapeHTML(value){
 
 function cleanCorrectionText(value){
   return String(value || "")
+    // Xóa mục 7 do AI tự viết; giao diện sẽ tạo mục 7 duy nhất từ evaluation.
+    .replace(/(?:^|\n)\s*7\.\s*ĐIỂM THEO TỪNG TIÊU CHÍ[\s\S]*$/i, "")
     .replace(/\*\*/g, "")
     .replace(/\|/g, " · ")
     .replace(/[ \t]+\n/g, "\n")
