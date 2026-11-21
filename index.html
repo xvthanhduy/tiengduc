@@ -1400,7 +1400,10 @@ body {
 .floating-dock.open .ai-restore.show,
 .floating-dock.open .restore-button.show,
 .floating-dock:focus-within .ai-restore.show,
-.floating-dock:focus-within .restore-button.show {
+.floating-dock:focus-within .restore-button.show,
+.floating-dock:hover .dock-tool,
+.floating-dock.open .dock-tool,
+.floating-dock:focus-within .dock-tool {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -1542,7 +1545,350 @@ body {
     }
 }
 
-</style>
+
+/* =========================================
+   CONTROL CENTER — labeled child tools
+========================================= */
+.floating-dock .dock-tool {
+    position: absolute !important;
+    right: 2px !important;
+    bottom: 0 !important;
+    z-index: 2;
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px;
+    min-height: 52px;
+    padding: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd4df;
+    border-radius: 12px;
+    color: #244d73;
+    background: linear-gradient(145deg, #ffffff, #e8eef5);
+    box-shadow: 0 5px 16px rgba(8, 25, 45, .18);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(12px) scale(.88);
+    transition: transform .28s cubic-bezier(.2,.8,.2,1), opacity .2s ease, visibility .2s ease;
+    cursor: pointer;
+}
+.floating-dock .dock-tool-symbol {
+    font-family: "Segoe UI Symbol", "Segoe UI", sans-serif;
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 600;
+}
+.floating-dock .dock-tool::before {
+    position: absolute;
+    right: 60px;
+    top: 0;
+    height: 52px;
+    min-width: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 13px;
+    border: 1px solid #cbd4df;
+    border-radius: 10px;
+    color: #26384c;
+    background: linear-gradient(145deg, #ffffff, #edf2f7);
+    box-shadow: 0 5px 16px rgba(8, 25, 45, .16);
+    font: 600 12px "Segoe UI", Arial, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+}
+.dock-focus::before { content: "Focus Timer"; }
+.dock-appearance::before { content: "Appearance"; }
+.floating-dock .ai-restore::before { content: "Trợ lí AI"; }
+.floating-dock .restore-button::before { content: "Music Player"; }
+.floating-dock .ai-restore::before,
+.floating-dock .restore-button::before {
+    position: absolute;
+    right: 60px;
+    top: 0;
+    height: 52px;
+    min-width: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 13px;
+    border: 1px solid #cbd4df;
+    border-radius: 10px;
+    color: #26384c;
+    background: linear-gradient(145deg, #ffffff, #edf2f7);
+    box-shadow: 0 5px 16px rgba(8, 25, 45, .16);
+    font: 600 12px "Segoe UI", Arial, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.floating-dock .dock-focus { bottom: 180px !important; }
+.floating-dock .dock-appearance { bottom: 238px !important; }
+
+.floating-dock:hover .dock-tool,
+.floating-dock.open .dock-tool,
+.floating-dock:focus-within .dock-tool {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+.floating-dock .dock-tool:hover {
+    transform: translateY(-3px) scale(1.04);
+    background: linear-gradient(145deg, #ffffff, #dce9f7);
+    border-color: #8eafd2;
+}
+.floating-dock .dock-tool:focus-visible {
+    outline: 2px solid #4a9bea;
+    outline-offset: 3px;
+}
+
+/* Focus Timer — compact floating panel */
+.focus-timer-panel {
+    position: fixed;
+    right: 25px;
+    bottom: 100px;
+    z-index: 10030;
+    width: 260px;
+    padding: 15px;
+    border: 1px solid rgba(145, 164, 188, .55);
+    border-radius: 15px;
+    color: #263447;
+    background: rgba(250, 252, 255, .97);
+    box-shadow: 0 16px 42px rgba(8, 22, 40, .24);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+.focus-timer-panel[hidden] { display: none !important; }
+.focus-timer-head { cursor: move; touch-action: none; } 
+.focus-timer-head button { cursor: pointer; }
+.focus-timer-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.focus-timer-head strong { display: block; font-size: 14px; }
+.focus-timer-head small { display: block; margin-top: 3px; color: #748196; font-size: 11px; }
+.focus-timer-head button {
+    width: 26px; height: 26px; border: 0; border-radius: 7px;
+    color: #667386; background: transparent; font-size: 19px; cursor: pointer;
+}
+.focus-timer-head button:hover { background: #e9eef5; }
+.focus-timer-display {
+    margin: 12px 0;
+    color: #1f4f82;
+    font: 600 42px/1.15 "Segoe UI", Arial, sans-serif;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.focus-timer-presets, .focus-timer-actions { display: flex; gap: 7px; }
+.focus-timer-presets button, .focus-timer-actions button {
+    flex: 1; min-height: 34px; border: 1px solid #d5deea; border-radius: 8px;
+    color: #40536b; background: #f4f7fb; font: 600 11px "Segoe UI", Arial, sans-serif; cursor: pointer;
+}
+.focus-timer-presets button.active {
+    color: #fff; border-color: #327bc4; background: #327bc4;
+}
+.focus-timer-actions { margin-top: 9px; }
+.focus-timer-actions #focusTimerStart {
+    color: #fff; border-color: #286bb0; background: #286bb0;
+}
+.focus-timer-presets button:hover, .focus-timer-actions button:hover { filter: brightness(.96); }
+
+/* Appearance mode applies to the shell and the embedded page background. */
+html.app-dark, html.app-dark body { color-scheme: dark; }
+html.app-dark body { background: #101722; }
+html.app-dark .focus-timer-panel {
+    color: #e8eef7; border-color: #3b4b60; background: rgba(28, 39, 54, .97);
+}
+html.app-dark .focus-timer-head small { color: #aab7c8; }
+html.app-dark .focus-timer-head button { color: #d3deec; }
+html.app-dark .focus-timer-head button:hover,
+html.app-dark .focus-timer-presets button { color: #dce7f5; background: #34445a; border-color: #4a5d75; }
+html.app-dark .focus-timer-display { color: #8fc5ff; }
+html.app-dark .focus-timer-presets button.active { color: #fff; background: #327bc4; }
+html.app-dark .focus-timer-actions button { color: #e6eef8; background: #34445a; border-color: #4a5d75; }
+html.app-dark .focus-timer-actions #focusTimerStart { color: #fff; background: #286bb0; border-color: #286bb0; }
+
+@media (max-width: 600px) {
+    .floating-dock .dock-tool { right: 1px !important; }
+    .focus-timer-panel { right: 12px; bottom: 88px; width: min(260px, calc(100vw - 24px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .floating-dock .dock-tool { transition-duration: .01ms !important; }
+}
+
+
+/* Focus Timer — custom duration input */
+.focus-timer-custom {
+    margin-top: 10px;
+}
+.focus-timer-custom label {
+    display: block;
+    margin-bottom: 5px;
+    color: #65758a;
+    font: 600 11px "Segoe UI", Arial, sans-serif;
+}
+.focus-timer-custom > div {
+    display: flex;
+    gap: 7px;
+}
+.focus-timer-custom input {
+    width: 0;
+    min-width: 0;
+    flex: 1;
+    height: 35px;
+    padding: 0 9px;
+    border: 1px solid #d5deea;
+    border-radius: 8px;
+    outline: none;
+    color: #263447;
+    background: #fff;
+    font: 600 12px "Segoe UI", Arial, sans-serif;
+}
+.focus-timer-custom input:focus {
+    border-color: #5796d4;
+    box-shadow: 0 0 0 3px rgba(65, 139, 211, .14);
+}
+.focus-timer-custom button {
+    min-width: 76px;
+    padding: 0 10px;
+    border: 1px solid #286bb0;
+    border-radius: 8px;
+    color: #fff;
+    background: #286bb0;
+    font: 600 11px "Segoe UI", Arial, sans-serif;
+    cursor: pointer;
+}
+.focus-timer-custom small {
+    display: block;
+    margin-top: 4px;
+    color: #8995a5;
+    font: 10px "Segoe UI", Arial, sans-serif;
+}
+html.app-dark .focus-timer-custom label,
+html.app-dark .focus-timer-custom small { color: #aab7c8; }
+html.app-dark .focus-timer-custom input {
+    color: #e8eef7;
+    background: #26364b;
+    border-color: #4a5d75;
+}
+
+/* Desktop: AI window sits directly to the left of the Music Player. */
+@media (min-width: 901px) {
+    .ai-mini,
+    .ai-mini.ai-left {
+        left: auto;
+        right: 345px;
+        bottom: 25px;
+    }
+}
+/* Narrow screens: stack AI above the music player to avoid overlap. */
+@media (max-width: 900px) {
+    .ai-mini,
+    .ai-mini.ai-left {
+        left: 12px;
+        right: 12px;
+        bottom: min(390px, 42vh);
+        width: auto !important;
+        max-width: none;
+        max-height: 48vh;
+    }
+}
+
+
+/* Floating Dock: vùng rê chuột rộng hơn + thời gian rời menu có độ trễ */
+.floating-dock {
+    width: 230px;
+    height: 370px;
+}
+.floating-dock .dock-notes { bottom: 296px !important; }
+.dock-notes::before { content: "Sticky Notes"; }
+.floating-dock .dock-tool::before { min-width: 112px; }
+@media (max-width: 600px) {
+    .floating-dock { width: 220px; height: 370px; }
+}
+
+/* Sticky Notes — cửa sổ ghi chú nổi, nhiều ghi chú, tự lưu */
+.sticky-notes-window {
+    position: fixed;
+    left: 25px;
+    top: 90px;
+    z-index: 10035;
+    width: min(330px, calc(100vw - 24px));
+    max-height: min(72vh, 680px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(95, 111, 128, .35);
+    border-radius: 13px;
+    background: #f7f8fa;
+    color: #263447;
+    box-shadow: 0 16px 44px rgba(8, 22, 40, .25);
+}
+.sticky-notes-window[hidden] { display: none !important; }
+.sticky-notes-head {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 0 14px;
+    color: #263447;
+    background: #e8edf3;
+    border-bottom: 1px solid #d7dee8;
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+}
+.sticky-notes-title { display:flex; align-items:center; gap:9px; font-size:13px; }
+.sticky-notes-title span { font-size:20px; }
+.sticky-notes-head-actions { display:flex; gap:5px; }
+.sticky-notes-head-actions button {
+    width:29px; height:29px; border:0; border-radius:7px;
+    color:#42536a; background:transparent; font-size:20px; cursor:pointer;
+}
+.sticky-notes-head-actions button:hover { background:#d7e0eb; }
+.sticky-notes-list {
+    padding: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+.sticky-note-card {
+    position: relative;
+    min-height: 150px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(30,45,60,.12);
+}
+.sticky-note-card textarea {
+    display:block; width:100%; min-height:112px; resize:vertical;
+    padding:0; border:0; outline:0; color:#30343b;
+    background:transparent; font:13px/1.55 "Segoe UI", Arial, sans-serif;
+}
+.sticky-note-card textarea::placeholder { color:rgba(40,48,58,.55); }
+.sticky-note-card-tools { display:flex; justify-content:space-between; align-items:center; margin-top:7px; }
+.sticky-note-colors { display:flex; gap:6px; }
+.sticky-note-color {
+    width:16px; height:16px; border:1px solid rgba(0,0,0,.18);
+    border-radius:50%; cursor:pointer;
+}
+.sticky-note-delete {
+    border:0; border-radius:6px; padding:4px 8px;
+    color:#596579; background:rgba(255,255,255,.55); cursor:pointer; font-size:11px;
+}
+.sticky-note-delete:hover { background:rgba(255,255,255,.9); }
+.sticky-notes-footer {
+    padding:8px 12px; border-top:1px solid #e1e6ed;
+    color:#8792a1; font-size:10px; text-align:center;
+}
+@media (max-width: 600px) {
+    .sticky-notes-window { left:12px; top:70px; width:calc(100vw - 24px); max-height:68vh; }
+}
+\n</style>
 </head>
 
 <body>
@@ -1719,6 +2065,33 @@ body {
     </button>
 
     <button
+        class="dock-tool dock-focus"
+        id="focusTimerToggle"
+        type="button"
+        title="Focus Timer"
+        aria-label="Mở Focus Timer">
+        <span class="dock-tool-symbol" aria-hidden="true">◷</span>
+    </button>
+
+    <button
+        class="dock-tool dock-notes"
+        id="stickyNotesToggle"
+        type="button"
+        title="Sticky Notes"
+        aria-label="Mở Sticky Notes">
+        <span class="dock-tool-symbol" aria-hidden="true">▤</span>
+    </button>
+
+    <button
+        class="dock-tool dock-appearance"
+        id="appearanceToggle"
+        type="button"
+        title="Appearance"
+        aria-label="Chuyển đổi giao diện sáng tối">
+        <span class="dock-tool-symbol" aria-hidden="true">◐</span>
+    </button>
+
+    <button
         class="floating-dock-main"
         id="floatingDockToggle"
         type="button"
@@ -1731,6 +2104,54 @@ body {
     </button>
 </div>
 
+<!-- WINDOWS-STYLE STICKY NOTES -->
+<section class="sticky-notes-window" id="stickyNotesWindow" aria-label="Sticky Notes" hidden>
+    <div class="sticky-notes-head" id="stickyNotesDragHandle">
+        <div class="sticky-notes-title"><span>▤</span><strong>Sticky Notes</strong></div>
+        <div class="sticky-notes-head-actions">
+            <button type="button" id="stickyNotesAdd" title="Tạo ghi chú mới" aria-label="Tạo ghi chú mới">＋</button>
+            <button type="button" id="stickyNotesClose" title="Đóng" aria-label="Đóng Sticky Notes">×</button>
+        </div>
+    </div>
+    <div class="sticky-notes-list" id="stickyNotesList"></div>
+    <div class="sticky-notes-footer">Ghi chú được tự động lưu trên thiết bị này</div>
+</section>
+
+<!-- FOCUS TIMER PANEL -->
+<section class="focus-timer-panel" id="focusTimerPanel" aria-label="Focus Timer" hidden>
+    <div class="focus-timer-head" id="focusTimerDragHandle" title="Kéo để di chuyển Focus Timer">
+        <div>
+            <strong>Focus Timer</strong>
+            <small id="focusTimerMode">Tập trung</small>
+        </div>
+        <button type="button" id="focusTimerClose" aria-label="Đóng Focus Timer">×</button>
+    </div>
+    <div class="focus-timer-display" id="focusTimerDisplay">25:00</div>
+    <div class="focus-timer-presets">
+        <button type="button" data-minutes="25" class="active">25 phút</button>
+        <button type="button" data-minutes="5">5 phút nghỉ</button>
+    </div>
+    <div class="focus-timer-custom">
+        <label for="focusTimerCustomMinutes">Thời gian tập trung (phút)</label>
+        <div>
+            <input id="focusTimerCustomMinutes" type="number" min="1" max="999" step="1" value="25" inputmode="numeric">
+            <button type="button" id="focusTimerApplyCustom">Áp dụng</button>
+        </div>
+        <small>Nhập từ 1 đến 999 phút</small>
+    </div>
+    <div class="focus-timer-custom">
+        <label for="focusTimerCustomBreakMinutes">Thời gian nghỉ (phút)</label>
+        <div>
+            <input id="focusTimerCustomBreakMinutes" type="number" min="1" max="999" step="1" value="5" inputmode="numeric">
+            <button type="button" id="focusTimerApplyCustomBreak">Áp dụng</button>
+        </div>
+        <small>Thời gian nghỉ tùy chỉnh từ 1 đến 999 phút</small>
+    </div>
+    <div class="focus-timer-actions">
+        <button type="button" id="focusTimerStart">Bắt đầu</button>
+        <button type="button" id="focusTimerReset">Đặt lại</button>
+    </div>
+</section>
 
 <script>
 
@@ -2196,8 +2617,30 @@ let aiHistory = [];
 
 const floatingDock = document.getElementById("floatingDock");
 const floatingDockToggle = document.getElementById("floatingDockToggle");
+let floatingDockCloseTimer = null;
+function cancelFloatingDockClose() {
+  if (floatingDockCloseTimer) window.clearTimeout(floatingDockCloseTimer);
+  floatingDockCloseTimer = null;
+}
+function scheduleFloatingDockClose() {
+  cancelFloatingDockClose();
+  floatingDockCloseTimer = window.setTimeout(() => {
+    if (!floatingDock.matches(":hover") && !floatingDock.contains(document.activeElement)) closeFloatingDock();
+  }, 2600);
+}
+floatingDock.addEventListener("pointerenter", () => {
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    cancelFloatingDockClose();
+    floatingDock.classList.add("open");
+    floatingDockToggle.setAttribute("aria-expanded", "true");
+  }
+});
+floatingDock.addEventListener("pointerleave", () => {
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) scheduleFloatingDockClose();
+});
 
 function closeFloatingDock() {
+  cancelFloatingDockClose();
   floatingDock.classList.remove("open");
   floatingDockToggle.setAttribute("aria-expanded", "false");
 }
@@ -2208,7 +2651,10 @@ floatingDockToggle.addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeFloatingDock();
+  if (event.key === "Escape") {
+    closeFloatingDock();
+    stickyNotesWindow.hidden = true;
+  }
 });
 
 document.addEventListener("pointerdown", event => {
@@ -2216,6 +2662,281 @@ document.addEventListener("pointerdown", event => {
 });
 
 updateAIRestorePosition();
+
+/* Focus Timer: 25-minute focus / 5-minute break */
+const focusTimerPanel = document.getElementById("focusTimerPanel");
+const focusTimerDisplay = document.getElementById("focusTimerDisplay");
+const focusTimerMode = document.getElementById("focusTimerMode");
+const focusTimerStart = document.getElementById("focusTimerStart");
+const focusTimerReset = document.getElementById("focusTimerReset");
+const focusTimerToggle = document.getElementById("focusTimerToggle");
+const appearanceToggle = document.getElementById("appearanceToggle");
+let focusTimerSeconds = 25 * 60;
+let focusTimerInitialSeconds = 25 * 60;
+let focusTimerInterval = null;
+
+function renderFocusTimer() {
+  const minutes = Math.floor(focusTimerSeconds / 60);
+  const seconds = focusTimerSeconds % 60;
+  focusTimerDisplay.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+}
+function stopFocusTimer() {
+  if (focusTimerInterval) window.clearInterval(focusTimerInterval);
+  focusTimerInterval = null;
+  focusTimerStart.textContent = "Tiếp tục";
+}
+function startFocusTimer() {
+  if (focusTimerInterval) {
+    stopFocusTimer();
+    return;
+  }
+  if (focusTimerSeconds <= 0) focusTimerSeconds = focusTimerInitialSeconds;
+  focusTimerStart.textContent = "Tạm dừng";
+  focusTimerInterval = window.setInterval(() => {
+    focusTimerSeconds = Math.max(0, focusTimerSeconds - 1);
+    renderFocusTimer();
+    if (focusTimerSeconds === 0) {
+      stopFocusTimer();
+      focusTimerMode.textContent = "Hoàn thành!";
+      focusTimerStart.textContent = "Bắt đầu lại";
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("Deutsch-Lernen", { body: "Phiên Focus Timer đã kết thúc!" });
+      }
+    }
+  }, 1000);
+}
+function setFocusTimer(minutes, mode) {
+  stopFocusTimer();
+  focusTimerSeconds = minutes * 60;
+  focusTimerInitialSeconds = focusTimerSeconds;
+  focusTimerMode.textContent = mode;
+  focusTimerStart.textContent = "Bắt đầu";
+  document.querySelectorAll(".focus-timer-presets button").forEach(button => {
+    button.classList.toggle("active", Number(button.dataset.minutes) === minutes);
+  });
+  renderFocusTimer();
+}
+focusTimerToggle.addEventListener("click", () => {
+  focusTimerPanel.hidden = !focusTimerPanel.hidden;
+  closeFloatingDock();
+});
+document.getElementById("focusTimerClose").addEventListener("click", () => {
+  focusTimerPanel.hidden = true;
+});
+focusTimerStart.addEventListener("click", startFocusTimer);
+focusTimerReset.addEventListener("click", () => setFocusTimer(focusTimerInitialSeconds / 60, focusTimerMode.textContent));
+document.querySelectorAll(".focus-timer-presets button").forEach(button => {
+  button.addEventListener("click", () => {
+    const minutes = Number(button.dataset.minutes);
+    setFocusTimer(minutes, minutes === 5 ? "Nghỉ ngắn" : "Tập trung");
+  });
+});
+renderFocusTimer();
+
+const focusTimerCustomMinutes = document.getElementById("focusTimerCustomMinutes");
+document.getElementById("focusTimerApplyCustom").addEventListener("click", () => {
+  const minutes = Number(focusTimerCustomMinutes.value);
+  if (!Number.isInteger(minutes) || minutes < 1 || minutes > 999) {
+    focusTimerCustomMinutes.setCustomValidity("Hãy nhập số phút từ 1 đến 999.");
+    focusTimerCustomMinutes.reportValidity();
+    return;
+  }
+  focusTimerCustomMinutes.setCustomValidity("");
+  setFocusTimer(minutes, "Tùy chỉnh");
+  focusTimerCustomMinutes.value = String(minutes);
+});
+focusTimerCustomMinutes.addEventListener("input", () => focusTimerCustomMinutes.setCustomValidity(""));
+
+const focusTimerCustomBreakMinutes = document.getElementById("focusTimerCustomBreakMinutes");
+document.getElementById("focusTimerApplyCustomBreak").addEventListener("click", () => {
+  const minutes = Number(focusTimerCustomBreakMinutes.value);
+  if (!Number.isInteger(minutes) || minutes < 1 || minutes > 999) {
+    focusTimerCustomBreakMinutes.setCustomValidity("Hãy nhập số phút nghỉ từ 1 đến 999.");
+    focusTimerCustomBreakMinutes.reportValidity();
+    return;
+  }
+  focusTimerCustomBreakMinutes.setCustomValidity("");
+  setFocusTimer(minutes, "Nghỉ tùy chỉnh");
+  focusTimerCustomBreakMinutes.value = String(minutes);
+});
+focusTimerCustomBreakMinutes.addEventListener("input", () => focusTimerCustomBreakMinutes.setCustomValidity(""));
+
+/* Kéo Focus Timer bằng thanh tiêu đề, hoạt động cả trên màn hình cảm ứng. */
+(function focusTimerEnableDrag() {
+  const handle = document.getElementById("focusTimerDragHandle");
+  let dragging = false, startX = 0, startY = 0, startRight = 0, startBottom = 0;
+  handle.addEventListener("pointerdown", event => {
+    if (event.target.closest("button")) return;
+    const rect = focusTimerPanel.getBoundingClientRect();
+    dragging = true;
+    startX = event.clientX; startY = event.clientY;
+    startRight = window.innerWidth - rect.right;
+    startBottom = window.innerHeight - rect.bottom;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener("pointermove", event => {
+    if (!dragging) return;
+    const rect = focusTimerPanel.getBoundingClientRect();
+    const right = Math.max(5, Math.min(window.innerWidth - rect.width - 5, startRight - (event.clientX - startX)));
+    const bottom = Math.max(5, Math.min(window.innerHeight - rect.height - 5, startBottom - (event.clientY - startY)));
+    focusTimerPanel.style.right = right + "px";
+    focusTimerPanel.style.bottom = bottom + "px";
+    focusTimerPanel.style.left = "auto";
+  });
+  const stopDragging = () => { dragging = false; };
+  handle.addEventListener("pointerup", stopDragging);
+  handle.addEventListener("pointercancel", stopDragging);
+})();
+
+/* Sticky Notes: nhiều ghi chú, tự lưu localStorage, kéo thả cửa sổ. */
+const stickyNotesWindow = document.getElementById("stickyNotesWindow");
+const stickyNotesList = document.getElementById("stickyNotesList");
+const stickyNotesToggle = document.getElementById("stickyNotesToggle");
+const STICKY_NOTES_KEY = "deutschLernen_sticky_notes_v1";
+const stickyNotePalette = ["#fff3a6", "#ffd9df", "#d8f2dc", "#dcecff", "#eadfff"];
+let stickyNotes = [];
+try {
+  const storedNotes = JSON.parse(localStorage.getItem(STICKY_NOTES_KEY) || "[]");
+  if (Array.isArray(storedNotes)) stickyNotes = storedNotes;
+} catch (e) { stickyNotes = []; }
+
+function saveStickyNotes() {
+  try { localStorage.setItem(STICKY_NOTES_KEY, JSON.stringify(stickyNotes)); }
+  catch (e) { console.warn("Không thể lưu Sticky Notes:", e); }
+}
+function renderStickyNotes() {
+  stickyNotesList.innerHTML = "";
+  if (!stickyNotes.length) {
+    const empty = document.createElement("div");
+    empty.textContent = "Chưa có ghi chú. Nhấn + để tạo ghi chú đầu tiên.";
+    empty.style.cssText = "padding:22px 12px;color:#778396;text-align:center;font-size:12px;line-height:1.6;";
+    stickyNotesList.appendChild(empty);
+    return;
+  }
+  stickyNotes.forEach(note => {
+    const card = document.createElement("article");
+    card.className = "sticky-note-card";
+    card.style.background = note.color || stickyNotePalette[0];
+    const textarea = document.createElement("textarea");
+    textarea.placeholder = "Viết ghi chú của cậu...";
+    textarea.value = note.text || "";
+    textarea.setAttribute("aria-label", "Nội dung ghi chú");
+    textarea.addEventListener("input", () => {
+      note.text = textarea.value;
+      saveStickyNotes();
+    });
+    const tools = document.createElement("div");
+    tools.className = "sticky-note-card-tools";
+    const colors = document.createElement("div");
+    colors.className = "sticky-note-colors";
+    stickyNotePalette.forEach(color => {
+      const swatch = document.createElement("button");
+      swatch.type = "button";
+      swatch.className = "sticky-note-color";
+      swatch.style.background = color;
+      swatch.title = "Đổi màu ghi chú";
+      swatch.setAttribute("aria-label", "Đổi màu ghi chú");
+      swatch.addEventListener("click", () => {
+        note.color = color;
+        card.style.background = color;
+        saveStickyNotes();
+      });
+      colors.appendChild(swatch);
+    });
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "sticky-note-delete";
+    remove.textContent = "Xóa ghi chú";
+    remove.addEventListener("click", () => {
+      stickyNotes = stickyNotes.filter(item => item.id !== note.id);
+      saveStickyNotes();
+      renderStickyNotes();
+    });
+    tools.append(colors, remove);
+    card.append(textarea, tools);
+    stickyNotesList.appendChild(card);
+  });
+}
+function addStickyNote() {
+  stickyNotes.unshift({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    text: "",
+    color: stickyNotePalette[stickyNotes.length % stickyNotePalette.length]
+  });
+  saveStickyNotes();
+  renderStickyNotes();
+  const firstNote = stickyNotesList.querySelector("textarea");
+  if (firstNote) firstNote.focus();
+}
+stickyNotesToggle.addEventListener("click", () => {
+  stickyNotesWindow.hidden = !stickyNotesWindow.hidden;
+  if (!stickyNotesWindow.hidden && !stickyNotes.length) addStickyNote();
+  closeFloatingDock();
+});
+document.getElementById("stickyNotesAdd").addEventListener("click", addStickyNote);
+document.getElementById("stickyNotesClose").addEventListener("click", () => stickyNotesWindow.hidden = true);
+renderStickyNotes();
+
+/* Kéo cửa sổ Sticky Notes bằng thanh tiêu đề. */
+(function stickyNotesEnableDrag() {
+  const handle = document.getElementById("stickyNotesDragHandle");
+  let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+  handle.addEventListener("pointerdown", event => {
+    if (event.target.closest("button")) return;
+    const rect = stickyNotesWindow.getBoundingClientRect();
+    dragging = true;
+    startX = event.clientX; startY = event.clientY;
+    startLeft = rect.left; startTop = rect.top;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener("pointermove", event => {
+    if (!dragging) return;
+    const rect = stickyNotesWindow.getBoundingClientRect();
+    const left = Math.max(5, Math.min(window.innerWidth - rect.width - 5, startLeft + event.clientX - startX));
+    const top = Math.max(5, Math.min(window.innerHeight - 55, startTop + event.clientY - startY));
+    stickyNotesWindow.style.left = left + "px";
+    stickyNotesWindow.style.top = top + "px";
+  });
+  const stop = () => dragging = false;
+  handle.addEventListener("pointerup", stop);
+  handle.addEventListener("pointercancel", stop);
+})();
+
+/* Appearance: remember Light / Dark preference and apply to same-origin iframe. */
+function applyAppearance(theme) {
+  document.documentElement.classList.toggle("app-dark", theme === "dark");
+  document.documentElement.style.colorScheme = theme;
+  appearanceToggle.querySelector(".dock-tool-symbol").textContent = theme === "dark" ? "☀" : "◐";
+  appearanceToggle.title = theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối";
+  try {
+    const frameDoc = document.getElementById("website").contentDocument;
+    if (frameDoc) {
+      frameDoc.documentElement.style.colorScheme = theme;
+      frameDoc.documentElement.classList.toggle("app-dark", theme === "dark");
+      let themeStyle = frameDoc.getElementById("dockAppearanceTheme");
+      if (!themeStyle) {
+        themeStyle = frameDoc.createElement("style");
+        themeStyle.id = "dockAppearanceTheme";
+        frameDoc.head.appendChild(themeStyle);
+      }
+      themeStyle.textContent = theme === "dark"
+        ? "body{background-color:#101722!important;color:#e8eef7!important;} "
+        : "body{background-color:#fff!important;color:#202124!important;}";
+    }
+  } catch (error) {
+    console.warn("Không thể áp dụng Appearance cho trang bên trong:", error);
+  }
+  try { localStorage.setItem("deutschLernen_appearance", theme); } catch (e) {}
+}
+let currentAppearance = "light";
+try { currentAppearance = localStorage.getItem("deutschLernen_appearance") || "light"; } catch (e) {}
+applyAppearance(currentAppearance);
+document.getElementById("website").addEventListener("load", () => applyAppearance(currentAppearance));
+appearanceToggle.addEventListener("click", () => {
+  currentAppearance = currentAppearance === "dark" ? "light" : "dark";
+  applyAppearance(currentAppearance);
+  closeFloatingDock();
+});
 
 try {
   const saved = JSON.parse(localStorage.getItem(AI_STORAGE_KEY) || "[]");
@@ -2258,7 +2979,7 @@ function aiShow() {
   const handle = document.getElementById("aiDragHandle");
   let dragging = false, startX = 0, startY = 0, startRight = 0, startBottom = 0;
   handle.addEventListener("pointerdown", e => {
-    if (e.target.closest("button") || window.matchMedia("(max-width: 600px)").matches) return;
+    if (e.target.closest("button")) return;
     const rect = aiWindow.getBoundingClientRect();
     dragging = true; startX = e.clientX; startY = e.clientY;
     startRight = window.innerWidth - rect.right; startBottom = window.innerHeight - rect.bottom;
@@ -2266,8 +2987,9 @@ function aiShow() {
   });
   handle.addEventListener("pointermove", e => {
     if (!dragging) return;
-    const right = Math.max(5, Math.min(window.innerWidth - 80, startRight - (e.clientX - startX)));
-    const bottom = Math.max(5, Math.min(window.innerHeight - 45, startBottom - (e.clientY - startY)));
+    const rect = aiWindow.getBoundingClientRect();
+    const right = Math.max(5, Math.min(window.innerWidth - rect.width - 5, startRight - (e.clientX - startX)));
+    const bottom = Math.max(5, Math.min(window.innerHeight - rect.height - 5, startBottom - (e.clientY - startY)));
     aiWindow.style.right = right + "px"; aiWindow.style.bottom = bottom + "px";
     aiWindow.style.left = "auto";
   });
