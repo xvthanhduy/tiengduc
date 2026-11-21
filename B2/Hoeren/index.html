@@ -33,7 +33,7 @@ h1{display:inline-block;font-size:clamp(22px,3vw,30px);line-height:1.2;letter-sp
 .apply-selection{border:1px solid var(--blue);border-radius:9px;background:var(--blue);color:#fff;padding:8px 15px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;transition:background .15s,transform .15s}
 .apply-selection:hover{background:var(--blue-dark)}.apply-selection.updated{background:#20a477;border-color:#20a477}
 .apply-selection:active{transform:translateY(1px)}
-.apply-selection:focus-visible{outline:3px solid #3978e833;outline-offset:2px}
+.apply-selection:focus-visible{outline:3px solid #3978e833;outline-offset:2px}.ai-generate{border:1px solid #0f766e;border-radius:9px;background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;padding:8px 13px;font-size:11px;font-weight:850;cursor:pointer;white-space:nowrap;transition:filter .15s,transform .15s}.ai-generate:hover{filter:brightness(1.08)}.ai-generate:disabled{opacity:.65;cursor:wait}.ai-generate:active{transform:translateY(1px)}.ai-generate:focus-visible{outline:3px solid #14b8a633;outline-offset:2px}.ai-status{flex-basis:100%;font-size:11px;color:var(--muted);min-height:0;padding-left:2px}.ai-status:empty{display:none}
 .lesson-panel{display:flex;flex-direction:column}
 .lesson-panel .audio-box{flex:0 0 auto;min-height:145px;display:flex;flex-direction:column;justify-content:space-between}
 .practice-panel{display:flex;flex-direction:column}
@@ -188,6 +188,8 @@ h1{display:inline-block;font-size:clamp(22px,3vw,30px);line-height:1.2;letter-sp
         <option value="swiss">Thụy Sĩ (Schweiz)</option>
       </select>
       <button class="apply-selection" id="applySelectionBtn" type="button">Cập nhật</button>
+      <button class="ai-generate" id="aiGenerateBtn" type="button">✦ Tạo bài nghe mới bằng AI</button>
+      <div class="ai-status" id="aiStatus" role="status" aria-live="polite"></div>
     </nav>
     <div class="content">
       <section class="lesson-panel">
@@ -399,8 +401,13 @@ $("vocabGrid").addEventListener("click",e=>{
   $("vocabSavedStatus").textContent="Đã lưu “"+item.word+"” vào sổ từ vựng trên thiết bị này.";
 });
 
-function render(){const d=lessons[kind];const chosenLevel=appliedLevel;$("lessonType").textContent=topicNames[kind]+" · "+chosenLevel;$("lessonTitle").textContent=d.title;$("lessonDesc").textContent=d.desc;$("duration").textContent=d.duration;$("formatTag").textContent=d.format;$("levelTag").textContent=chosenLevel;$("levelLabel").textContent=chosenLevel+" · "+levelNames[chosenLevel];$("transcriptText").textContent=d.text;$("transcript").classList.remove("show");$("transcriptBtn").textContent="Hiện transcript";index=0;answered=new Set();correct=0;renderQuestion();renderVocabulary();updateStats();stopSpeech();$("audioStatus").textContent="Sẵn sàng phát · Giọng đọc tiếng Đức trên thiết bị";}
-function renderQuestion(){const q=lessons[kind].qs[index];$("questionTitle").textContent=(index+1)+". "+q.q;$("questionCount").textContent="FRAGE "+(index+1)+" / "+lessons[kind].qs.length;$("options").innerHTML=q.opts.map((o,i)=>`<label class="option"><input type="radio" name="answer" value="${i}"><span>${String.fromCharCode(65+i)}. ${o}</span></label>`).join("");$("feedback").className="feedback";$("feedback").textContent="";$("nextBtn").textContent=index===lessons[kind].qs.length-1?"Hoàn thành bài →":"Câu tiếp theo →";}
+function render(){const d=lessons[kind];const chosenLevel=appliedLevel;$("lessonType").textContent=topicNames[kind]+" · "+chosenLevel;$("lessonTitle").textContent=d.title;$("lessonDesc").textContent=d.desc;$("duration").textContent=d.duration;$("formatTag").textContent=d.format;$("levelTag").textContent=chosenLevel;$("levelLabel").textContent=chosenLevel+" · "+levelNames[chosenLevel];$("transcriptText").textContent=d.transcript||d.text;$("transcript").classList.remove("show");$("transcriptBtn").textContent="Hiện transcript";index=0;answered=new Set();correct=0;renderQuestion();renderVocabulary();updateStats();stopSpeech();$("audioStatus").textContent="Sẵn sàng phát · Giọng đọc tiếng Đức trên thiết bị";}
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,function(ch){
+    return ch==="&"?"&amp;":ch==="<"?"&lt;":ch===">"?"&gt;":ch==='"'?"&quot;":"&#39;";
+  });
+}
+function renderQuestion(){const q=lessons[kind].qs[index];$("questionTitle").textContent=(index+1)+". "+q.q;$("questionCount").textContent="FRAGE "+(index+1)+" / "+lessons[kind].qs.length;$("options").innerHTML=q.opts.map((o,i)=>`<label class="option"><input type="radio" name="answer" value="${i}"><span>${String.fromCharCode(65+i)}. ${escapeHTML(o)}</span></label>`).join("");$("feedback").className="feedback";$("feedback").textContent="";$("nextBtn").textContent=index===lessons[kind].qs.length-1?"Hoàn thành bài →":"Câu tiếp theo →";}
 function stopSpeech(){if("speechSynthesis"in window){speechSynthesis.cancel()}playing=false;clearInterval(elapsedTimer);$("playBtn").textContent="▶";$("progressFill").style.width="0%";$("elapsed").textContent="00:00";}
 function chooseGermanVoice(){
   const all=speechSynthesis.getVoices();
@@ -421,7 +428,7 @@ function chooseGermanVoice(){
 }
 function speak(){if(!("speechSynthesis"in window)){alert("Trình duyệt này chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.");return}if(playing){speechSynthesis.pause();playing=false;$("playBtn").textContent="▶";return}if(speechSynthesis.paused){speechSynthesis.resume();playing=true;$("playBtn").textContent="Ⅱ";return}stopSpeech();utterance=new SpeechSynthesisUtterance(lessons[kind].text);utterance.lang=$("voiceRegion").value==="austria"?"de-AT":$("voiceRegion").value==="swiss"?"de-CH":"de-DE";utterance.rate=speed;const de=chooseGermanVoice();if(de){utterance.voice=de;utterance.lang=de.lang;}else{$("audioStatus").textContent="Không tìm thấy giọng Đức trên thiết bị; trình duyệt sẽ dùng giọng mặc định.";}utterance.onstart=()=>{$("audioStatus").textContent="Đang phát audio";playing=true;$("playBtn").textContent="Ⅱ";startedAt=Date.now();const words=lessons[kind].text.split(/\s+/).length;const duration=words/(3.0*speed);$("total").textContent="~"+String(Math.round(duration)).padStart(2,"0")+"s";elapsedTimer=setInterval(()=>{const t=(Date.now()-startedAt)/1000;$("elapsed").textContent="00:"+String(Math.min(Math.floor(t),Math.round(duration))).padStart(2,"0");$("progressFill").style.width=Math.min(100,t/duration*100)+"%";},250)};utterance.onend=()=>{playing=false;$("playBtn").textContent="▶";$("audioStatus").textContent="Đã phát xong · Cậu có thể nghe lại";$("progressFill").style.width="100%";clearInterval(elapsedTimer)};speechSynthesis.speak(utterance)}
 $("playBtn").onclick=speak;$("restartBtn").onclick=()=>{stopSpeech();speak()};$("speedBtn").onclick=()=>{speed=speed===1?0.85:speed===0.85?0.7:1;$("speedBtn").textContent=speed.toFixed(2).replace(/0$/,"")+"×";if(playing){stopSpeech();speak()}};
-$("checkBtn").onclick=()=>{const selected=document.querySelector('input[name="answer"]:checked');if(!selected){$("feedback").className="feedback show bad";$("feedback").innerHTML="Cậu hãy chọn một đáp án trước nhé.";return}if(answered.has(index))return;const q=lessons[kind].qs[index],ok=Number(selected.value)===q.a;answered.add(index);if(ok)correct++;$("feedback").className="feedback show"+(ok?"":" bad");$("feedback").innerHTML=`<strong>${ok?"Richtig! Sehr gut!":"Noch nicht ganz – cùng xem lại nhé."}</strong><br>${q.why}<br><span style="color:var(--muted)">Đáp án đúng: ${String.fromCharCode(65+q.a)}. ${q.opts[q.a]}</span>`;document.querySelectorAll('input[name="answer"]').forEach(x=>x.disabled=true);updateStats()};
+$("checkBtn").onclick=()=>{const selected=document.querySelector('input[name="answer"]:checked');if(!selected){$("feedback").className="feedback show bad";$("feedback").innerHTML="Cậu hãy chọn một đáp án trước nhé.";return}if(answered.has(index))return;const q=lessons[kind].qs[index],ok=Number(selected.value)===q.a;answered.add(index);if(ok)correct++;$("feedback").className="feedback show"+(ok?"":" bad");$("feedback").innerHTML=`<strong>${ok?"Richtig! Sehr gut!":"Noch nicht ganz – cùng xem lại nhé."}</strong><br>${escapeHTML(q.why)}<br><span style="color:var(--muted)">Đáp án đúng: ${String.fromCharCode(65+q.a)}. ${escapeHTML(q.opts[q.a])}</span>`;document.querySelectorAll('input[name="answer"]').forEach(x=>x.disabled=true);updateStats()};
 $("nextBtn").onclick=()=>{if(index<lessons[kind].qs.length-1){index++;renderQuestion()}else{const pct=Math.round(correct/lessons[kind].qs.length*100);$("feedback").className="feedback show";$("feedback").innerHTML=`<strong>Hoàn thành bài nghe!</strong><br>Cậu trả lời đúng ${correct}/${lessons[kind].qs.length} câu (${pct}%). Hãy nghe lại và xem transcript để củng cố.`;index=0;answered=new Set();correct=0;updateStats();$("nextBtn").textContent="Làm lại từ đầu ↻";$("nextBtn").onclick=()=>{render()}}};
 $("transcriptBtn").onclick=()=>{const show=$("transcript").classList.toggle("show");$("transcriptBtn").textContent=show?"Ẩn transcript":"Hiện transcript"};
 function updateStats(){const n=answered.size;$("answeredCount").textContent=n+" / "+lessons[kind].qs.length;$("answerBar").style.width=n/lessons[kind].qs.length*100+"%";const p=n?Math.round(correct/n*100):0;$("score").textContent=p+"%";$("scoreBar").style.width=p+"%";try{localStorage.setItem("hoerenAI_progress",JSON.stringify({kind,answered:n,correct,updatedAt:new Date().toISOString()}))}catch(e){}}
@@ -436,6 +443,83 @@ $("applySelectionBtn").addEventListener("click",()=>{
   $("applySelectionBtn").classList.add("updated");
   window.setTimeout(()=>{$("applySelectionBtn").textContent="Cập nhật";$("applySelectionBtn").classList.remove("updated")},1400);
 });
+
+const AI_WORKER_URL="https://german-hoeren-ai.xv-thanhduy.workers.dev/";
+async function generateAILesson(){
+  const button=$("aiGenerateBtn"),status=$("aiStatus");
+  const selectedTopic=$("topicSelect").value;
+  const selectedLevel=$("levelSelect").value;
+  const selectedRegion=$("voiceRegion").value;
+  const regionForWorker={austria:"Austria",swiss:"Switzerland"};
+  button.disabled=true;
+  button.textContent="⏳ AI đang tạo bài...";
+  status.textContent="Đang kết nối Groq AI và xây dựng bài nghe mới. Quá trình có thể mất khoảng 10–30 giây.";
+  try{
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),90000);
+    let response;
+    try{
+      response=await fetch(AI_WORKER_URL,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          level:selectedLevel,
+          topic:topicNames[selectedTopic]||selectedTopic,
+          voiceRegion:regionForWorker[selectedRegion]||selectedRegion
+        }),
+        signal:controller.signal
+      });
+    }finally{clearTimeout(timeout);}
+    let data;
+    try{data=await response.json()}catch(e){throw new Error("Worker không trả về dữ liệu JSON hợp lệ.");}
+    if(!response.ok||!data.success||!data.lesson){
+      const detail=data.details?": "+data.details:"";
+      throw new Error((data.error||"Không thể tạo bài nghe.")+detail);
+    }
+    const generated=data.lesson;
+    if(!generated.title||!generated.text||!Array.isArray(generated.questions)||generated.questions.length!==5||!Array.isArray(generated.vocabulary)){
+      throw new Error("Bài nghe AI trả về chưa đủ cấu trúc. Cậu hãy thử tạo lại nhé.");
+    }
+    const questions=generated.questions.map(q=>{
+      if(!q.question||!Array.isArray(q.options)||q.options.length!==4||!Number.isInteger(q.answer)||q.answer<0||q.answer>3){
+        throw new Error("Một câu hỏi AI trả về chưa đúng định dạng.");
+      }
+      return {q:q.question,opts:q.options,a:q.answer,why:q.explanation||"Hãy đối chiếu lại thông tin trong bài nghe."};
+    });
+    const vocabulary=generated.vocabulary.map(v=>({
+      word:String(v.word||""),
+      meaning:String(v.meaning||""),
+      example:String(v.example||"")
+    })).filter(v=>v.word&&v.meaning);
+    if(!vocabulary.length)throw new Error("AI chưa tạo được danh sách từ vựng.");
+    const wordCount=generated.text.trim().split(/\s+/).length;
+    const seconds=Math.max(30,Math.round(wordCount/2.6));
+    lessons[selectedTopic]={
+      type:(topicNames[selectedTopic]||selectedTopic)+" · "+selectedLevel,
+      title:generated.title,
+      desc:generated.description||"Bài nghe mới được tạo bởi Groq AI.",
+      duration:"~ "+Math.floor(seconds/60)+":"+String(seconds%60).padStart(2,"0"),
+      format:/\?/.test(generated.text)?"Dialog":"Monolog",
+      text:generated.text,
+      transcript:generated.transcript||generated.text,
+      qs:questions
+    };
+    vocabularyByTopic[selectedTopic]=vocabulary;
+    appliedLevel=selectedLevel;
+    kind=selectedTopic;
+    render();
+    status.textContent="✓ Đã tạo bài nghe mới thành công! Cậu có thể nhấn Phát audio để bắt đầu.";
+    button.textContent="✦ Tạo bài nghe mới bằng AI";
+  }catch(error){
+    const message=error.name==="AbortError"?"AI phản hồi quá lâu. Cậu hãy thử lại sau.":error.message;
+    status.textContent="Chưa tạo được bài nghe: "+message;
+    button.textContent="↻ Thử tạo lại bằng AI";
+  }finally{
+    button.disabled=false;
+  }
+}
+$("aiGenerateBtn").addEventListener("click",generateAILesson);
+
 render();
 
 window.addEventListener("pagehide",()=>{try{if("speechSynthesis" in window)speechSynthesis.cancel();clearInterval(elapsedTimer)}catch(e){}});
