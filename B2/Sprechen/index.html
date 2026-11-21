@@ -1,12 +1,16 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sprechen AI | Deutsch Lernen</title>
 
 <style>
+
 :root {
     --bg: #f7f8fa;
     --white: #ffffff;
@@ -35,7 +39,7 @@ button, select {
 
 .container {
     width: min(760px, calc(100% - 32px));
-    margin: 0 auto;
+    margin: auto;
     padding: 38px 0 60px;
 }
 
@@ -43,7 +47,7 @@ button, select {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 55px;
+    margin-bottom: 48px;
 }
 
 .logo {
@@ -63,14 +67,13 @@ button, select {
 }
 
 .heading {
-    margin-bottom: 32px;
+    margin-bottom: 30px;
 }
 
 .heading h1 {
     font-size: clamp(30px, 5vw, 42px);
     letter-spacing: -1.5px;
     margin: 0 0 10px;
-    font-weight: 700;
 }
 
 .heading p {
@@ -84,8 +87,8 @@ button, select {
     background: var(--white);
     border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 25px;
-    margin-bottom: 20px;
+    padding: 24px;
+    margin-bottom: 18px;
 }
 
 .section-title {
@@ -107,11 +110,6 @@ button, select {
     background: white;
     color: #555e69;
     cursor: pointer;
-    transition: .2s;
-}
-
-.level-btn:hover {
-    border-color: #a9c2f4;
 }
 
 .level-btn.active {
@@ -122,7 +120,7 @@ button, select {
 }
 
 .field {
-    margin-top: 25px;
+    margin-top: 24px;
 }
 
 select {
@@ -135,10 +133,6 @@ select {
     outline: none;
 }
 
-select:focus {
-    border-color: var(--blue);
-}
-
 .helper {
     color: var(--muted);
     font-size: 12px;
@@ -148,33 +142,33 @@ select:focus {
 
 .conversation {
     text-align: center;
-    padding: 35px 20px 25px;
+    padding: 24px 10px 20px;
 }
 
 .mic-circle {
-    width: 88px;
-    height: 88px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     background: var(--blue-light);
     color: var(--blue);
     display: grid;
     place-items: center;
-    margin: 0 auto 20px;
+    margin: 0 auto 18px;
     transition: .2s;
 }
 
 .mic-circle svg {
-    width: 34px;
-    height: 34px;
+    width: 33px;
+    height: 33px;
 }
 
 .mic-circle.active {
-    animation: pulse 1.6s infinite;
+    animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
     50% {
-        box-shadow: 0 0 0 13px rgba(71,126,232,.08);
+        box-shadow: 0 0 0 13px rgba(71,126,232,.09);
     }
 }
 
@@ -188,21 +182,21 @@ select:focus {
     color: var(--muted);
     line-height: 1.6;
     margin: 0 auto;
-    max-width: 420px;
+    max-width: 440px;
 }
 
 .controls {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 22px;
+    gap: 9px;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
 
 .btn {
     border: 1px solid var(--line);
     border-radius: 10px;
-    padding: 12px 20px;
+    padding: 12px 18px;
     cursor: pointer;
     background: white;
     color: var(--text);
@@ -216,10 +210,6 @@ select:focus {
     color: white;
 }
 
-.btn:hover:not(:disabled) {
-    opacity: .88;
-}
-
 .btn:disabled {
     opacity: .4;
     cursor: not-allowed;
@@ -228,26 +218,26 @@ select:focus {
 .status {
     color: var(--muted);
     font-size: 12px;
-    margin-top: 15px;
+    margin-top: 14px;
 }
 
 .transcript {
     border-top: 1px solid var(--line);
-    padding-top: 20px;
-    margin-top: 10px;
+    padding-top: 19px;
+    margin-top: 8px;
 }
 
 .transcript h3 {
     font-size: 12px;
     letter-spacing: .5px;
-    margin: 0 0 15px;
+    margin: 0 0 14px;
 }
 
 .message {
-    padding: 13px 15px;
+    padding: 12px 14px;
     border-radius: 11px;
     background: #f6f7f9;
-    margin-bottom: 10px;
+    margin-bottom: 9px;
     text-align: left;
     font-size: 13px;
     line-height: 1.65;
@@ -272,20 +262,21 @@ select:focus {
     text-align: center;
     color: #a0a6af;
     font-size: 11px;
-    margin-top: 30px;
+    margin-top: 28px;
 }
 
 @media(max-width:520px) {
+
     .container {
         padding-top: 23px;
     }
 
     .topbar {
-        margin-bottom: 40px;
+        margin-bottom: 38px;
     }
 
     .panel {
-        padding: 19px;
+        padding: 18px;
     }
 
     .levels {
@@ -293,11 +284,14 @@ select:focus {
     }
 
     .level-btn {
-        padding: 11px 3px;
         font-size: 12px;
+        padding: 11px 3px;
     }
+
 }
+
 </style>
+
 </head>
 
 <body>
@@ -305,34 +299,52 @@ select:focus {
 <div class="container">
 
     <div class="topbar">
-        <div class="logo">DEUTSCH LERNEN</div>
-        <a class="back" href="../../index.html">← Zurück</a>
+
+        <div class="logo">
+            DEUTSCH LERNEN
+        </div>
+
+        <a class="back" href="../../index.html">
+            ← Zurück
+        </a>
+
     </div>
 
     <header class="heading">
+
         <h1>Sprechen mit AI</h1>
+
         <p>
             Dein persönlicher Deutsch-Gesprächspartner.
             Sprich Deutsch und verbessere deine Sprachkenntnisse.
         </p>
+
     </header>
 
     <section class="panel">
 
-        <div class="section-title">Sprachniveau</div>
+        <div class="section-title">
+            Sprachniveau
+        </div>
 
         <div class="levels">
+
             <button class="level-btn" data-level="A1">A1</button>
             <button class="level-btn" data-level="A2">A2</button>
             <button class="level-btn" data-level="B1">B1</button>
             <button class="level-btn active" data-level="B2">B2</button>
             <button class="level-btn" data-level="C1">C1</button>
+
         </div>
 
         <div class="field">
-            <div class="section-title">Gesprächsthema</div>
+
+            <div class="section-title">
+                Gesprächsthema
+            </div>
 
             <select id="topic">
+
                 <option value="Freies Gespräch">Freies Gespräch</option>
                 <option value="Alltag und Freizeit">Alltag und Freizeit</option>
                 <option value="Arbeit und Beruf">Arbeit und Beruf</option>
@@ -342,11 +354,13 @@ select:focus {
                 <option value="Technologie und KI">Technologie und KI</option>
                 <option value="Bildung und Lernen">Bildung und Lernen</option>
                 <option value="Goethe-Prüfung">Goethe-Prüfung</option>
+
             </select>
 
             <div class="helper">
                 Wähle ein Thema oder führe ein freies Gespräch.
             </div>
+
         </div>
 
     </section>
@@ -356,45 +370,69 @@ select:focus {
         <div class="conversation">
 
             <div class="mic-circle" id="micCircle">
-                <svg viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="1.7"
-                     stroke-linecap="round" stroke-linejoin="round">
+
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.7"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
                     <rect x="9" y="2" width="6" height="13" rx="3"/>
                     <path d="M5 10v2a7 7 0 0 0 14 0v-2"/>
                     <path d="M12 19v3M8 22h8"/>
+
                 </svg>
+
             </div>
 
-            <h2 id="mainStatus">Bereit zum Sprechen?</h2>
+            <h2 id="mainStatus">
+                Bereit zum Sprechen?
+            </h2>
 
             <p id="description">
-                Starte das Gespräch und sprich mit deinem
-                persönlichen AI-Partner auf Deutsch.
+                Nhấn ghi âm, nói tiếng Đức và gửi câu trả lời.
+                AI sẽ phản hồi bằng giọng nói.
             </p>
 
             <div class="controls">
-                <button class="btn primary" id="startBtn">
-                    Gespräch starten
+
+                <button class="btn primary" id="recordBtn">
+                    ● Bắt đầu ghi âm
                 </button>
 
-                <button class="btn" id="endBtn" disabled>
-                    Beenden
+                <button class="btn" id="sendBtn" disabled>
+                    Gửi câu trả lời
                 </button>
+
+                <button class="btn" id="stopBtn" disabled>
+                    Dừng ghi âm
+                </button>
+
+                <button class="btn" id="endConversationBtn">
+                    Kết thúc buổi học
+                </button>
+
             </div>
 
-            <div class="status" id="connectionStatus">
-                Nicht verbunden
+            <div class="status" id="status">
+                Chưa kết nối
             </div>
 
         </div>
 
         <div class="transcript">
+
             <h3>GESPRÄCHSVERLAUF</h3>
+
             <div id="messages">
+
                 <div class="helper">
-                    Deine Unterhaltung wird hier angezeigt.
+                    Nội dung hội thoại sẽ xuất hiện ở đây.
                 </div>
+
             </div>
+
         </div>
 
     </section>
@@ -405,269 +443,543 @@ select:focus {
 
 </div>
 
-<audio id="remoteAudio" autoplay></audio>
-
 <script>
-/*
-  KONFIGURATION:
-  Nach der Einrichtung des Backends hier die Worker-Adresse
-  eintragen. Beispiel: https://dein-worker.workers.dev
-*/
-const WORKER_URL = "DEINE_CLOUDFLARE_WORKER_URL";
+
+// ========================================
+// CONFIGURATION
+// ========================================
+
+const WORKER_URL =
+    "PASTE_GERMAN_SPRECHEN_AI_WORKER_URL";
 
 let selectedLevel = "B2";
-let peer = null;
-let dataChannel = null;
-let microphone = null;
+let recorder = null;
+let chunks = [];
+let recordedBlob = null;
+let history = [];
+let busy = false;
 
-const startBtn = document.getElementById("startBtn");
-const endBtn = document.getElementById("endBtn");
+// ========================================
+// ELEMENTS
+// ========================================
+
+const recordBtn = document.getElementById("recordBtn");
+const sendBtn = document.getElementById("sendBtn");
+const stopBtn = document.getElementById("stopBtn");
+
 const mainStatus = document.getElementById("mainStatus");
 const description = document.getElementById("description");
-const connectionStatus = document.getElementById("connectionStatus");
+const statusEl = document.getElementById("status");
+
 const micCircle = document.getElementById("micCircle");
 const messages = document.getElementById("messages");
-const remoteAudio = document.getElementById("remoteAudio");
 
-document.querySelectorAll(".level-btn").forEach(button => {
-    button.addEventListener("click", () => {
+// ========================================
+// LEVEL SELECTION
+// ========================================
+
+document.querySelectorAll(".level-btn").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
         document.querySelectorAll(".level-btn")
             .forEach(item => item.classList.remove("active"));
 
-        button.classList.add("active");
-        selectedLevel = button.dataset.level;
+        btn.classList.add("active");
+
+        selectedLevel = btn.dataset.level;
+
     });
+
 });
 
+// ========================================
+// STATUS
+// ========================================
+
+function setStatus(text, active = false) {
+
+    statusEl.textContent = text;
+
+    micCircle.classList.toggle("active", active);
+
+}
+
+// ========================================
+// ADD MESSAGE
+// ========================================
+
 function addMessage(who, text) {
-    if (!text || !text.trim()) return;
+
+    if (!text) return;
 
     const empty = messages.querySelector(".helper");
+
     if (empty) empty.remove();
 
     const box = document.createElement("div");
-    box.className = "message " + (who === "AI" ? "ai" : "user");
+
+    box.className =
+        "message " + (who === "AI" ? "ai" : "");
 
     const label = document.createElement("span");
+
     label.className = "message-label";
-    label.textContent = who === "AI" ? "AI PARTNER" : "DU";
+
+    label.textContent =
+        who === "AI" ? "AI PARTNER" : "DU";
 
     const content = document.createElement("span");
+
     content.textContent = text;
 
     box.append(label, content);
+
     messages.appendChild(box);
-    box.scrollIntoView({behavior: "smooth", block: "nearest"});
+
+    box.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+
 }
 
-function setLive(isLive, text) {
-    micCircle.classList.toggle("active", isLive);
-    connectionStatus.textContent = text;
-}
+// ========================================
+// GERMAN TEXT TO SPEECH
+// ========================================
 
-function handleEvent(event) {
-    switch(event.type) {
-        case "conversation.item.input_audio_transcription.completed":
-            addMessage("Du", event.transcript);
-            break;
+function speakGerman(text) {
 
-        case "response.output_audio_transcript.done":
-            addMessage("AI", event.transcript);
-            break;
+    if (!("speechSynthesis" in window)) {
 
-        case "input_audio_buffer.speech_started":
-            mainStatus.textContent = "Ich höre dir zu...";
-            description.textContent = "AI đang lắng nghe cậu.";
-            break;
+        setStatus("Trình duyệt không hỗ trợ giọng đọc.");
 
-        case "response.created":
-            mainStatus.textContent = "AI spricht...";
-            description.textContent = "AI đang trả lời bằng tiếng Đức.";
-            break;
-
-        case "response.done":
-            mainStatus.textContent = "Du bist dran!";
-            description.textContent = "Cậu có thể tiếp tục nói.";
-            break;
-
-        case "error":
-            addMessage("AI", event.error?.message || "Ein Fehler ist aufgetreten.");
-            break;
-    }
-}
-
-async function startConversation() {
-    if (WORKER_URL === "DEINE_CLOUDFLARE_WORKER_URL") {
-        alert("Cần cấu hình Cloudflare Worker trước khi kết nối AI.");
         return;
+
     }
 
-    startBtn.disabled = true;
-    connectionStatus.textContent = "Verbindung wird hergestellt...";
+    window.speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "de-DE";
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+
+    const voices =
+        window.speechSynthesis.getVoices();
+
+    const germanVoice = voices.find(voice =>
+        voice.lang.toLowerCase().startsWith("de")
+    );
+
+    if (germanVoice) {
+        utterance.voice = germanVoice;
+    }
+
+    utterance.onstart = () => {
+
+        mainStatus.textContent = "AI spricht...";
+
+        setStatus("AI đang đọc câu trả lời", true);
+
+    };
+
+    utterance.onend = () => {
+
+        mainStatus.textContent = "Du bist dran!";
+
+        description.textContent =
+            "Cậu có thể tiếp tục trả lời bằng tiếng Đức.";
+
+        setStatus("Sẵn sàng ghi âm");
+
+    };
+
+    utterance.onerror = () => {
+
+        setStatus("Không phát được giọng đọc.");
+
+    };
+
+    window.speechSynthesis.speak(utterance);
+
+}
+
+// ========================================
+// START RECORDING
+// ========================================
+
+async function startRecording() {
+
+    if (WORKER_URL.includes("PASTE_")) {
+
+        alert("Cậu cần điền URL Worker trước.");
+
+        return;
+
+    }
+
+    if (
+        !navigator.mediaDevices?.getUserMedia ||
+        !window.MediaRecorder
+    ) {
+
+        alert(
+            "Trình duyệt chưa hỗ trợ ghi âm. " +
+            "Hãy dùng Chrome hoặc Edge qua HTTPS."
+        );
+
+        return;
+
+    }
 
     try {
-        microphone = await navigator.mediaDevices.getUserMedia({
-            audio: {
-                echoCancellation: true,
-                noiseSuppression: true,
-                autoGainControl: true
-            }
-        });
 
-        const tokenResponse = await fetch(
-            WORKER_URL.replace(/\/$/, "") + "/token",
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
+
+        const formats = [
+            "audio/webm;codecs=opus",
+            "audio/webm",
+            "audio/mp4"
+        ];
+
+        const mimeType = formats.find(type =>
+            MediaRecorder.isTypeSupported(type)
+        );
+
+        recorder = new MediaRecorder(
+            stream,
+            mimeType ? { mimeType } : {}
+        );
+
+        chunks = [];
+        recordedBlob = null;
+
+        recorder.ondataavailable = event => {
+
+            if (event.data.size > 0) {
+                chunks.push(event.data);
+            }
+
+        };
+
+        recorder.onstop = () => {
+
+            recordedBlob = new Blob(chunks, {
+                type: recorder.mimeType || "audio/webm"
+            });
+
+            stream.getTracks().forEach(track =>
+                track.stop()
+            );
+
+            sendBtn.disabled = !recordedBlob.size;
+
+            recordBtn.disabled = false;
+
+            recordBtn.textContent = "● Ghi âm lại";
+
+            stopBtn.disabled = true;
+
+            mainStatus.textContent = "Aufnahme fertig";
+
+            description.textContent =
+                "Nhấn Gửi câu trả lời để AI phản hồi.";
+
+            setStatus(
+                "Đã ghi âm · " +
+                Math.round(recordedBlob.size / 1024) +
+                " KB"
+            );
+
+        };
+
+        recorder.start();
+
+        recordBtn.disabled = true;
+        sendBtn.disabled = true;
+        stopBtn.disabled = false;
+
+        recordBtn.textContent = "Đang ghi âm...";
+
+        mainStatus.textContent = "Ich höre zu...";
+
+        description.textContent =
+            "Cậu hãy nói tiếng Đức. Nhấn Dừng ghi âm khi hoàn tất.";
+
+        setStatus("Micro đang hoạt động", true);
+
+    } catch (error) {
+
+        setStatus("Không truy cập được micro");
+
+        mainStatus.textContent = "Mikrofon nicht verfügbar";
+
+        description.textContent = error.message;
+
+    }
+
+}
+
+// ========================================
+// STOP RECORDING
+// ========================================
+
+function stopRecording() {
+
+    if (recorder && recorder.state !== "inactive") {
+
+        recorder.stop();
+
+    }
+
+}
+
+// ========================================
+// SEND AUDIO TO GROQ
+// ========================================
+
+async function sendToAI() {
+
+    if (!recordedBlob || busy) return;
+
+    busy = true;
+
+    sendBtn.disabled = true;
+    recordBtn.disabled = true;
+
+    try {
+
+        mainStatus.textContent = "AI verarbeitet...";
+
+        description.textContent =
+            "Đang nhận diện giọng nói và tạo phản hồi.";
+
+        setStatus("Đang gửi âm thanh đến Groq...", true);
+
+        // 1. Whisper transcription
+
+        const form = new FormData();
+
+        const extension =
+            recordedBlob.type.includes("mp4") ? "mp4" : "webm";
+
+        form.append(
+            "audio",
+            recordedBlob,
+            "speech." + extension
+        );
+
+        const transResponse = await fetch(
+            WORKER_URL.replace(/\/$/, "") + "/api/transcribe",
             {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                body: form
+            }
+        );
+
+        const transData = await transResponse.json();
+
+        if (!transResponse.ok) {
+
+            throw new Error(
+                transData.error || "Whisper transcription failed."
+            );
+
+        }
+
+        const transcript = (transData.text || "").trim();
+
+        if (!transcript) {
+
+            throw new Error(
+                "Không nhận diện được lời nói. Cậu thử lại nhé."
+            );
+
+        }
+
+        addMessage("Du", transcript);
+
+        history.push({
+            role: "user",
+            content: transcript
+        });
+
+        // 2. Groq Chat
+
+        setStatus("Groq đang suy nghĩ...", true);
+
+        const chatResponse = await fetch(
+            WORKER_URL.replace(/\/$/, "") + "/api/chat",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
                 body: JSON.stringify({
+
                     level: selectedLevel,
-                    topic: document.getElementById("topic").value
+
+                    topic:
+                        document.getElementById("topic").value,
+
+                    history
+
                 })
             }
         );
 
-        const tokenData = await tokenResponse.json();
+        const chatData = await chatResponse.json();
 
-        if (!tokenResponse.ok) {
-            throw new Error(tokenData.error || "Không tạo được phiên AI.");
-        }
+        if (!chatResponse.ok) {
 
-        const ephemeralKey =
-            tokenData.value || tokenData.client_secret?.value;
-
-        if (!ephemeralKey) {
-            throw new Error("Không nhận được mã kết nối AI.");
-        }
-
-        peer = new RTCPeerConnection();
-
-        peer.ontrack = event => {
-            remoteAudio.srcObject = event.streams[0];
-            remoteAudio.play().catch(() => {});
-        };
-
-        microphone.getTracks().forEach(track => {
-            peer.addTrack(track, microphone);
-        });
-
-        dataChannel = peer.createDataChannel("oai-events");
-
-        dataChannel.onmessage = event => {
-            try {
-                handleEvent(JSON.parse(event.data));
-            } catch(error) {
-                console.error(error);
-            }
-        };
-
-        peer.onconnectionstatechange = () => {
-            if (!peer) return;
-
-            if (peer.connectionState === "connected") {
-                setLive(true, "Đã kết nối");
-                mainStatus.textContent = "Das Gespräch läuft!";
-                description.textContent =
-                    "Sprich einfach Deutsch. AI wird dir antworten.";
-                endBtn.disabled = false;
-            }
-
-            if (["failed", "disconnected"].includes(peer.connectionState)) {
-                setLive(false, "Verbindung unterbrochen");
-            }
-        };
-
-        const offer = await peer.createOffer();
-        await peer.setLocalDescription(offer);
-
-        await new Promise((resolve, reject) => {
-            if (peer.iceGatheringState === "complete") {
-                resolve();
-                return;
-            }
-
-            const timeout = setTimeout(
-                () => reject(new Error("ICE-Verbindung Timeout.")),
-                12000
+            throw new Error(
+                chatData.error || "Groq Chat failed."
             );
 
-            peer.addEventListener("icegatheringstatechange", () => {
-                if (peer.iceGatheringState === "complete") {
-                    clearTimeout(timeout);
-                    resolve();
-                }
-            });
-        });
-
-        const answerResponse = await fetch(
-            "https://api.openai.com/v1/realtime/calls",
-            {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + ephemeralKey,
-                    "Content-Type": "application/sdp"
-                },
-                body: peer.localDescription.sdp
-            }
-        );
-
-        if (!answerResponse.ok) {
-            throw new Error("Realtime-Verbindung fehlgeschlagen.");
         }
 
-        const answerSDP = await answerResponse.text();
+        const reply = (chatData.reply || "").trim();
 
-        await peer.setRemoteDescription({
-            type: "answer",
-            sdp: answerSDP
+        if (!reply) {
+
+            throw new Error("AI chưa tạo được câu trả lời.");
+
+        }
+
+        history.push({
+            role: "assistant",
+            content: reply
         });
 
-        endBtn.disabled = false;
+        addMessage("AI", reply);
 
-    } catch(error) {
+        // 3. German browser speech
+
+        mainStatus.textContent = "AI antwortet";
+
+        description.textContent =
+            "Hãy nghe câu trả lời tiếng Đức của AI.";
+
+        speakGerman(reply);
+
+        recordedBlob = null;
+
+        recordBtn.textContent = "● Bắt đầu ghi âm";
+
+    } catch (error) {
+
         console.error(error);
-        addMessage("AI", error.message);
-        await stopConversation();
-        mainStatus.textContent = "Verbindung fehlgeschlagen";
-        description.textContent = "Bitte versuche es erneut.";
+
+        addMessage("System", error.message);
+
+        mainStatus.textContent = "Ein Fehler ist aufgetreten";
+
+        description.textContent =
+            "Cậu có thể thử lại.";
+
+        setStatus(error.message);
+
+        sendBtn.disabled = false;
+
+    } finally {
+
+        busy = false;
+
+        recordBtn.disabled = false;
+
+        stopBtn.disabled = true;
+
     }
+
 }
 
-async function stopConversation() {
-    if (dataChannel) {
-        try { dataChannel.close(); } catch(error) {}
-        dataChannel = null;
+// ========================================
+// END CONVERSATION
+// ========================================
+
+function endConversation() {
+
+    if (recorder && recorder.state !== "inactive") {
+
+        recorder.stop();
+
     }
 
-    if (peer) {
-        try { peer.close(); } catch(error) {}
-        peer = null;
+    if ("speechSynthesis" in window) {
+
+        window.speechSynthesis.cancel();
+
     }
 
-    if (microphone) {
-        microphone.getTracks().forEach(track => track.stop());
-        microphone = null;
-    }
+    recordedBlob = null;
+    history = [];
 
-    remoteAudio.srcObject = null;
+    messages.innerHTML =
+        '<div class="helper">' +
+        'Nội dung hội thoại sẽ xuất hiện ở đây.' +
+        '</div>';
 
-    startBtn.disabled = false;
-    endBtn.disabled = true;
+    sendBtn.disabled = true;
+    recordBtn.disabled = false;
+    stopBtn.disabled = true;
 
-    setLive(false, "Nicht verbunden");
+    recordBtn.textContent = "● Bắt đầu ghi âm";
+
     mainStatus.textContent = "Gespräch beendet";
+
     description.textContent =
-        "Du kannst jederzeit ein neues Gespräch beginnen.";
+        "Cậu có thể bắt đầu một cuộc trò chuyện mới.";
+
+    setStatus("Đã kết thúc");
+
 }
 
-startBtn.addEventListener("click", startConversation);
-endBtn.addEventListener("click", stopConversation);
+// ========================================
+// EVENT LISTENERS
+// ========================================
+
+recordBtn.addEventListener(
+    "click",
+    startRecording
+);
+
+stopBtn.addEventListener(
+    "click",
+    stopRecording
+);
+
+sendBtn.addEventListener(
+    "click",
+    sendToAI
+);
+
+document.getElementById(
+    "endConversationBtn"
+).addEventListener(
+    "click",
+    endConversation
+);
 
 window.addEventListener("beforeunload", () => {
-    if (peer) peer.close();
-    if (microphone) {
-        microphone.getTracks().forEach(track => track.stop());
+
+    if (recorder && recorder.state !== "inactive") {
+        recorder.stop();
     }
+
+    if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+    }
+
 });
+
 </script>
 
 </body>
