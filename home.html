@@ -1277,7 +1277,85 @@ body {
     }
 }
 
-</style>
+
+/* =========================
+   BANG LED CHAM NGON - THIET KE TOI GIAN
+   Kich thuoc tuong duong hang slogan cu
+========================= */
+.quote-led {
+    position: fixed;
+    left: 65px;
+    bottom: 35px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    max-width: min(620px, calc(100vw - 130px));
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid rgba(104, 190, 230, .42);
+    border-radius: 3px;
+    background: rgba(7, 19, 31, .78);
+    color: #c9f2ff;
+    box-shadow: inset 0 0 8px rgba(75, 190, 255, .08);
+    font-family: "Courier New", "Lucida Console", monospace;
+}
+.quote-led::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .12;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 2px,
+        rgba(120, 215, 255, .24) 3px
+    );
+}
+.quote-led-status {
+    position: relative;
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #64e6ad;
+    box-shadow: 0 0 6px rgba(100, 230, 173, .75);
+}
+.quote-led p {
+    position: relative;
+    margin: 0;
+    color: #d8f5ff;
+    font-family: "Courier New", "Lucida Console", monospace;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: .35px;
+    text-shadow: 0 0 5px rgba(108, 211, 255, .36);
+    overflow-wrap: anywhere;
+    transition: opacity .45s ease;
+}
+.quote-led p.is-changing { opacity: 0; }
+@media (max-width: 600px) {
+    .quote-led {
+        left: 25px;
+        right: 20px;
+        bottom: 25px;
+        max-width: none;
+        width: fit-content;
+        min-height: 32px;
+        padding: 7px 10px;
+    }
+    .quote-led p {
+        font-size: 12px;
+        letter-spacing: .2px;
+    }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+    .quote-led { left: 40px; }
+}
+\n</style>
 </head>
 
 <body>
@@ -1450,9 +1528,10 @@ body {
      SLOGAN
 ========================= -->
 
-<footer class="footer">
-    Học, học nữa, học mãi
-</footer>
+<section class="quote-led" aria-label="Bảng điện tử câu châm ngôn">
+    <span class="quote-led-status" aria-hidden="true"></span>
+    <p id="quoteLedText" aria-live="polite">Học, học nữa, học mãi.</p>
+</section>
 
 
 <!-- =========================
@@ -1462,6 +1541,28 @@ body {
 <script>
 const touchDevice = window.matchMedia("(hover: none)");
 const levelCards = document.querySelectorAll(".level-card");
+
+// Bang LED tu dong thay cau cham ngon moi sau moi 3 phut.
+const quoteLedItems = [
+    "Học, học nữa, học mãi.",
+    "Có công mài sắt, có ngày nên kim.",
+    "Có công mài sắc, có ngày nên kim.",
+    "Những điều vĩ đại không được xây dựng bằng sự vội vàng.",
+    "Kỷ luật hôm nay tạo nên tự do ngày mai.",
+    "Kiên trì là con đường dẫn đến thành công.",
+    "Mỗi ngày tiến một bước, rồi cậu sẽ đi rất xa.",
+    "Wissen ist Macht – Tri thức là sức mạnh."
+];
+const quoteLedText = document.getElementById("quoteLedText");
+let quoteLedIndex = 0;
+window.setInterval(() => {
+    quoteLedText.classList.add("is-changing");
+    window.setTimeout(() => {
+        quoteLedIndex = (quoteLedIndex + 1) % quoteLedItems.length;
+        quoteLedText.textContent = quoteLedItems[quoteLedIndex];
+        quoteLedText.classList.remove("is-changing");
+    }, 450);
+}, 180000);
 
 // Can mep duoi menu cap do va menu Wortschatz theo mep duoi cua thu muc B2.
 function alignLevelMenusToB2() {
