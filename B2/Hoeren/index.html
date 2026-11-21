@@ -210,6 +210,31 @@ details#vocabAccordion[open] > .vocab-content::-webkit-scrollbar-thumb{backgroun
   }
 }
 
+
+/* V3: reliable mouse-wheel scrolling for the vocabulary drawer */
+html body details#vocabAccordion[open] > div.vocab-content{
+  display:block !important;
+  box-sizing:border-box !important;
+  height:clamp(180px, 52vh, 420px) !important;
+  max-height:clamp(180px, 52vh, 420px) !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch !important;
+  touch-action:pan-y !important;
+  scrollbar-width:thin !important;
+  scrollbar-color:#7898c7 #edf2f8 !important;
+}
+html body details#vocabAccordion[open] > div.vocab-content > .vocab-grid{
+  display:grid !important;
+  overflow:visible !important;
+  max-height:none !important;
+}
+html body details#vocabAccordion[open] > div.vocab-content::-webkit-scrollbar{width:11px}
+html body details#vocabAccordion[open] > div.vocab-content::-webkit-scrollbar-track{background:#edf2f8;border-radius:12px}
+html body details#vocabAccordion[open] > div.vocab-content::-webkit-scrollbar-thumb{background:#7898c7;border:2px solid #edf2f8;border-radius:12px}
+
 </style>
 </head>
 <body>
@@ -604,6 +629,19 @@ async function generateAILesson(){
 $("aiGenerateBtn").addEventListener("click",generateAILesson);
 
 render();
+
+
+// Ensure the mouse wheel is captured by the vocabulary panel itself.
+(function enableVocabularyWheelScroll(){
+  const panel=document.querySelector("#vocabAccordion > .vocab-content");
+  if(!panel || panel.dataset.wheelScrollReady==="1") return;
+  panel.dataset.wheelScrollReady="1";
+  panel.addEventListener("wheel",function(event){
+    if(panel.scrollHeight <= panel.clientHeight) return;
+    event.preventDefault();
+    panel.scrollTop += event.deltaY;
+  },{passive:false});
+})();
 
 window.addEventListener("pagehide",()=>{try{if("speechSynthesis" in window)speechSynthesis.cancel();clearInterval(elapsedTimer)}catch(e){}});
 </script>
