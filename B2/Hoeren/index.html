@@ -181,6 +181,35 @@ h1{display:inline-block;font-size:clamp(22px,3vw,30px);line-height:1.2;letter-sp
 @media(max-width:760px){.lesson-panel,.practice-panel{padding:14px}.lesson-title{font-size:20px}.question h3{font-size:17px}.option{font-size:13px}.vocab-section{margin:0 10px 12px;padding:14px}.vocab-head h2{font-size:18px}}
 @media(max-width:480px){.vocab-grid{grid-template-columns:1fr}.vocab-head{flex-direction:column}.vocab-count{align-self:flex-start}}
 
+
+/* V2: force an independently scrollable vocabulary area */
+details#vocabAccordion[open] > .vocab-content{
+  display:block !important;
+  height: min(52vh, 420px) !important;
+  max-height: min(52vh, 420px) !important;
+  min-height: 0 !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scrollbar-width: auto;
+  scrollbar-color: #8da9d0 #edf2f8;
+}
+details#vocabAccordion[open] > .vocab-content > .vocab-grid{
+  max-height: none !important;
+  overflow: visible !important;
+}
+details#vocabAccordion[open] > .vocab-content::-webkit-scrollbar{width:10px}
+details#vocabAccordion[open] > .vocab-content::-webkit-scrollbar-track{background:#edf2f8;border-radius:10px}
+details#vocabAccordion[open] > .vocab-content::-webkit-scrollbar-thumb{background:#8da9d0;border:2px solid #edf2f8;border-radius:10px}
+@media(max-width:760px){
+  details#vocabAccordion[open] > .vocab-content{
+    height: min(48vh, 360px) !important;
+    max-height: min(48vh, 360px) !important;
+  }
+}
+
 </style>
 </head>
 <body>
