@@ -192,7 +192,7 @@ h1{display:inline-block;font-size:clamp(22px,3vw,30px);line-height:1.2;letter-sp
     <div class="content">
       <section class="lesson-panel">
         <div class="lesson-head"><div><div class="eyebrow" id="lessonType">ALLTAG · B1</div><div class="lesson-title" id="lessonTitle">Ein Termin beim Arzt</div><p class="lesson-desc" id="lessonDesc">Nghe hội thoại và xác định thông tin quan trọng.</p></div><span class="duration" id="duration">~ 1:00</span></div>
-        <div class="meta"><span id="levelTag">B1</span><span id="formatTag">Dialog</span><span>5 Fragen</span></div>
+        <div class="meta"><span id="levelTag">B1</span><span id="levelLabel">B1 · Mittelstufe</span><span id="formatTag">Dialog</span><span>5 Fragen</span></div>
         <div class="audio-box">
           <div class="audio-top"><div class="sound-icon">♫</div><div class="audio-info"><strong>Hörverstehen · Audio</strong><small id="audioStatus">Sẵn sàng phát · Giọng đọc tiếng Đức trên thiết bị</small></div><button class="control" id="speedBtn">0.9×</button></div>
           <div class="audio-controls"><button class="play" id="playBtn" aria-label="Phát audio">▶</button><button class="control" id="restartBtn" title="Phát lại">↺</button><div class="progress-wrap"><div class="progress"><i id="progressFill"></i></div><div class="time-row"><span id="elapsed">00:00</span><span id="total">--:--</span></div></div></div>
@@ -438,6 +438,7 @@ $("applySelectionBtn").addEventListener("click",()=>{
 });
 render();
 
+window.addEventListener("pagehide",()=>{try{if("speechSynthesis" in window)speechSynthesis.cancel();clearInterval(elapsedTimer)}catch(e){}});
 </script>
 </body>
 </html>
