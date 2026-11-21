@@ -65,14 +65,14 @@ body::before {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 18px;
-  font-weight: 750;
+  gap: 12px;
+  min-width: 0;
 }
 
 .brand-icon {
   width: 40px;
   height: 40px;
+  flex: 0 0 40px;
   display: grid;
   place-items: center;
   background: rgba(255,255,255,.85);
@@ -81,44 +81,40 @@ body::before {
   font-size: 21px;
 }
 
-.back-link {
-  color: #53647b;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.back-link:hover {
-  color: var(--blue);
-}
-
 .hero {
   text-align: left;
-  padding: 2px 0 10px;
+  padding: 0 0 10px 52px;
   flex: 0 0 auto;
 }
 
-.eyebrow {
-  color: var(--blue);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 9px;
+h1 {
+  display: inline-block;
+  width: 0;
+  max-width: calc(100vw - 105px);
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -.7px;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 2px 9px rgba(0,0,0,.24);
+  animation: title-typing 5.5s steps(27, end) 0.35s forwards;
 }
 
-h1 {
-  font-size: clamp(24px, 3vw, 32px);
-  letter-spacing: -1px;
-  margin: 0;
-  color: #182334;
+@keyframes title-typing {
+  from { width: 0; }
+  to { width: 27ch; }
 }
+
 
 .hero p {
-  color: #56657a;
-  font-size: 13px;
-  line-height: 1.45;
-  margin: 5px 0 0;
-  max-width: 620px;
+  color: rgba(255,255,255,.88);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 7px 0 0;
+  max-width: 760px;
+  text-shadow: 0 1px 5px rgba(0,0,0,.3);
 }
 
 .main-card {
@@ -360,9 +356,13 @@ select:focus {
   transform: translateY(-2px);
 }
 
-.mic-button.recording {
-  background: var(--red);
-  animation: pulse 1.3s infinite;
+.mic-button.recording,
+.mic-button.recording:hover:not(:disabled) {
+  background: var(--blue);
+  transform: scale(calc(1 + var(--voice-level, 0) * .22));
+  box-shadow: 0 0 calc(8px + var(--voice-level, 0) * 30px)
+    rgba(57,120,232,.52);
+  transition: transform 85ms ease-out, box-shadow 85ms ease-out;
 }
 
 .mic-button:disabled {
@@ -472,32 +472,24 @@ select:focus {
     margin-bottom: 5px;
   }
 
-  .brand {
-    font-size: 15px;
-  }
-
   .brand-icon {
     width: 34px;
     height: 34px;
+    flex-basis: 34px;
   }
 
   .hero {
-    padding: 1px 0 7px;
-  }
-
-  .eyebrow {
-    margin-bottom: 4px;
-    font-size: 9px;
+    padding: 0 0 7px 46px;
   }
 
   h1 {
-    font-size: 23px;
+    font-size: clamp(18px, 5vw, 23px);
   }
 
   .hero p {
-    font-size: 11px;
-    line-height: 1.35;
-    margin-top: 4px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 5px;
   }
 
   .settings {
@@ -621,6 +613,11 @@ select:focus {
   .status-message { margin-top: 4px; min-height: 14px; }
   .footer-note { margin-top: 2px; font-size: 9px; }
 }
+
+@media(max-width:380px) {
+  h1 { font-size: 17px; }
+  .hero { padding-left: 44px; }
+}
 </style>
 </head>
 
@@ -631,17 +628,11 @@ select:focus {
 <header class="topbar">
   <div class="brand">
     <div class="brand-icon">🎙</div>
-    <span>Deutsch Lernen</span>
+    <h1>Luyện nói tiếng Đức cùng AI</h1>
   </div>
-
-  <a class="back-link" href="../../index.html">
-    ← Quay lại
-  </a>
 </header>
 
 <section class="hero">
-  <div class="eyebrow">AI SPEAKING PRACTICE</div>
-  <h1>Luyện nói tiếng Đức cùng AI</h1>
   <p>
     Hãy tự tin giao tiếp bằng tiếng Đức.
     AI sẽ lắng nghe, phản hồi và giúp cậu cải thiện
@@ -814,6 +805,14 @@ let pendingTranscript = "";
 let stopRecordingPromise = null;
 let resolveRecordingStop = null;
 
+// Các biến riêng cho hiệu ứng phản ứng theo âm lượng micro.
+// Nếu trình duyệt không hỗ trợ Web Audio, ghi âm vẫn hoạt động bình thường.
+let voiceAudioContext = null;
+let voiceAnalyser = null;
+let voiceDataArray = null;
+let voiceAnimationFrame = null;
+let smoothedVoiceLevel = 0;
+
 
 // ========================================
 // 4. UI HELPERS
@@ -939,6 +938,79 @@ function getSupportedMimeType() {
   return "";
 }
 
+function startVoiceAnimation(audioStream) {
+  stopVoiceAnimation();
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass || !audioStream || !micButton) return;
+
+  try {
+    voiceAudioContext = new AudioContextClass();
+    voiceAnalyser = voiceAudioContext.createAnalyser();
+    voiceAnalyser.fftSize = 1024;
+    voiceAnalyser.smoothingTimeConstant = 0.55;
+
+    const microphoneSource = voiceAudioContext.createMediaStreamSource(audioStream);
+    microphoneSource.connect(voiceAnalyser);
+    voiceDataArray = new Float32Array(voiceAnalyser.fftSize);
+    smoothedVoiceLevel = 0;
+
+    const animate = () => {
+      if (!isRecording || !voiceAnalyser || !micButton) return;
+
+      voiceAnalyser.getFloatTimeDomainData(voiceDataArray);
+      let sum = 0;
+      for (let i = 0; i < voiceDataArray.length; i++) {
+        const sample = voiceDataArray[i];
+        sum += sample * sample;
+      }
+
+      const rms = Math.sqrt(sum / voiceDataArray.length);
+      // Tăng độ nhạy với giọng nói bình thường, nhưng bỏ qua nhiễu nền rất nhỏ.
+      const level = Math.max(0, Math.min(1, (rms - 0.008) * 13));
+      smoothedVoiceLevel = smoothedVoiceLevel * 0.62 + level * 0.38;
+      micButton.style.setProperty('--voice-level', smoothedVoiceLevel.toFixed(3));
+      voiceAnimationFrame = requestAnimationFrame(animate);
+    };
+
+    const resumeAndAnimate = () => {
+      if (!voiceAudioContext || !isRecording) return;
+      const begin = () => {
+        if (isRecording && voiceAnalyser) animate();
+      };
+      if (voiceAudioContext.state === 'suspended') {
+        voiceAudioContext.resume().then(begin).catch(() => {
+          // Hiệu ứng có thể không chạy trên một số trình duyệt; không ảnh hưởng ghi âm.
+        });
+      } else {
+        begin();
+      }
+    };
+    resumeAndAnimate();
+  } catch (error) {
+    console.warn('Voice animation unavailable; recording continues:', error);
+    stopVoiceAnimation();
+  }
+}
+
+function stopVoiceAnimation() {
+  if (voiceAnimationFrame !== null) {
+    cancelAnimationFrame(voiceAnimationFrame);
+    voiceAnimationFrame = null;
+  }
+
+  if (voiceAudioContext) {
+    const contextToClose = voiceAudioContext;
+    voiceAudioContext = null;
+    contextToClose.close().catch(() => {});
+  }
+
+  voiceAnalyser = null;
+  voiceDataArray = null;
+  smoothedVoiceLevel = 0;
+  if (micButton) micButton.style.setProperty('--voice-level', '0');
+}
+
 async function startRecording() {
   if (!sessionActive || isProcessing || isRecording) return;
 
@@ -962,13 +1034,20 @@ async function startRecording() {
 
     transcriptPanel.classList.remove("visible");
 
-    stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true
-      }
-    });
+    // Tái sử dụng luồng micro đã được cấp quyền trong trang hiện tại.
+    // Chỉ yêu cầu quyền lần đầu hoặc khi luồng cũ đã bị đóng/hết hiệu lực.
+    const existingStreamIsUsable = stream &&
+      stream.getAudioTracks().some(track => track.readyState === "live");
+
+    if (!existingStreamIsUsable) {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+    }
 
     const mimeType = getSupportedMimeType();
 
@@ -994,7 +1073,9 @@ async function startRecording() {
         type: actualType
       });
 
-      stopMicrophoneStream();
+      stopVoiceAnimation();
+      // Giữ luồng micro sau khi kết thúc một lượt ghi âm.
+      // Nhờ vậy trình duyệt không phải xin quyền lại mỗi lần bấm micro.
 
       clearInterval(recordingInterval);
       recordingInterval = null;
@@ -1033,7 +1114,8 @@ async function startRecording() {
     recordingStartedAt = Date.now();
 
     micButton.classList.add("recording");
-    micButton.textContent = "●";
+    micButton.textContent = "🎙";
+    startVoiceAnimation(stream);
 
     micCaption.textContent = "Đang thu âm ...";
 
@@ -1059,7 +1141,8 @@ async function startRecording() {
   } catch (error) {
     console.error("Microphone error:", error);
 
-    stopMicrophoneStream();
+    // Không đóng luồng micro đang hoạt động khi một lượt ghi âm gặp lỗi.
+    // Luồng sẽ được giải phóng khi kết thúc hội thoại hoặc rời trang.
 
     setStatus(
       "Không thể truy cập micro. Hãy kiểm tra quyền sử dụng micro của trình duyệt.",
