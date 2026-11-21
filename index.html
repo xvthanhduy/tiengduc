@@ -1888,10 +1888,58 @@ html.app-dark .focus-timer-custom input {
 @media (max-width: 600px) {
     .sticky-notes-window { left:12px; top:70px; width:calc(100vw - 24px); max-height:68vh; }
 }
-\n</style>
+\n
+
+/* =========================================
+   STARTUP LOADING SCREEN
+   Chỉ phủ lên index trong 5 giây đầu.
+========================================= */
+#startupLoading {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f8fa;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s ease, visibility .5s ease;
+}
+#startupLoading .loading-message {
+    margin: 0;
+    color: #9299a3;
+    font: 400 clamp(13px, 2vw, 15px)/1.5 "Segoe UI", Arial, sans-serif;
+    letter-spacing: .15px;
+    animation: startup-text-blink 2.1s ease-in-out infinite;
+}
+#startupLoading.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+@keyframes startup-text-blink {
+    0%, 100% { opacity: .58; }
+    50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #startupLoading,
+    #startupLoading .loading-message {
+        animation: none;
+        transition: none;
+    }
+}
+
+</style>
 </head>
 
 <body>
+
+<!-- Loading screen: hiển thị trước nội dung index trong 5 giây -->
+<div id="startupLoading" role="status" aria-live="polite">
+    <p class="loading-message">Đang khởi tạo môi trường...</p>
+</div>
+
 
 <!-- WEBSITE -->
 <iframe
@@ -3039,6 +3087,21 @@ aiInput.addEventListener("keydown", e => {
 aiRenderHistory();
 
 
+</script>
+
+
+<script>
+/* Tự động đóng màn hình loading sau khoảng 5 giây.
+   Không thay đổi hoặc can thiệp vào các chức năng hiện có của index. */
+(() => {
+    const loadingScreen = document.getElementById("startupLoading");
+    if (!loadingScreen) return;
+
+    window.setTimeout(() => {
+        loadingScreen.classList.add("is-hidden");
+        window.setTimeout(() => loadingScreen.remove(), 550);
+    }, 5000);
+})();
 </script>
 
 </body>
