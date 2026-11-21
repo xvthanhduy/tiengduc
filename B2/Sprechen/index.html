@@ -1,0 +1,674 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprechen AI | Deutsch Lernen</title>
+
+<style>
+:root {
+    --bg: #f7f8fa;
+    --white: #ffffff;
+    --text: #20242b;
+    --muted: #858d99;
+    --line: #e8ebef;
+    --blue: #477ee8;
+    --blue-light: #edf3ff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, Arial, sans-serif;
+    min-height: 100vh;
+}
+
+button, select {
+    font: inherit;
+}
+
+.container {
+    width: min(760px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 38px 0 60px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 55px;
+}
+
+.logo {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.back:hover {
+    color: var(--blue);
+}
+
+.heading {
+    margin-bottom: 32px;
+}
+
+.heading h1 {
+    font-size: clamp(30px, 5vw, 42px);
+    letter-spacing: -1.5px;
+    margin: 0 0 10px;
+    font-weight: 700;
+}
+
+.heading p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.panel {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 650;
+    margin-bottom: 13px;
+}
+
+.levels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.level-btn {
+    padding: 12px 5px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: white;
+    color: #555e69;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.level-btn:hover {
+    border-color: #a9c2f4;
+}
+
+.level-btn.active {
+    background: var(--blue-light);
+    color: var(--blue);
+    border-color: var(--blue);
+    font-weight: 700;
+}
+
+.field {
+    margin-top: 25px;
+}
+
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: white;
+    color: var(--text);
+    outline: none;
+}
+
+select:focus {
+    border-color: var(--blue);
+}
+
+.helper {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 9px;
+}
+
+.conversation {
+    text-align: center;
+    padding: 35px 20px 25px;
+}
+
+.mic-circle {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    color: var(--blue);
+    display: grid;
+    place-items: center;
+    margin: 0 auto 20px;
+    transition: .2s;
+}
+
+.mic-circle svg {
+    width: 34px;
+    height: 34px;
+}
+
+.mic-circle.active {
+    animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        box-shadow: 0 0 0 13px rgba(71,126,232,.08);
+    }
+}
+
+.conversation h2 {
+    font-size: 17px;
+    margin: 0 0 8px;
+}
+
+.conversation p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 420px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    background: white;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn.primary {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+}
+
+.btn:hover:not(:disabled) {
+    opacity: .88;
+}
+
+.btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.status {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+.transcript {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.transcript h3 {
+    font-size: 12px;
+    letter-spacing: .5px;
+    margin: 0 0 15px;
+}
+
+.message {
+    padding: 13px 15px;
+    border-radius: 11px;
+    background: #f6f7f9;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.message.ai {
+    background: var(--blue-light);
+}
+
+.message-label {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .7px;
+    margin-bottom: 5px;
+}
+
+.footer {
+    text-align: center;
+    color: #a0a6af;
+    font-size: 11px;
+    margin-top: 30px;
+}
+
+@media(max-width:520px) {
+    .container {
+        padding-top: 23px;
+    }
+
+    .topbar {
+        margin-bottom: 40px;
+    }
+
+    .panel {
+        padding: 19px;
+    }
+
+    .levels {
+        gap: 5px;
+    }
+
+    .level-btn {
+        padding: 11px 3px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="topbar">
+        <div class="logo">DEUTSCH LERNEN</div>
+        <a class="back" href="../../index.html">← Zurück</a>
+    </div>
+
+    <header class="heading">
+        <h1>Sprechen mit AI</h1>
+        <p>
+            Dein persönlicher Deutsch-Gesprächspartner.
+            Sprich Deutsch und verbessere deine Sprachkenntnisse.
+        </p>
+    </header>
+
+    <section class="panel">
+
+        <div class="section-title">Sprachniveau</div>
+
+        <div class="levels">
+            <button class="level-btn" data-level="A1">A1</button>
+            <button class="level-btn" data-level="A2">A2</button>
+            <button class="level-btn" data-level="B1">B1</button>
+            <button class="level-btn active" data-level="B2">B2</button>
+            <button class="level-btn" data-level="C1">C1</button>
+        </div>
+
+        <div class="field">
+            <div class="section-title">Gesprächsthema</div>
+
+            <select id="topic">
+                <option value="Freies Gespräch">Freies Gespräch</option>
+                <option value="Alltag und Freizeit">Alltag und Freizeit</option>
+                <option value="Arbeit und Beruf">Arbeit und Beruf</option>
+                <option value="Reisen und Urlaub">Reisen und Urlaub</option>
+                <option value="Gesundheit">Gesundheit</option>
+                <option value="Umwelt und Nachhaltigkeit">Umwelt und Nachhaltigkeit</option>
+                <option value="Technologie und KI">Technologie und KI</option>
+                <option value="Bildung und Lernen">Bildung und Lernen</option>
+                <option value="Goethe-Prüfung">Goethe-Prüfung</option>
+            </select>
+
+            <div class="helper">
+                Wähle ein Thema oder führe ein freies Gespräch.
+            </div>
+        </div>
+
+    </section>
+
+    <section class="panel">
+
+        <div class="conversation">
+
+            <div class="mic-circle" id="micCircle">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="2" width="6" height="13" rx="3"/>
+                    <path d="M5 10v2a7 7 0 0 0 14 0v-2"/>
+                    <path d="M12 19v3M8 22h8"/>
+                </svg>
+            </div>
+
+            <h2 id="mainStatus">Bereit zum Sprechen?</h2>
+
+            <p id="description">
+                Starte das Gespräch und sprich mit deinem
+                persönlichen AI-Partner auf Deutsch.
+            </p>
+
+            <div class="controls">
+                <button class="btn primary" id="startBtn">
+                    Gespräch starten
+                </button>
+
+                <button class="btn" id="endBtn" disabled>
+                    Beenden
+                </button>
+            </div>
+
+            <div class="status" id="connectionStatus">
+                Nicht verbunden
+            </div>
+
+        </div>
+
+        <div class="transcript">
+            <h3>GESPRÄCHSVERLAUF</h3>
+            <div id="messages">
+                <div class="helper">
+                    Deine Unterhaltung wird hier angezeigt.
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="footer">
+        DEUTSCH LERNEN · ARTIFICIAL INTELLIGENCE
+    </div>
+
+</div>
+
+<audio id="remoteAudio" autoplay></audio>
+
+<script>
+/*
+  KONFIGURATION:
+  Nach der Einrichtung des Backends hier die Worker-Adresse
+  eintragen. Beispiel: https://dein-worker.workers.dev
+*/
+const WORKER_URL = "DEINE_CLOUDFLARE_WORKER_URL";
+
+let selectedLevel = "B2";
+let peer = null;
+let dataChannel = null;
+let microphone = null;
+
+const startBtn = document.getElementById("startBtn");
+const endBtn = document.getElementById("endBtn");
+const mainStatus = document.getElementById("mainStatus");
+const description = document.getElementById("description");
+const connectionStatus = document.getElementById("connectionStatus");
+const micCircle = document.getElementById("micCircle");
+const messages = document.getElementById("messages");
+const remoteAudio = document.getElementById("remoteAudio");
+
+document.querySelectorAll(".level-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".level-btn")
+            .forEach(item => item.classList.remove("active"));
+
+        button.classList.add("active");
+        selectedLevel = button.dataset.level;
+    });
+});
+
+function addMessage(who, text) {
+    if (!text || !text.trim()) return;
+
+    const empty = messages.querySelector(".helper");
+    if (empty) empty.remove();
+
+    const box = document.createElement("div");
+    box.className = "message " + (who === "AI" ? "ai" : "user");
+
+    const label = document.createElement("span");
+    label.className = "message-label";
+    label.textContent = who === "AI" ? "AI PARTNER" : "DU";
+
+    const content = document.createElement("span");
+    content.textContent = text;
+
+    box.append(label, content);
+    messages.appendChild(box);
+    box.scrollIntoView({behavior: "smooth", block: "nearest"});
+}
+
+function setLive(isLive, text) {
+    micCircle.classList.toggle("active", isLive);
+    connectionStatus.textContent = text;
+}
+
+function handleEvent(event) {
+    switch(event.type) {
+        case "conversation.item.input_audio_transcription.completed":
+            addMessage("Du", event.transcript);
+            break;
+
+        case "response.output_audio_transcript.done":
+            addMessage("AI", event.transcript);
+            break;
+
+        case "input_audio_buffer.speech_started":
+            mainStatus.textContent = "Ich höre dir zu...";
+            description.textContent = "AI đang lắng nghe cậu.";
+            break;
+
+        case "response.created":
+            mainStatus.textContent = "AI spricht...";
+            description.textContent = "AI đang trả lời bằng tiếng Đức.";
+            break;
+
+        case "response.done":
+            mainStatus.textContent = "Du bist dran!";
+            description.textContent = "Cậu có thể tiếp tục nói.";
+            break;
+
+        case "error":
+            addMessage("AI", event.error?.message || "Ein Fehler ist aufgetreten.");
+            break;
+    }
+}
+
+async function startConversation() {
+    if (WORKER_URL === "DEINE_CLOUDFLARE_WORKER_URL") {
+        alert("Cần cấu hình Cloudflare Worker trước khi kết nối AI.");
+        return;
+    }
+
+    startBtn.disabled = true;
+    connectionStatus.textContent = "Verbindung wird hergestellt...";
+
+    try {
+        microphone = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true
+            }
+        });
+
+        const tokenResponse = await fetch(
+            WORKER_URL.replace(/\/$/, "") + "/token",
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    level: selectedLevel,
+                    topic: document.getElementById("topic").value
+                })
+            }
+        );
+
+        const tokenData = await tokenResponse.json();
+
+        if (!tokenResponse.ok) {
+            throw new Error(tokenData.error || "Không tạo được phiên AI.");
+        }
+
+        const ephemeralKey =
+            tokenData.value || tokenData.client_secret?.value;
+
+        if (!ephemeralKey) {
+            throw new Error("Không nhận được mã kết nối AI.");
+        }
+
+        peer = new RTCPeerConnection();
+
+        peer.ontrack = event => {
+            remoteAudio.srcObject = event.streams[0];
+            remoteAudio.play().catch(() => {});
+        };
+
+        microphone.getTracks().forEach(track => {
+            peer.addTrack(track, microphone);
+        });
+
+        dataChannel = peer.createDataChannel("oai-events");
+
+        dataChannel.onmessage = event => {
+            try {
+                handleEvent(JSON.parse(event.data));
+            } catch(error) {
+                console.error(error);
+            }
+        };
+
+        peer.onconnectionstatechange = () => {
+            if (!peer) return;
+
+            if (peer.connectionState === "connected") {
+                setLive(true, "Đã kết nối");
+                mainStatus.textContent = "Das Gespräch läuft!";
+                description.textContent =
+                    "Sprich einfach Deutsch. AI wird dir antworten.";
+                endBtn.disabled = false;
+            }
+
+            if (["failed", "disconnected"].includes(peer.connectionState)) {
+                setLive(false, "Verbindung unterbrochen");
+            }
+        };
+
+        const offer = await peer.createOffer();
+        await peer.setLocalDescription(offer);
+
+        await new Promise((resolve, reject) => {
+            if (peer.iceGatheringState === "complete") {
+                resolve();
+                return;
+            }
+
+            const timeout = setTimeout(
+                () => reject(new Error("ICE-Verbindung Timeout.")),
+                12000
+            );
+
+            peer.addEventListener("icegatheringstatechange", () => {
+                if (peer.iceGatheringState === "complete") {
+                    clearTimeout(timeout);
+                    resolve();
+                }
+            });
+        });
+
+        const answerResponse = await fetch(
+            "https://api.openai.com/v1/realtime/calls",
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + ephemeralKey,
+                    "Content-Type": "application/sdp"
+                },
+                body: peer.localDescription.sdp
+            }
+        );
+
+        if (!answerResponse.ok) {
+            throw new Error("Realtime-Verbindung fehlgeschlagen.");
+        }
+
+        const answerSDP = await answerResponse.text();
+
+        await peer.setRemoteDescription({
+            type: "answer",
+            sdp: answerSDP
+        });
+
+        endBtn.disabled = false;
+
+    } catch(error) {
+        console.error(error);
+        addMessage("AI", error.message);
+        await stopConversation();
+        mainStatus.textContent = "Verbindung fehlgeschlagen";
+        description.textContent = "Bitte versuche es erneut.";
+    }
+}
+
+async function stopConversation() {
+    if (dataChannel) {
+        try { dataChannel.close(); } catch(error) {}
+        dataChannel = null;
+    }
+
+    if (peer) {
+        try { peer.close(); } catch(error) {}
+        peer = null;
+    }
+
+    if (microphone) {
+        microphone.getTracks().forEach(track => track.stop());
+        microphone = null;
+    }
+
+    remoteAudio.srcObject = null;
+
+    startBtn.disabled = false;
+    endBtn.disabled = true;
+
+    setLive(false, "Nicht verbunden");
+    mainStatus.textContent = "Gespräch beendet";
+    description.textContent =
+        "Du kannst jederzeit ein neues Gespräch beginnen.";
+}
+
+startBtn.addEventListener("click", startConversation);
+endBtn.addEventListener("click", stopConversation);
+
+window.addEventListener("beforeunload", () => {
+    if (peer) peer.close();
+    if (microphone) {
+        microphone.getTracks().forEach(track => track.stop());
+    }
+});
+</script>
+
+</body>
+</html>
