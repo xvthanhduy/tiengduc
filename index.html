@@ -1808,6 +1808,7 @@ html.app-dark .focus-timer-custom input {
     overflow: visible;
 }
 .floating-dock .dock-notes { bottom: 238px !important; }
+.floating-dock .dock-vocabulary { bottom: 296px !important; }
 .dock-notes::before { content: "Sticky Notes"; }
 .floating-dock .dock-tool::before { min-width: 112px; }
 @media (max-width: 600px) {
@@ -2152,6 +2153,169 @@ html.app-dark .focus-timer-custom input {
   .member-entry button { padding:8px 10px; }
 }
 
+
+/* MY VOCABULARY — menu tool and independent study windows */
+.floating-dock .dock-vocabulary { bottom: 296px !important; }
+.dock-vocabulary::before { content: "Từ vựng của tôi"; min-width: 132px !important; }
+.my-vocab-window {
+  position:fixed; z-index:10036; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:min(760px,calc(100vw - 28px)); max-height:min(82vh,760px);
+  display:flex; flex-direction:column; overflow:hidden;
+  color:#263447; background:#fbfcfe; border:1px solid #d9e2ee;
+  border-radius:16px; box-shadow:0 22px 70px rgba(8,22,40,.28);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
+.my-vocab-window[hidden]{display:none !important}
+.my-vocab-head {
+  min-height:54px; display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:0 16px; background:#f1f5fa; border-bottom:1px solid #e0e7f0;
+}
+.my-vocab-title {display:flex;align-items:center;gap:10px;font-size:15px;font-weight:750}
+.my-vocab-mark {width:30px;height:30px;display:grid;place-items:center;border-radius:9px;color:#fff;background:#3478d4;font-size:16px}
+.my-vocab-head-actions {display:flex;align-items:center;gap:6px}
+.my-vocab-head-actions button {
+  width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:#53657b;
+  font-size:19px;cursor:pointer
+}
+.my-vocab-head-actions button:hover{background:#e2eaf4}
+.my-vocab-body {min-height:0;overflow:auto;padding:17px}
+.my-vocab-intro {margin:0 0 14px;color:#718096;font-size:12px;line-height:1.55}
+.my-vocab-launch-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.my-vocab-launch-card {
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:18px;
+  min-height:170px;text-align:left;border:1px solid #dce5f0;border-radius:13px;
+  background:#fff;color:#29384d;cursor:pointer;transition:.18s ease
+}
+.my-vocab-launch-card:hover{border-color:#8eb4e5;box-shadow:0 7px 20px rgba(39,94,160,.10);transform:translateY(-2px)}
+.my-vocab-launch-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#edf4ff;color:#3478d4;font-size:21px}
+.my-vocab-launch-card strong{font-size:15px}
+.my-vocab-launch-card span:last-child{font-size:12px;line-height:1.5;color:#718096}
+.my-vocab-form {display:grid;grid-template-columns:1fr auto;gap:9px;margin-bottom:12px}
+.my-vocab-form input,.my-vocab-question-form input {
+  width:100%;min-width:0;padding:11px 12px;border:1px solid #d8e1ec;border-radius:9px;
+  background:#fff;color:#263447;font:inherit;font-size:13px;outline:none
+}
+.my-vocab-form input:focus,.my-vocab-question-form input:focus{border-color:#76a6e5;box-shadow:0 0 0 3px rgba(67,130,210,.10)}
+.my-vocab-primary,.my-vocab-secondary {
+  border:1px solid #3478d4;border-radius:9px;padding:10px 14px;background:#3478d4;color:#fff;
+  font-size:12px;font-weight:700;cursor:pointer
+}
+.my-vocab-primary:disabled{opacity:.55;cursor:wait}
+.my-vocab-secondary{background:#fff;color:#3478d4}
+.my-vocab-status{min-height:18px;margin:6px 0 10px;color:#6b7c91;font-size:11px}
+.my-vocab-status.error{color:#b42318}
+.my-vocab-list {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.my-vocab-item {padding:12px;border:1px solid #e0e7f0;border-radius:10px;background:#fff;min-width:0}
+.my-vocab-item-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.my-vocab-word{font-size:15px;font-weight:750;overflow-wrap:anywhere}
+.my-vocab-pos{display:inline-block;margin-top:5px;padding:3px 7px;border-radius:99px;background:#edf4ff;color:#326eb9;font-size:10px;font-weight:700}
+.my-vocab-meaning{margin-top:7px;font-size:12px;color:#3478d4;font-weight:650}
+.my-vocab-example{margin-top:6px;font-size:11px;line-height:1.5;color:#64748b;font-style:italic}
+.my-vocab-delete{border:0;background:transparent;color:#9aa5b3;cursor:pointer;font-size:15px}
+.my-vocab-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px}
+.my-vocab-tab{padding:8px 12px;border:1px solid #d9e2ee;border-radius:8px;background:#fff;color:#53657b;font-size:11px;font-weight:700;cursor:pointer}
+.my-vocab-tab.active{border-color:#3478d4;background:#edf4ff;color:#2868b8}
+.my-vocab-quiz-card{padding:18px;border:1px solid #dce5f0;border-radius:13px;background:#fff}
+.my-vocab-quiz-kicker{font-size:10px;letter-spacing:.08em;color:#3478d4;font-weight:800}
+.my-vocab-quiz-word{margin:9px 0 14px;font-size:24px;font-weight:800;overflow-wrap:anywhere}
+.my-vocab-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.my-vocab-option{padding:13px;text-align:left;border:1px solid #dce5f0;border-radius:10px;background:#fff;color:#344256;font-size:13px;cursor:pointer}
+.my-vocab-option:hover{border-color:#8eb4e5;background:#f7faff}
+.my-vocab-option.correct{border-color:#31a36b;background:#effaf4;color:#18794e}
+.my-vocab-option.wrong{border-color:#d66a6a;background:#fff3f2;color:#a83232}
+.my-vocab-feedback{min-height:22px;margin-top:12px;color:#64748b;font-size:12px;line-height:1.5}
+.my-vocab-quiz-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+.my-vocab-question-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:14px}
+.my-vocab-answer{white-space:pre-wrap;margin-top:10px;padding:12px;border-radius:10px;background:#f2f6fb;color:#40536b;font-size:12px;line-height:1.6}
+.my-vocab-empty{padding:20px;text-align:center;color:#8391a4;font-size:12px;border:1px dashed #d7e0eb;border-radius:10px;background:#fff}
+@media(max-width:620px){
+ .my-vocab-window{width:calc(100vw - 16px);max-height:86vh}
+ .my-vocab-body{padding:12px}
+ .my-vocab-launch-grid,.my-vocab-list{grid-template-columns:1fr}
+ .my-vocab-options{grid-template-columns:1fr}
+ .my-vocab-head{padding:0 11px}
+ .my-vocab-form,.my-vocab-question-form{grid-template-columns:1fr}
+}
+
+
+/* Equal-size menu labels */
+.floating-dock .dock-tool::before,
+.floating-dock .ai-restore::before,
+.floating-dock .restore-button::before {
+  width:150px !important;
+  min-width:150px !important;
+  max-width:150px !important;
+  height:52px !important;
+  box-sizing:border-box !important;
+  padding:0 8px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+}
+
+
+.my-vocab-question-form textarea,
+#myVocabAskInput {
+  width:100%; min-width:0; resize:vertical; min-height:78px;
+  padding:11px 12px; border:1px solid #d8e1ec; border-radius:9px;
+  background:#fff; color:#263447; font:inherit; font-size:13px; line-height:1.55; outline:none;
+}
+#myVocabAskInput:focus{border-color:#76a6e5;box-shadow:0 0 0 3px rgba(67,130,210,.10)}
+.my-vocab-sentence-label{display:block;margin:12px 0 7px;font-size:12px;font-weight:750;color:#34465d}
+.my-vocab-sentence-label span{font-weight:500;color:#b45353}
+
+
+/* Vocabulary windows: slide in from the right and remain draggable */
+.my-vocab-window{will-change:translate,opacity}
+.my-vocab-window.vocab-slide-in{animation:vocabSlideFromRight .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vocabSlideFromRight{
+  from{translate:42px 0;opacity:0}
+  to{translate:0 0;opacity:1}
+}
+.my-vocab-head{cursor:grab;touch-action:none}
+.my-vocab-head:active{cursor:grabbing}
+.my-vocab-head button{touch-action:manipulation}
+
+
+.my-vocab-random-card{margin:10px 0 14px;padding:16px;border:1px solid #dce5f0;border-radius:12px;background:linear-gradient(135deg,#f5f8ff,#fff)}
+.my-vocab-random-word{margin:8px 0 4px;font-size:22px;font-weight:800;color:#263b59;overflow-wrap:anywhere}
+.my-vocab-random-meaning{min-height:18px;margin-bottom:12px;font-size:12px;color:#3478d4}
+#myVocabRandomButton{padding:7px 11px}
+
+
+/* DAILY VOCABULARY REVIEW — persistent white task card */
+@keyframes dailyVocabHeartbeat {
+  0%, 100% { transform: scale(1); }
+  8% { transform: scale(1.025); }
+  16% { transform: scale(1); }
+  25% { transform: scale(1.018); }
+  34% { transform: scale(1); }
+}
+.daily-vocab-task {
+  position: fixed; z-index: 8500; right: 22px; top: 78px;
+  width: min(310px, calc(100vw - 28px)); padding: 14px 15px;
+  border: 1px solid rgba(35,55,85,.13); border-radius: 16px;
+  background: rgba(255,255,255,.97); color: #263449;
+  box-shadow: 0 12px 34px rgba(20,35,55,.16); backdrop-filter: blur(14px);
+  font-family: inherit; animation: dailyVocabHeartbeat 3.2s ease-in-out infinite;
+  transform-origin: center;
+}
+.daily-vocab-task[hidden] { display:none !important; }
+.daily-vocab-task-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; }
+.daily-vocab-task-kicker { font-size:10px; letter-spacing:1.15px; font-weight:800; color:#607895; }
+.daily-vocab-task-status { font-size:10px; color:#607086; }
+.daily-vocab-task h3 { margin:0 0 5px; font-size:16px; color:#1e2c40; }
+.daily-vocab-task p { margin:0 0 11px; font-size:12px; line-height:1.5; color:#59697d; }
+.daily-vocab-progress { height:5px; background:rgba(35,55,85,.12); border-radius:10px; overflow:hidden; margin:8px 0 11px; }
+.daily-vocab-progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,#75a9f7,#67c9a5); border-radius:10px; transition:width .25s; }
+.daily-vocab-task-actions { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.daily-vocab-task-actions small { font-size:10px; color:#718096; }
+.daily-vocab-task button { border:0; border-radius:10px; padding:9px 12px; background:#dceaff; color:#19365d; font:700 11px inherit; cursor:pointer; }
+.daily-vocab-task button:hover { filter:brightness(1.04); }
+@media (max-width:600px) {
+  .daily-vocab-task { top:72px; right:10px; width:min(285px,calc(100vw - 20px)); padding:11px 12px; }
+  .daily-vocab-task h3 { font-size:14px; }
+}
 </style>
 </head>
 
@@ -2387,12 +2551,12 @@ html.app-dark .focus-timer-custom input {
     </button>
 
     <button
-        class="dock-tool dock-focus"
-        id="focusTimerToggle"
+        class="dock-tool dock-vocabulary"
+        id="myVocabularyToggle"
         type="button"
-        title="Focus Timer"
-        aria-label="Mở Focus Timer">
-        <span class="dock-tool-symbol" aria-hidden="true">◷</span>
+        title="Từ vựng của tôi"
+        aria-label="Mở Từ vựng của tôi">
+        <span class="dock-tool-symbol" aria-hidden="true">忍</span>
     </button>
 
     <button
@@ -2402,6 +2566,15 @@ html.app-dark .focus-timer-custom input {
         title="Sticky Notes"
         aria-label="Mở Sticky Notes">
         <span class="dock-tool-symbol" aria-hidden="true">▤</span>
+    </button>
+
+    <button
+        class="dock-tool dock-focus"
+        id="focusTimerToggle"
+        type="button"
+        title="Focus Timer"
+        aria-label="Mở Focus Timer">
+        <span class="dock-tool-symbol" aria-hidden="true">◷</span>
     </button>
 
     <button
@@ -2428,8 +2601,103 @@ html.app-dark .focus-timer-custom input {
     </div>
     <div class="sticky-notes-list" id="stickyNotesList"></div>
     <div class="sticky-notes-footer" id="stickyNotesFooter">Đang dùng chế độ khách · Ghi chú lưu trên thiết bị này</div>
+
 </section>
 
+<!-- MY VOCABULARY HUB -->
+<section class="my-vocab-window" id="myVocabHub" aria-label="Từ vựng của tôi" hidden>
+  <header class="my-vocab-head">
+    <div class="my-vocab-title"><span class="my-vocab-mark">忍</span><span>Từ vựng của tôi</span></div>
+    <div class="my-vocab-head-actions"><button type="button" data-vocab-close="myVocabHub" aria-label="Đóng">×</button></div>
+  </header>
+  <div class="my-vocab-body">
+    <p class="my-vocab-intro">Không gian lưu trữ và luyện tập những từ tiếng Đức cậu đang học. Chọn một chức năng để bắt đầu.</p>
+    <div class="my-vocab-launch-grid">
+      <button type="button" class="my-vocab-launch-card" id="myVocabOpenAdd">
+        <span class="my-vocab-launch-icon">＋</span><strong>Thêm từ vựng mới</strong>
+        <span>Nhập từ tiếng Đức. AI tự nhận diện loại từ, giống danh từ, nghĩa và ví dụ.</span>
+      </button>
+      <button type="button" class="my-vocab-launch-card" id="myVocabOpenReview">
+        <span class="my-vocab-launch-icon">✦</span><strong>Ôn tập & luyện đặt câu</strong>
+        <span>Quiz hai lựa chọn A/B và đặt câu hỏi với bất kỳ từ nào trong sổ từ vựng.</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- WINDOW 1: ADD VOCABULARY -->
+<section class="my-vocab-window" id="myVocabAddWindow" aria-label="Thêm từ vựng mới" hidden>
+  <header class="my-vocab-head">
+    <div class="my-vocab-title"><span class="my-vocab-mark">＋</span><span>Thêm từ vựng mới</span></div>
+    <div class="my-vocab-head-actions">
+      <button type="button" data-vocab-back="myVocabAddWindow" title="Quay lại">↶</button>
+      <button type="button" data-vocab-close="myVocabAddWindow" aria-label="Đóng">×</button>
+    </div>
+  </header>
+  <div class="my-vocab-body">
+    <p class="my-vocab-intro">Nhập một từ hoặc cụm từ tiếng Đức. AI sẽ tự phân loại và bổ sung thông tin để cậu dễ ghi nhớ.</p>
+    <form class="my-vocab-form" id="myVocabAddForm">
+      <input id="myVocabInput" type="text" maxlength="100" placeholder="Ví dụ: die Entscheidung" autocomplete="off" required>
+      <button class="my-vocab-primary" id="myVocabAddButton" type="submit">✦ Phân tích bằng AI</button>
+    </form>
+    <div class="my-vocab-status" id="myVocabAddStatus" aria-live="polite"></div>
+    <div class="my-vocab-list" id="myVocabList"></div>
+  </div>
+</section>
+
+<!-- WINDOW 2: REVIEW / QUIZ / ASK -->
+<section class="my-vocab-window" id="myVocabReviewWindow" aria-label="Ôn tập từ vựng" hidden>
+  <header class="my-vocab-head">
+    <div class="my-vocab-title"><span class="my-vocab-mark">✦</span><span>Ôn tập từ vựng</span></div>
+    <div class="my-vocab-head-actions">
+      <button type="button" data-vocab-back="myVocabReviewWindow" title="Quay lại">↶</button>
+      <button type="button" data-vocab-close="myVocabReviewWindow" aria-label="Đóng">×</button>
+    </div>
+  </header>
+  <div class="my-vocab-body">
+    <div class="my-vocab-tabs">
+      <button type="button" class="my-vocab-tab active" id="myVocabQuizTab">Quiz A/B</button>
+      <button type="button" class="my-vocab-tab" id="myVocabAskTab">Luyện đặt câu với từ mới</button>
+    </div>
+    <div id="myVocabQuizPane">
+      <p class="my-vocab-intro">Chọn đáp án đúng trong hai lựa chọn A và B. Câu hỏi được lấy từ sổ từ vựng của cậu.</p>
+      <div id="myVocabQuizArea"></div>
+    </div>
+    <div id="myVocabAskPane" hidden>
+      <p class="my-vocab-intro">Chọn một từ trong sổ và tự viết câu tiếng Đức có sử dụng từ đó. AI sẽ kiểm tra ngữ pháp, ý nghĩa và độ tự nhiên. Nếu câu chưa hợp lý, AI sẽ giải thích lỗi và đề xuất câu đúng hơn.</p>
+      <div class="my-vocab-random-card" aria-live="polite">
+        <div class="my-vocab-quiz-kicker">TỪ VỰNG NGẪU NHIÊN CỦA CẬU</div>
+        <div class="my-vocab-random-word" id="myVocabRandomWord">Nhấn “Lấy từ ngẫu nhiên” để bắt đầu</div>
+        <div class="my-vocab-random-meaning" id="myVocabRandomMeaning"></div>
+        <button type="button" class="my-vocab-secondary" id="myVocabRandomButton">↻ Lấy từ ngẫu nhiên</button>
+      </div>
+      <label for="myVocabAskInput" class="my-vocab-sentence-label">Câu tiếng Đức của cậu <span>· bắt buộc phải dùng từ được giao</span></label>
+      <textarea id="myVocabAskInput" rows="3" maxlength="700" placeholder="Ví dụ, nếu chọn „die Entscheidung“: Ich muss heute eine wichtige Entscheidung treffen." required></textarea>
+      <div class="my-vocab-question-form">
+        <input id="myVocabExtraQuestion" maxlength="300" placeholder="Câu hỏi thêm về cách dùng (không bắt buộc)">
+        <button type="button" class="my-vocab-primary" id="myVocabAskButton">Kiểm tra câu</button>
+      </div>
+      <div class="my-vocab-status" id="myVocabAskStatus" aria-live="polite"></div>
+      <div class="my-vocab-answer" id="myVocabAskAnswer" hidden></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- DAILY VOCABULARY REVIEW TASK -->
+<aside class="daily-vocab-task" id="dailyVocabTask" aria-live="polite" hidden>
+  <div class="daily-vocab-task-top">
+    <span class="daily-vocab-task-kicker">NHIỆM VỤ HÔM NAY</span>
+    <span class="daily-vocab-task-status" id="dailyVocabTaskStatus">Chưa hoàn thành</span>
+  </div>
+  <h3 id="dailyVocabTaskTitle">Đã đến giờ ôn từ vựng!</h3>
+  <p id="dailyVocabTaskDescription">Dành vài phút để ôn lại những từ tiếng Đức đã học nhé.</p>
+  <div class="daily-vocab-progress"><span id="dailyVocabProgressBar"></span></div>
+  <div class="daily-vocab-task-actions">
+    <small id="dailyVocabProgressText">0/5 từ đã ôn</small>
+    <button type="button" id="dailyVocabStartButton">Bắt đầu ôn →</button>
+  </div>
+</aside>
 <!-- FOCUS TIMER PANEL -->
 <section class="focus-timer-panel" id="focusTimerPanel" aria-label="Focus Timer" hidden>
     <div class="focus-timer-head" id="focusTimerDragHandle" title="Kéo để di chuyển Focus Timer">
@@ -3558,6 +3826,403 @@ aiInput.addEventListener("keydown", e => {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); aiForm.requestSubmit(); }
 });
 aiRenderHistory();
+
+
+/* =========================================
+   MY VOCABULARY — AI classification + A/B review
+   Guest data is saved locally in this browser.
+========================================= */
+(() => {
+  "use strict";
+  const WORKER_URL = "https://german-schreiben-ai.xv-thanhduy.workers.dev";
+  const STORAGE_KEY = "deutschLernen_my_vocabulary_v1";
+  const hub = document.getElementById("myVocabHub");
+  const addWindow = document.getElementById("myVocabAddWindow");
+  const reviewWindow = document.getElementById("myVocabReviewWindow");
+  const windows = { myVocabHub: hub, myVocabAddWindow: addWindow, myVocabReviewWindow: reviewWindow };
+  const $ = id => document.getElementById(id);
+  let words = loadWords();
+  let currentQuiz = null;
+  let quizAnswered = false;
+  const DAILY_REVIEW_KEY = "deutschLernen_daily_vocab_review_v1";
+  const DAILY_REVIEW_TARGET = 5;
+  const todayKey = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+  };
+  function loadDailyReview() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(DAILY_REVIEW_KEY) || "null");
+      if (saved && saved.date === todayKey()) {
+        return { date: saved.date, reviewedIds: Array.isArray(saved.reviewedIds) ? saved.reviewedIds : [], completed: !!saved.completed, reminderSeen: !!saved.reminderSeen };
+      }
+    } catch (_) {}
+    return { date: todayKey(), reviewedIds: [], completed: false, reminderSeen: false };
+  }
+  let dailyReview = loadDailyReview();
+  function saveDailyReview() {
+    try { localStorage.setItem(DAILY_REVIEW_KEY, JSON.stringify(dailyReview)); } catch (_) {}
+  }
+  function dailyTarget() { return Math.min(DAILY_REVIEW_TARGET, words.length); }
+  function updateDailyTask() {
+    const card = $("dailyVocabTask");
+    if (!card) return;
+    card.hidden = false;
+    const target = dailyTarget();
+    const done = Math.min(dailyReview.reviewedIds.length, target);
+    const complete = dailyReview.completed || (target > 0 && done >= target);
+    $("dailyVocabTaskStatus").textContent = complete ? "Đã hoàn thành ✓" : "Chưa hoàn thành";
+    $("dailyVocabTaskTitle").textContent = complete ? "Tuyệt vời! Cậu đã ôn xong hôm nay." : "Đã đến giờ ôn từ vựng!";
+    $("dailyVocabTaskDescription").textContent = words.length < 2
+      ? "Thêm ít nhất 2 từ vào sổ để bắt đầu Quiz A/B."
+      : complete ? "Nhiệm vụ hôm nay đã hoàn tất. Hẹn gặp lại cậu ngày mai!"
+      : "Ôn lại các từ đã học để chúng không bị lãng quên nhé.";
+    $("dailyVocabProgressText").textContent = `${done}/${target || DAILY_REVIEW_TARGET} từ đã ôn`;
+    $("dailyVocabProgressBar").style.width = `${target ? Math.min(100, done / target * 100) : 0}%`;
+    $("dailyVocabStartButton").textContent = complete ? "Ôn thêm →" : words.length < 2 ? "Thêm từ →" : "Bắt đầu ôn →";
+  }
+  function openDailyReview() {
+    if (words.length < 2) {
+      renderWordList();
+      showWindow(addWindow);
+      return;
+    }
+    renderQuiz();
+    updateWordOptions();
+    assignRandomPracticeWord();
+    switchReviewTab("quiz");
+    showWindow(reviewWindow);
+  }
+
+  function loadWords() {
+    try {
+      const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      return Array.isArray(value) ? value : [];
+    } catch (_) { return []; }
+  }
+  function saveWords() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(words)); }
+    catch (error) { console.warn("Không thể lưu sổ từ vựng:", error); }
+  }
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    })[ch]);
+  }
+  function showWindow(target) {
+    Object.values(windows).forEach(node => {
+      node.hidden = true;
+      node.classList.remove("vocab-slide-in");
+    });
+    target.hidden = false;
+    // Restart the entrance animation every time a vocabulary window opens.
+    void target.offsetWidth;
+    target.classList.add("vocab-slide-in");
+    closeFloatingDock();
+  }
+  function setStatus(node, message, isError = false) {
+    node.textContent = message;
+    node.classList.toggle("error", isError);
+  }
+  async function askAI(prompt) {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "chat",
+        level: "B2",
+        messages: [
+          { role: "system", content: "Bạn là trợ lý dạy tiếng Đức cho người Việt. Làm theo yêu cầu chính xác, trả lời bằng tiếng Việt, giữ ví dụ tiếng Đức chuẩn." },
+          { role: "user", content: prompt }
+        ]
+      })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.reply) throw new Error(data.error || data.details || "Không nhận được phản hồi từ AI.");
+    return data.reply;
+  }
+  function parseAIJson(reply) {
+    const cleaned = reply.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim();
+    const start = cleaned.indexOf("{"), end = cleaned.lastIndexOf("}");
+    if (start < 0 || end <= start) throw new Error("AI chưa trả về dữ liệu phân loại hợp lệ. Cậu thử lại nhé.");
+    return JSON.parse(cleaned.slice(start, end + 1));
+  }
+  function renderWordList() {
+    const list = $("myVocabList");
+    if (!words.length) {
+      list.innerHTML = '<div class="my-vocab-empty" style="grid-column:1/-1">Sổ từ vựng chưa có từ nào. Hãy thêm từ đầu tiên nhé!</div>';
+      return;
+    }
+    list.innerHTML = words.slice().reverse().map(item => `
+      <article class="my-vocab-item">
+        <div class="my-vocab-item-top">
+          <div><div class="my-vocab-word">${escapeHTML(item.word)}</div><span class="my-vocab-pos">${escapeHTML(item.article ? item.article + " · " : "")}${escapeHTML(item.partOfSpeech || "Chưa phân loại")}</span></div>
+          <button class="my-vocab-delete" type="button" data-delete-word="${escapeHTML(item.id)}" title="Xóa từ này">×</button>
+        </div>
+        <div class="my-vocab-meaning">${escapeHTML(item.meaning || "")}</div>
+        ${item.example ? `<div class="my-vocab-example">${escapeHTML(item.example)}</div>` : ""}
+        ${item.plural ? `<div class="my-vocab-example">Plural: ${escapeHTML(item.plural)}</div>` : ""}
+      </article>`).join("");
+    list.querySelectorAll("[data-delete-word]").forEach(button => {
+      button.addEventListener("click", () => {
+        words = words.filter(item => item.id !== button.dataset.deleteWord);
+        saveWords(); renderWordList(); renderQuiz();
+      });
+    });
+  }
+  async function addWord(event) {
+    event.preventDefault();
+    const input = $("myVocabInput"), button = $("myVocabAddButton"), status = $("myVocabAddStatus");
+    const word = input.value.trim();
+    if (!word) return;
+    if (words.some(item => item.word.toLocaleLowerCase() === word.toLocaleLowerCase())) {
+      setStatus(status, "Từ này đã có trong sổ từ vựng rồi."); return;
+    }
+    button.disabled = true; button.textContent = "Đang phân tích…";
+    setStatus(status, "AI đang nhận diện loại từ và bổ sung thông tin…");
+    try {
+      const reply = await askAI(`Phân tích từ/cụm từ tiếng Đức sau: "${word}".
+Trả về DUY NHẤT một đối tượng JSON, không markdown, theo cấu trúc:
+{"word":"từ chuẩn có mạo từ nếu là danh từ","partOfSpeech":"danh từ/động từ/tính từ/trạng từ/giới từ/liên từ/đại từ/cụm từ/khác","article":"der/die/das hoặc chuỗi rỗng","plural":"dạng số nhiều nếu là danh từ, nếu không để chuỗi rỗng","meaning":"nghĩa tiếng Việt ngắn gọn","example":"một câu ví dụ tiếng Đức tự nhiên","exampleMeaning":"nghĩa tiếng Việt của câu ví dụ","note":"ghi chú ngữ pháp hữu ích ngắn gọn nếu cần"}.
+Nếu là động từ, ghi dạng nguyên mẫu ở word và giải thích cách dùng trong note. Không tự bịa thông tin.`);
+      const data = parseAIJson(reply);
+      if (!data.word || !data.partOfSpeech || !data.meaning) throw new Error("Thiếu trường thông tin. Cậu thử lại nhé.");
+      const entry = {
+        id: (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)),
+        word: String(data.word).trim(), partOfSpeech: String(data.partOfSpeech),
+        article: String(data.article || ""), plural: String(data.plural || ""),
+        meaning: String(data.meaning), example: String(data.example || ""),
+        exampleMeaning: String(data.exampleMeaning || ""), note: String(data.note || ""),
+        createdAt: new Date().toISOString()
+      };
+      words.push(entry); saveWords(); renderWordList(); renderQuiz(); updateWordOptions(); updateDailyTask();
+      input.value = "";
+      setStatus(status, `Đã thêm “${entry.word}” vào sổ từ vựng.`);
+    } catch (error) {
+      setStatus(status, "Chưa thêm được từ: " + error.message, true);
+    } finally {
+      button.disabled = false; button.textContent = "✦ Phân tích bằng AI";
+    }
+  }
+  let assignedPracticeWord = null;
+  function updateWordOptions() {
+    // Kept as a no-op for compatibility with the existing initialization flow.
+  }
+  function assignRandomPracticeWord() {
+    const wordNode = $("myVocabRandomWord");
+    const meaningNode = $("myVocabRandomMeaning");
+    if (words.length === 0) {
+      assignedPracticeWord = null;
+      wordNode.textContent = "Sổ từ vựng của cậu đang trống";
+      meaningNode.textContent = "Hãy thêm từ mới trước khi luyện đặt câu.";
+      return;
+    }
+    const candidates = words.filter(item => !assignedPracticeWord || item.id !== assignedPracticeWord.id);
+    const pool = candidates.length ? candidates : words;
+    assignedPracticeWord = pool[Math.floor(Math.random() * pool.length)];
+    wordNode.textContent = assignedPracticeWord.word;
+    meaningNode.textContent = `${assignedPracticeWord.partOfSpeech || "Từ vựng"} · ${assignedPracticeWord.meaning || ""}`;
+    $("myVocabAskInput").value = "";
+    $("myVocabAskAnswer").hidden = true;
+    setStatus($("myVocabAskStatus"), "AI đã giao một từ ngẫu nhiên. Hãy tự đặt câu tiếng Đức với từ này.");
+  }
+  function formatQuizGermanWord(item) {
+    const word = String(item.word || "").trim();
+    const pos = String(item.partOfSpeech || "").toLocaleLowerCase("vi");
+    const isNoun = /danh từ|substantiv|nomen/.test(pos);
+    const isAdjective = /tính từ|adjektiv/.test(pos);
+    const isAdverb = /trạng từ|phó từ|adverb/.test(pos);
+    const isVerb = /động từ|verb/.test(pos);
+
+    if (isNoun) {
+      const article = String(item.article || "").trim();
+      if (article && !/^(der|die|das)\\s/i.test(word)) return `${article} ${word}`;
+      return word;
+    }
+    if (isAdjective) return `${word} (adj)`;
+    if (isAdverb) return `${word} (adv)`;
+    if (isVerb) return `${word} (verb)`;
+    return word;
+  }
+
+  function renderQuiz() {
+    const area = $("myVocabQuizArea");
+    if (words.length < 2) {
+      area.innerHTML = '<div class="my-vocab-empty">Cần ít nhất 2 từ trong sổ để tạo Quiz A/B. Cậu hãy thêm vài từ mới trước nhé.</div>';
+      currentQuiz = null; return;
+    }
+    const unreviewedToday = words.filter(item => !dailyReview.reviewedIds.includes(item.id));
+    const pool = unreviewedToday.length ? unreviewedToday : words.slice();
+    const correct = pool[Math.floor(Math.random() * pool.length)];
+    let wrong = pool.filter(item => item.id !== correct.id)[Math.floor(Math.random() * (pool.length - 1))];
+    const options = Math.random() < .5
+      ? [{label:"A", item:correct, ok:true},{label:"B", item:wrong, ok:false}]
+      : [{label:"A", item:wrong, ok:false},{label:"B", item:correct, ok:true}];
+    currentQuiz = { correct, options };
+    quizAnswered = false;
+    const showGerman = Math.random() < .5;
+    currentQuiz.showGerman = showGerman;
+    const prompt = showGerman ? `Nghĩa tiếng Việt của từ này là gì?` : `Từ tiếng Đức nào tương ứng với nghĩa “${escapeHTML(correct.meaning)}”?`;
+    area.innerHTML = `
+      <div class="my-vocab-quiz-card">
+        <div class="my-vocab-quiz-kicker">CÂU HỎI · ${showGerman ? "ĐỨC → VIỆT" : "VIỆT → ĐỨC"}</div>
+        <div class="my-vocab-quiz-word">${showGerman ? escapeHTML(correct.word) : escapeHTML(correct.meaning)}</div>
+        <div style="font-size:12px;color:#718096;margin-bottom:12px">${prompt}</div>
+        <div class="my-vocab-options">
+          ${options.map(option => `<button type="button" class="my-vocab-option" data-answer="${option.label}"><strong>${option.label}.</strong> ${escapeHTML(showGerman ? option.item.meaning : formatQuizGermanWord(option.item))}</button>`).join("")}
+        </div>
+        <div class="my-vocab-feedback" id="myVocabQuizFeedback" aria-live="polite"></div>
+        <div class="my-vocab-quiz-actions"><span style="font-size:11px;color:#8391a4">${words.length} từ trong sổ</span><button type="button" class="my-vocab-secondary" id="myVocabNextQuiz">Câu tiếp theo →</button></div>
+      </div>`;
+    area.querySelectorAll("[data-answer]").forEach(button => button.addEventListener("click", () => answerQuiz(button.dataset.answer)));
+    $("myVocabNextQuiz").addEventListener("click", () => {
+      if (dailyReview.completed) {
+        updateDailyTask();
+        renderQuiz();
+      } else {
+        renderQuiz();
+      }
+    });
+  }
+  function answerQuiz(label) {
+    if (!currentQuiz || quizAnswered) return;
+    quizAnswered = true;
+    const chosen = currentQuiz.options.find(item => item.label === label);
+    const feedback = $("myVocabQuizFeedback");
+    document.querySelectorAll("#myVocabQuizArea [data-answer]").forEach(button => {
+      const option = currentQuiz.options.find(item => item.label === button.dataset.answer);
+      if (option.ok) button.classList.add("correct");
+      else if (button.dataset.answer === label) button.classList.add("wrong");
+      button.disabled = true;
+    });
+    feedback.textContent = chosen.ok
+      ? "Chính xác! " + formatQuizGermanWord(currentQuiz.correct) + " — " + currentQuiz.correct.meaning
+      : "Chưa chính xác. Đáp án đúng là " + formatQuizGermanWord(currentQuiz.correct) + " — " + currentQuiz.correct.meaning;
+    if (!dailyReview.reviewedIds.includes(currentQuiz.correct.id)) {
+      dailyReview.reviewedIds.push(currentQuiz.correct.id);
+      if (dailyReview.reviewedIds.length >= dailyTarget() && dailyTarget() > 0) dailyReview.completed = true;
+      saveDailyReview();
+      updateDailyTask();
+    }
+    if (dailyReview.completed) {
+      const nextButton = $("myVocabNextQuiz");
+      if (nextButton) nextButton.textContent = "Hoàn thành nhiệm vụ ✓";
+    }
+  }
+  function switchReviewTab(tab) {
+    $("myVocabQuizPane").hidden = tab !== "quiz";
+    $("myVocabAskPane").hidden = tab !== "ask";
+    $("myVocabQuizTab").classList.toggle("active", tab === "quiz");
+    $("myVocabAskTab").classList.toggle("active", tab === "ask");
+  }
+  async function askAboutWord() {
+    const sentence = $("myVocabAskInput").value.trim();
+    const word = assignedPracticeWord ? assignedPracticeWord.word : "";
+    const extraQuestion = $("myVocabExtraQuestion").value.trim();
+    const status = $("myVocabAskStatus"), answer = $("myVocabAskAnswer"), button = $("myVocabAskButton");
+
+    if (!word) {
+      setStatus(status, "Cậu cần chọn một từ trong sổ từ vựng trước nhé.", true);
+      $("myVocabAskInput").focus(); return;
+    }
+    if (!sentence) {
+      setStatus(status, "Cậu phải tự đặt ít nhất một câu tiếng Đức có sử dụng từ đã chọn.", true);
+      $("myVocabAskInput").focus(); return;
+    }
+    const saved = assignedPracticeWord;
+    if (!saved || !words.some(item => item.id === saved.id)) {
+      setStatus(status, "Chưa có từ ngẫu nhiên được giao. Hãy nhấn “Lấy từ ngẫu nhiên” trước nhé.", true);
+      return;
+    }
+
+    button.disabled = true; button.textContent = "Đang kiểm tra…"; answer.hidden = true;
+    setStatus(status, "AI đang kiểm tra từ vựng, ngữ pháp và độ tự nhiên của câu…");
+    try {
+      const reply = await askAI(`Bạn là giáo viên tiếng Đức. Hãy chấm và phản hồi bài luyện đặt câu sau.
+TỪ BẮT BUỘC: "${saved.word}"
+Loại từ: ${saved.partOfSpeech}
+Nghĩa tiếng Việt: ${saved.meaning}
+Thông tin thêm: ${saved.note || "Không có"}
+CÂU NGƯỜI HỌC TỰ ĐẶT: "${sentence}"
+${extraQuestion ? `CÂU HỎI THÊM: "${extraQuestion}"` : ""}
+
+YÊU CẦU BẮT BUỘC:
+1. Kiểm tra câu có thực sự sử dụng từ mục tiêu "${saved.word}" hay một dạng biến đổi/ngữ pháp hợp lệ của từ đó không. Nếu không có từ này hoặc dạng biến đổi hợp lệ, đánh giá là CHƯA ĐẠT và nói rõ lý do.
+2. Kiểm tra ngữ pháp, trật tự từ, cách chia, cách kết hợp từ và ngữ cảnh. Phân biệt lỗi ngữ pháp với cách diễn đạt chỉ chưa tự nhiên.
+3. Nếu câu đúng và tự nhiên: xác nhận ĐẠT, giải thích ngắn gọn vì sao đúng.
+4. Nếu câu sai, thiếu từ mục tiêu hoặc không hợp lý: đánh giá CHƯA ĐẠT; chỉ rõ từng vấn đề và giải thích bằng tiếng Việt tại sao; sau đó bắt buộc đưa ra một câu tiếng Đức mới, đúng ngữ pháp, tự nhiên và có sử dụng chính xác từ mục tiêu (hoặc dạng biến đổi hợp lệ).
+5. Luôn đưa bản dịch tiếng Việt cho câu đề xuất. Không được chỉ khen chung chung hoặc tự sửa mà không giải thích.
+6. Nếu có câu hỏi thêm, trả lời ở mục riêng.
+Trình bày rõ theo các mục: KẾT QUẢ, PHÂN TÍCH, CÂU ĐỀ XUẤT (nếu cần), DỊCH NGHĨA, TRẢ LỜI CÂU HỎI THÊM (nếu có).`);
+      answer.textContent = reply;
+      answer.hidden = false;
+      setStatus(status, "Đã kiểm tra xong câu của cậu.");
+    } catch (error) {
+      setStatus(status, "Chưa kiểm tra được câu: " + error.message, true);
+    } finally {
+      button.disabled = false; button.textContent = "Kiểm tra câu";
+    }
+  }
+
+  $("myVocabularyToggle").addEventListener("click", () => showWindow(hub));
+  $("dailyVocabStartButton").addEventListener("click", openDailyReview);
+  $("myVocabOpenAdd").addEventListener("click", () => { renderWordList(); showWindow(addWindow); });
+  $("myVocabOpenReview").addEventListener("click", () => {
+    renderQuiz(); updateWordOptions(); assignRandomPracticeWord(); showWindow(reviewWindow);
+  });
+  $("myVocabAddForm").addEventListener("submit", addWord);
+  $("myVocabQuizTab").addEventListener("click", () => switchReviewTab("quiz"));
+  $("myVocabAskTab").addEventListener("click", () => {
+    switchReviewTab("ask");
+    if (!assignedPracticeWord || !words.some(item => item.id === assignedPracticeWord.id)) assignRandomPracticeWord();
+  });
+  $("myVocabAskButton").addEventListener("click", askAboutWord);
+  $("myVocabRandomButton").addEventListener("click", assignRandomPracticeWord);
+  document.querySelectorAll("[data-vocab-close]").forEach(button => {
+    button.addEventListener("click", () => { windows[button.dataset.vocabClose].hidden = true; });
+  });
+  document.querySelectorAll("[data-vocab-back]").forEach(button => {
+    button.addEventListener("click", () => showWindow(hub));
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") Object.values(windows).forEach(node => node.hidden = true);
+  });
+
+  /* Kéo tự do các cửa sổ Từ vựng bằng thanh tiêu đề. */
+  updateDailyTask();
+  window.addEventListener("load", updateDailyTask, { once: true });
+
+  Object.values(windows).forEach(panel => {
+    const handle = panel.querySelector(".my-vocab-head");
+    if (!handle) return;
+    let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+    handle.addEventListener("pointerdown", event => {
+      if (event.target.closest("button")) return;
+      const rect = panel.getBoundingClientRect();
+      dragging = true;
+      startX = event.clientX; startY = event.clientY;
+      startLeft = rect.left; startTop = rect.top;
+      panel.style.left = rect.left + "px";
+      panel.style.top = rect.top + "px";
+      panel.style.transform = "none";
+      handle.setPointerCapture(event.pointerId);
+    });
+    handle.addEventListener("pointermove", event => {
+      if (!dragging) return;
+      const rect = panel.getBoundingClientRect();
+      const left = Math.max(5, Math.min(window.innerWidth - rect.width - 5, startLeft + event.clientX - startX));
+      const top = Math.max(5, Math.min(window.innerHeight - rect.height - 5, startTop + event.clientY - startY));
+      panel.style.left = left + "px";
+      panel.style.top = top + "px";
+    });
+    const stop = () => dragging = false;
+    handle.addEventListener("pointerup", stop);
+    handle.addEventListener("pointercancel", stop);
+  });
+
+  renderWordList();
+  updateWordOptions();
+})();
 
 
 </script>
