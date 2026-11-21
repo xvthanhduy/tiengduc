@@ -62,6 +62,7 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 .correction-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start}
 .correction-content{min-width:0}
 .correction-content .result{margin:0;padding:12px 14px;line-height:1.7;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.correction-content .result strong{font-weight:700;color:#111}
 .score-panel h3{font-size:12px}
 
 .action-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:9px}
@@ -316,22 +317,38 @@ function escapeHTML(value){
 }
 
 function renderCorrectionText(value){
-  const headings = [
-    /^1\.\s*NHẬN XÉT TỔNG QUAN\s*$/i,
-    /^2\.\s*PHÂN TÍCH LỖI\s*$/i,
-    /^3\.\s*TỪ VỰNG VÀ DIỄN ĐẠT\s*$/i,
-    /^4\.\s*BỐ CỤC VÀ MẠCH LẠC\s*$/i,
-    /^5\.\s*BÀI VIẾT HOÀN CHỈNH ĐÃ CHỈNH SỬA\s*$/i,
-    /^6\.\s*ĐIỂM CẦN GHI NHỚ\s*$/i,
-    /^7\.\s*ĐIỂM THEO TỪNG TIÊU CHÍ(?:\s*[–-].*)?$/i
+  const headingPatterns = [
+    // Mục 1: hỗ trợ cả cách ghi đầy đủ và cách ghi rút gọn "Tổng quan".
+    /^(\s*1\.\s*(?:NHẬN XÉT\s+)?TỔNG QUAN)(.*)$/i,
+
+    // Mục 2.
+    /^(\s*2\.\s*PHÂN TÍCH LỖI)(.*)$/i,
+
+    // Mục 3: hỗ trợ cả "Từ vựng và diễn đạt" và "Từ vựng phù hợp B2".
+    /^(\s*3\.\s*TỪ VỰNG\s+(?:VÀ DIỄN ĐẠT|PHÙ HỢP\s+B2))(.*)$/i,
+
+    // Mục 4: hỗ trợ cả chữ "và" lẫn ký hiệu "&".
+    /^(\s*4\.\s*BỐ CỤC\s+(?:&|VÀ)\s*MẠCH LẠC)(.*)$/i,
+
+    // Mục 5.
+    /^(\s*5\.\s*BÀI VIẾT HOÀN CHỈNH ĐÃ CHỈNH SỬA)(.*)$/i,
+
+    // Mục 6.
+    /^(\s*6\.\s*ĐIỂM CẦN GHI NHỚ)(.*)$/i,
+
+    // Mục 7.
+    /^(\s*7\.\s*ĐIỂM THEO TỪNG TIÊU CHÍ)(.*)$/i
   ];
 
-  return String(value || "").split("\\n").map(line => {
-    const safeLine = escapeHTML(line);
-    return headings.some(pattern => pattern.test(line.trim()))
-      ? "<strong>" + safeLine + "</strong>"
-      : safeLine;
-  }).join("\\n");
+  return String(value || "").split(/\r?\n/).map(line => {
+    for (const pattern of headingPatterns) {
+      const match = line.match(pattern);
+      if (match) {
+        return "<strong>" + escapeHTML(match[1]) + "</strong>" + escapeHTML(match[2]);
+      }
+    }
+    return escapeHTML(line);
+  }).join("\n");
 }
 
 function cleanCorrectionText(value){
