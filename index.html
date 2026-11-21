@@ -2052,10 +2052,155 @@ html.app-dark .focus-timer-custom input {
     }
 }
 
+
+/* =========================================
+   MEMBER SYSTEM — Phase 1 (Supabase Auth UI)
+========================================= */
+.member-entry {
+  position: fixed; top: 16px; right: 18px; z-index: 12030;
+  display: flex; align-items: center; gap: 8px;
+  font: 13px "Segoe UI", Arial, sans-serif;
+}
+.member-entry button {
+  border: 1px solid rgba(255,255,255,.72); border-radius: 10px;
+  padding: 9px 13px; color: #20364d;
+  background: rgba(255,255,255,.94); box-shadow: 0 4px 16px rgba(0,0,0,.13);
+  cursor: pointer; font: 600 12px "Segoe UI", Arial, sans-serif;
+  backdrop-filter: blur(12px);
+}
+.member-entry button:hover { background:#eaf2fb; }
+.member-entry .member-status {
+  max-width: 170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  padding: 8px 11px; border-radius: 9px; color:#f5f8fc;
+  background:rgba(15,27,43,.66); border:1px solid rgba(255,255,255,.2);
+  text-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.member-entry .member-user-button { display:none; }
+.member-entry.signed-in .member-user-button { display:inline-flex; align-items:center; gap:7px; }
+.member-entry.signed-in .member-login-button { display:none; }
+.member-modal[hidden] { display:none !important; }
+.member-modal {
+  position:fixed; inset:0; z-index:12050; display:grid; place-items:center;
+  padding:18px; background:rgba(8,16,27,.48); backdrop-filter:blur(8px);
+  font-family:"Segoe UI",Arial,sans-serif;
+}
+.member-card {
+  width:min(420px,100%); max-height:min(760px,calc(100dvh - 36px)); overflow:auto;
+  color:#202936; background:#fff; border:1px solid #e2e8f0; border-radius:18px;
+  box-shadow:0 24px 80px rgba(0,0,0,.28);
+}
+.member-card-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:17px 19px; border-bottom:1px solid #edf0f4;
+}
+.member-card-head strong { font-size:16px; }
+.member-close {
+  width:32px; height:32px; border:0; border-radius:9px;
+  background:#f1f3f6; color:#46505d; font-size:20px; cursor:pointer;
+}
+.member-card-body { padding:19px; }
+.member-tabs { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:4px; border-radius:11px; background:#f1f4f8; }
+.member-tabs button {
+  border:0; border-radius:8px; padding:9px; color:#667085;
+  background:transparent; cursor:pointer; font:600 13px "Segoe UI",Arial,sans-serif;
+}
+.member-tabs button.active { color:#1f3d5b; background:#fff; box-shadow:0 1px 4px rgba(20,35,55,.1); }
+.member-field { display:block; margin-top:14px; }
+.member-field span { display:block; margin-bottom:6px; font-size:12px; font-weight:600; color:#475467; }
+.member-field input {
+  width:100%; height:43px; padding:0 12px; border:1px solid #d8dee8;
+  border-radius:9px; outline:none; color:#202936; background:#fff;
+  font:14px "Segoe UI",Arial,sans-serif;
+}
+.member-field input:focus { border-color:#6098d4; box-shadow:0 0 0 3px rgba(68,137,208,.13); }
+.member-primary {
+  width:100%; min-height:44px; margin-top:17px; border:0; border-radius:10px;
+  color:#fff; background:linear-gradient(135deg,#347fca,#245b9c);
+  cursor:pointer; font:650 13px "Segoe UI",Arial,sans-serif;
+}
+.member-primary:disabled { opacity:.55; cursor:wait; }
+.member-secondary {
+  width:100%; margin-top:9px; padding:9px; border:0; background:transparent;
+  color:#315f91; cursor:pointer; font:600 12px "Segoe UI",Arial,sans-serif;
+}
+.member-message {
+  display:none; margin-top:13px; padding:10px 11px; border-radius:9px;
+  color:#31516e; background:#edf5fd; font-size:12px; line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.member-message.show { display:block; }
+.member-message.error { color:#9d3030; background:#fff0f0; }
+.member-message.success { color:#21633d; background:#ecf8f0; }
+.member-note { margin-top:13px; color:#7a8492; font-size:11px; line-height:1.5; }
+.member-account-info { padding:13px; border-radius:10px; background:#f5f7fa; font-size:13px; overflow-wrap:anywhere; }
+.member-account-actions { display:flex; gap:8px; margin-top:14px; }
+.member-account-actions button { flex:1; min-height:40px; border:1px solid #d8dee8; border-radius:9px; background:#fff; color:#344054; cursor:pointer; }
+@media(max-width:600px) {
+  .member-entry { top:10px; right:10px; gap:5px; }
+  .member-entry .member-status { display:none; }
+  .member-entry button { padding:8px 10px; }
+}
+
 </style>
 </head>
 
 <body>
+
+
+<!-- MEMBER ENTRY: guest mode remains available without sign-in -->
+<div class="member-entry" id="memberEntry">
+  <span class="member-status" id="memberStatus">Đang dùng chế độ khách</span>
+  <button type="button" class="member-login-button" id="memberOpenButton">Đăng nhập / Đăng ký</button>
+  <button type="button" class="member-user-button" id="memberUserButton">♙ <span id="memberUserLabel">Tài khoản</span> ▾</button>
+</div>
+
+<section class="member-modal" id="memberModal" hidden aria-modal="true" role="dialog" aria-labelledby="memberModalTitle">
+  <div class="member-card">
+    <header class="member-card-head">
+      <strong id="memberModalTitle">Tài khoản thành viên</strong>
+      <button type="button" class="member-close" id="memberCloseButton" aria-label="Đóng">×</button>
+    </header>
+    <div class="member-card-body">
+      <div id="memberAuthView">
+        <div class="member-tabs" id="memberTabs">
+          <button type="button" class="active" data-member-tab="login">Đăng nhập</button>
+          <button type="button" data-member-tab="signup">Đăng ký</button>
+        </div>
+        <form id="memberAuthForm">
+          <label class="member-field">
+            <span>Email</span>
+            <input id="memberEmail" type="email" autocomplete="email" required maxlength="254" placeholder="email@example.com">
+          </label>
+          <label class="member-field">
+            <span>Mật khẩu</span>
+            <input id="memberPassword" type="password" autocomplete="current-password" required minlength="8" maxlength="72" placeholder="Ít nhất 8 ký tự">
+          </label>
+          <label class="member-field" id="memberConfirmField" hidden>
+            <span>Nhập lại mật khẩu</span>
+            <input id="memberConfirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="72" placeholder="Nhập lại mật khẩu">
+          </label>
+          <button class="member-primary" id="memberSubmitButton" type="submit">Đăng nhập</button>
+        </form>
+        <button type="button" class="member-secondary" id="memberResendButton" hidden>Gửi lại email xác thực</button>
+        <div class="member-message" id="memberMessage" role="status" aria-live="polite"></div>
+        <p class="member-note">Khách vẫn có thể sử dụng các chức năng học tập. Đăng ký thành viên giúp chuẩn bị tài khoản để đồng bộ dữ liệu cá nhân ở giai đoạn tiếp theo.</p>
+      </div>
+      <div id="memberAccountView" hidden>
+        <div class="member-account-info">
+          <strong>Đã đăng nhập</strong>
+          <div id="memberAccountEmail" style="margin-top:5px"></div>
+          <div style="margin-top:8px;color:#667085;font-size:11px">Tài khoản đã xác thực email.</div>
+        </div>
+        <div class="member-account-actions">
+          <button type="button" id="memberSignOutButton">Đăng xuất</button>
+          <button type="button" id="memberAccountCloseButton">Đóng</button>
+        </div>
+        <div class="member-message" id="memberAccountMessage" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <!-- WEBSITE -->
 <iframe
@@ -3204,6 +3349,239 @@ aiInput.addEventListener("keydown", e => {
 aiRenderHistory();
 
 
+</script>
+
+
+<!-- Supabase Auth client (Phase 1). Uses the public publishable/anon key only. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  "use strict";
+
+  // Supabase project configuration. The publishable key is intended for browser use.
+  // NEVER put a service_role/secret key in this file.
+  const SUPABASE_URL = "https://gzfomoeyeqaeaubwmbmd.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AzL6ANRZT1oj-tJAN81hIQ_2ZXanCIc";
+
+  const entry = document.getElementById("memberEntry");
+  const modal = document.getElementById("memberModal");
+  const openButton = document.getElementById("memberOpenButton");
+  const userButton = document.getElementById("memberUserButton");
+  const closeButton = document.getElementById("memberCloseButton");
+  const accountCloseButton = document.getElementById("memberAccountCloseButton");
+  const authView = document.getElementById("memberAuthView");
+  const accountView = document.getElementById("memberAccountView");
+  const tabs = document.getElementById("memberTabs");
+  const form = document.getElementById("memberAuthForm");
+  const emailInput = document.getElementById("memberEmail");
+  const passwordInput = document.getElementById("memberPassword");
+  const confirmField = document.getElementById("memberConfirmField");
+  const confirmInput = document.getElementById("memberConfirmPassword");
+  const submitButton = document.getElementById("memberSubmitButton");
+  const resendButton = document.getElementById("memberResendButton");
+  const message = document.getElementById("memberMessage");
+  const accountMessage = document.getElementById("memberAccountMessage");
+  const status = document.getElementById("memberStatus");
+  const userLabel = document.getElementById("memberUserLabel");
+  const accountEmail = document.getElementById("memberAccountEmail");
+  const signOutButton = document.getElementById("memberSignOutButton");
+
+  let supabaseClient = null;
+  let activeTab = "login";
+  let pendingVerificationEmail = "";
+
+  function showMessage(text, type = "") {
+    message.textContent = text;
+    message.className = "member-message show" + (type ? " " + type : "");
+  }
+  function clearMessage() {
+    message.textContent = "";
+    message.className = "member-message";
+    resendButton.hidden = true;
+  }
+  function showAccountMessage(text, type = "") {
+    accountMessage.textContent = text;
+    accountMessage.className = "member-message show" + (type ? " " + type : "");
+  }
+  function setTab(tab) {
+    activeTab = tab;
+    clearMessage();
+    tabs.querySelectorAll("button").forEach(button => {
+      button.classList.toggle("active", button.dataset.memberTab === tab);
+    });
+    confirmField.hidden = tab !== "signup";
+    confirmInput.required = tab === "signup";
+    passwordInput.autocomplete = tab === "signup" ? "new-password" : "current-password";
+    submitButton.textContent = tab === "signup" ? "Tạo tài khoản" : "Đăng nhập";
+    document.getElementById("memberModalTitle").textContent =
+      tab === "signup" ? "Đăng ký thành viên" : "Đăng nhập";
+  }
+  function openModal() {
+    modal.hidden = false;
+    if (supabaseClient) {
+      authView.hidden = false;
+      accountView.hidden = true;
+    }
+    clearMessage();
+  }
+  function closeModal() { modal.hidden = true; }
+
+  function updateMemberUI(user) {
+    if (user && user.email_confirmed_at) {
+      entry.classList.add("signed-in");
+      status.textContent = "Thành viên";
+      userLabel.textContent = user.email || "Tài khoản";
+      accountEmail.textContent = user.email || "";
+      authView.hidden = true;
+      accountView.hidden = false;
+    } else {
+      entry.classList.remove("signed-in");
+      status.textContent = "Đang dùng chế độ khách";
+      authView.hidden = false;
+      accountView.hidden = true;
+    }
+  }
+
+  openButton.addEventListener("click", () => {
+    setTab("login");
+    openModal();
+    if (!supabaseClient) {
+      showMessage("Giao diện thành viên đã sẵn sàng nhưng Supabase chưa được kết nối. Hãy kiểm tra cấu hình Project URL và Publishable Key.", "error");
+    }
+  });
+  userButton.addEventListener("click", () => {
+    openModal();
+    authView.hidden = true;
+    accountView.hidden = false;
+    accountMessage.className = "member-message";
+  });
+  closeButton.addEventListener("click", closeModal);
+  accountCloseButton.addEventListener("click", closeModal);
+  modal.addEventListener("click", event => { if (event.target === modal) closeModal(); });
+  document.addEventListener("keydown", event => { if (event.key === "Escape" && !modal.hidden) closeModal(); });
+  tabs.addEventListener("click", event => {
+    const button = event.target.closest("[data-member-tab]");
+    if (button) setTab(button.dataset.memberTab);
+  });
+
+  if (!window.supabase || !window.supabase.createClient ||
+      SUPABASE_URL.startsWith("PASTE_") || SUPABASE_PUBLISHABLE_KEY.startsWith("PASTE_")) {
+    status.textContent = "Chế độ khách · Chưa kết nối tài khoản";
+    openButton.title = "Cần cấu hình Supabase để bật tài khoản";
+    form.querySelectorAll("input, button").forEach(control => { control.disabled = true; });
+    tabs.querySelectorAll("button").forEach(control => { control.disabled = true; });
+    return;
+  }
+
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    clearMessage();
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
+    submitButton.disabled = true;
+    try {
+      if (activeTab === "signup") {
+        if (password !== confirmInput.value) throw new Error("Hai mật khẩu chưa trùng khớp.");
+        if (password.length < 8) throw new Error("Mật khẩu cần có ít nhất 8 ký tự.");
+        const { data, error } = await supabaseClient.auth.signUp({
+          email, password,
+          options: {
+            emailRedirectTo: window.location.href.split("#")[0].split("?")[0]
+          }
+        });
+        if (error) throw error;
+        pendingVerificationEmail = email;
+        if (data.session && !(data.user && data.user.email_confirmed_at)) {
+          await supabaseClient.auth.signOut();
+          showMessage("Supabase hiện chưa bắt buộc xác thực email. Hãy bật Email Confirmations trong Authentication settings rồi thử đăng ký lại.", "error");
+        } else if (data.user && data.user.email_confirmed_at) {
+          showMessage("Tài khoản đã được tạo và email đã xác thực. Cậu có thể đăng nhập.", "success");
+          setTab("login");
+        } else {
+          showMessage("Tài khoản đã được tạo. Hãy mở hộp thư của " + email + " và nhấn liên kết xác thực trước khi đăng nhập. Nếu chưa thấy thư, hãy kiểm tra Spam.", "success");
+          resendButton.hidden = false;
+        }
+      } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          const msg = String(error.message || "");
+          if (/email not confirmed/i.test(msg)) {
+            pendingVerificationEmail = email;
+            resendButton.hidden = false;
+            throw new Error("Email này chưa được xác thực. Hãy mở thư xác thực hoặc gửi lại email bên dưới.");
+          }
+          throw error;
+        }
+        if (!data.user || !data.user.email_confirmed_at) {
+          await supabaseClient.auth.signOut();
+          pendingVerificationEmail = email;
+          resendButton.hidden = false;
+          throw new Error("Cậu cần xác thực email trước khi sử dụng tài khoản.");
+        }
+        updateMemberUI(data.user);
+        closeModal();
+      }
+    } catch (error) {
+      showMessage(error.message || "Có lỗi xảy ra. Vui lòng thử lại.", "error");
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
+  resendButton.addEventListener("click", async () => {
+    const email = pendingVerificationEmail || emailInput.value.trim().toLowerCase();
+    if (!email) return showMessage("Hãy nhập email trước.", "error");
+    resendButton.disabled = true;
+    try {
+      const { error } = await supabaseClient.auth.resend({ type: "signup", email });
+      if (error) throw error;
+      showMessage("Đã gửi yêu cầu gửi lại email xác thực. Hãy kiểm tra hộp thư và Spam.", "success");
+    } catch (error) {
+      showMessage(error.message || "Không gửi lại được email xác thực.", "error");
+    } finally {
+      resendButton.disabled = false;
+    }
+  });
+
+  signOutButton.addEventListener("click", async () => {
+    signOutButton.disabled = true;
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) throw error;
+      updateMemberUI(null);
+      setTab("login");
+      showMessage("Cậu đã đăng xuất. Website vẫn có thể sử dụng ở chế độ khách.", "success");
+      authView.hidden = false;
+      accountView.hidden = true;
+    } catch (error) {
+      showAccountMessage(error.message || "Không đăng xuất được.", "error");
+    } finally {
+      signOutButton.disabled = false;
+    }
+  });
+
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    const user = session && session.user;
+    if (user && !user.email_confirmed_at) {
+      supabaseClient.auth.signOut();
+      updateMemberUI(null);
+      return;
+    }
+    updateMemberUI(user || null);
+  });
+
+  supabaseClient.auth.getSession().then(({ data, error }) => {
+    if (error) console.warn("Không thể khôi phục phiên thành viên:", error.message);
+    const user = data && data.session && data.session.user;
+    updateMemberUI(user && user.email_confirmed_at ? user : null);
+  });
+
+  setTab("login");
+})();
 </script>
 
 </body>
