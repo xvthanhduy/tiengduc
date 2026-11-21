@@ -2416,7 +2416,7 @@ html.app-dark .focus-timer-custom input {
         </div>
     </div>
     <div class="sticky-notes-list" id="stickyNotesList"></div>
-    <div class="sticky-notes-footer">Ghi chú được tự động lưu trên thiết bị này</div>
+    <div class="sticky-notes-footer" id="stickyNotesFooter">Đang dùng chế độ khách · Ghi chú lưu trên thiết bị này</div>
 </section>
 
 <!-- FOCUS TIMER PANEL -->
@@ -3090,21 +3090,147 @@ focusTimerCustomBreakMinutes.addEventListener("input", () => focusTimerCustomBre
   handle.addEventListener("pointercancel", stopDragging);
 })();
 
-/* Sticky Notes: nhiều ghi chú, tự lưu localStorage, kéo thả cửa sổ. */
+/* Sticky Notes: Guest dùng localStorage; Member dùng Supabase Cloud. */
 const stickyNotesWindow = document.getElementById("stickyNotesWindow");
 const stickyNotesList = document.getElementById("stickyNotesList");
 const stickyNotesToggle = document.getElementById("stickyNotesToggle");
+const stickyNotesFooter = document.getElementById("stickyNotesFooter");
 const STICKY_NOTES_KEY = "deutschLernen_sticky_notes_v1";
 const stickyNotePalette = ["#fff3a6", "#ffd9df", "#d8f2dc", "#dcecff", "#eadfff"];
 let stickyNotes = [];
-try {
-  const storedNotes = JSON.parse(localStorage.getItem(STICKY_NOTES_KEY) || "[]");
-  if (Array.isArray(storedNotes)) stickyNotes = storedNotes;
-} catch (e) { stickyNotes = []; }
+let stickyNotesUserId = null;
+let stickyNotesCloudReady = false;
+let stickyNotesSaveTimer = null;
+let stickyNotesSwitchToken = 0;
+
+function readGuestStickyNotes() {
+  try {
+    const storedNotes = JSON.parse(localStorage.getItem(STICKY_NOTES_KEY) || "[]");
+    return Array.isArray(storedNotes) ? storedNotes : [];
+  } catch (e) { return []; }
+}
+stickyNotes = readGuestStickyNotes();
 
 function saveStickyNotes() {
-  try { localStorage.setItem(STICKY_NOTES_KEY, JSON.stringify(stickyNotes)); }
-  catch (e) { console.warn("Không thể lưu Sticky Notes:", e); }
+  if (!stickyNotesUserId) {
+    try { localStorage.setItem(STICKY_NOTES_KEY, JSON.stringify(stickyNotes)); }
+    catch (e) { console.warn("Không thể lưu Sticky Notes:", e); }
+    return;
+  }
+  if (!stickyNotesCloudReady) return;
+  clearTimeout(stickyNotesSaveTimer);
+  stickyNotesSaveTimer = setTimeout(saveStickyNotesToCloud, 450);
+}
+
+function makeStickyNoteUuid() {
+  if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, character => {
+    const random = Math.random() * 16 | 0;
+    return (character === "x" ? random : (random & 0x3 | 0x8)).toString(16);
+  });
+}
+
+async function saveStickyNotesToCloud() {
+  const client = window.__tdaiSupabaseClient;
+  const userId = stickyNotesUserId;
+  if (!client || !userId || !stickyNotesCloudReady) return;
+  const snapshot = stickyNotes.map(note => ({
+    id: note.id,
+    user_id: userId,
+    content_html: note.html || "",
+    content_text: note.text || "",
+    color: note.color || stickyNotePalette[0]
+  }));
+  try {
+    // Reconcile deletions first, then upsert current notes. RLS limits both to this user.
+    const { data: existing, error: listError } = await client.from("notes")
+      .select("id").eq("user_id", userId);
+    if (listError) throw listError;
+    const keepIds = new Set(snapshot.map(note => note.id));
+    const deletedIds = (existing || []).map(row => row.id).filter(id => !keepIds.has(id));
+    if (deletedIds.length) {
+      const { error: deleteError } = await client.from("notes").delete()
+        .eq("user_id", userId).in("id", deletedIds);
+      if (deleteError) throw deleteError;
+    }
+    if (snapshot.length) {
+      const { error } = await client.from("notes").upsert(snapshot, { onConflict: "id" });
+      if (error) throw error;
+    }
+    stickyNotesFooter.textContent = "Thành viên · Đã lưu trên Cloud";
+  } catch (error) {
+    console.error("Không thể đồng bộ Sticky Notes lên Cloud:", error);
+    stickyNotesFooter.textContent = "Chưa đồng bộ được · Kiểm tra kết nối rồi thử lại";
+  }
+}
+
+async function activateStickyNotesForUser(user) {
+  const token = ++stickyNotesSwitchToken;
+  clearTimeout(stickyNotesSaveTimer);
+  stickyNotesUserId = user && user.id ? user.id : null;
+  stickyNotesCloudReady = false;
+  if (!stickyNotesUserId) {
+    stickyNotes = readGuestStickyNotes();
+    stickyNotesFooter.textContent = "Chế độ khách · Ghi chú lưu trên thiết bị này";
+    renderStickyNotes();
+    return;
+  }
+
+  stickyNotesFooter.textContent = "Đang tải ghi chú thành viên từ Cloud…";
+  try {
+    const client = window.__tdaiSupabaseClient;
+    if (!client) throw new Error("Supabase chưa sẵn sàng.");
+    const { data, error } = await client.from("notes")
+      .select("id, content_html, content_text, color, created_at")
+      .eq("user_id", stickyNotesUserId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    if (token !== stickyNotesSwitchToken) return;
+
+    const cloudNotes = (data || []).map(row => ({
+      id: row.id,
+      html: row.content_html || "",
+      text: row.content_text || "",
+      color: row.color || stickyNotePalette[0]
+    }));
+    const guestNotes = readGuestStickyNotes();
+
+    if (cloudNotes.length === 0 && guestNotes.length > 0) {
+      const shouldMigrate = window.confirm(
+        "Tớ tìm thấy " + guestNotes.length + " ghi chú đang lưu trên thiết bị này. Cậu có muốn chuyển chúng lên tài khoản thành viên để đồng bộ giữa các thiết bị không?"
+      );
+      if (shouldMigrate) {
+        const migrated = guestNotes.map(note => ({
+          id: makeStickyNoteUuid(),
+          html: note.html || "",
+          text: note.text || "",
+          color: note.color || stickyNotePalette[0]
+        }));
+        const rows = migrated.map(note => ({
+          id: note.id, user_id: stickyNotesUserId,
+          content_html: note.html, content_text: note.text, color: note.color
+        }));
+        const { error: migrationError } = await client.from("notes").insert(rows);
+        if (migrationError) throw migrationError;
+        cloudNotes.push(...migrated);
+        // Keep the Guest copy until the user explicitly resets local Guest data.
+      }
+    }
+    if (token !== stickyNotesSwitchToken) return;
+    stickyNotes = cloudNotes;
+    stickyNotesCloudReady = true;
+    stickyNotesFooter.textContent = "Thành viên · Đã kết nối lưu trữ Cloud";
+    renderStickyNotes();
+  } catch (error) {
+    if (token !== stickyNotesSwitchToken) return;
+    stickyNotesCloudReady = false;
+    stickyNotesUserId = null; // Fall back to Guest storage so edits are never silently discarded.
+    stickyNotes = readGuestStickyNotes();
+    stickyNotesFooter.textContent = "Cloud chưa tải được · Đang dùng ghi chú trên thiết bị";
+    renderStickyNotes();
+    console.error("Không thể tải Sticky Notes từ Cloud:", error);
+    window.alert("Không tải được Notes từ Cloud. Ghi chú Guest trên thiết bị vẫn được giữ nguyên. Chi tiết: " + (error.message || error));
+  }
 }
 function renderStickyNotes() {
   stickyNotesList.innerHTML = "";
@@ -3198,7 +3324,7 @@ function escapeNoteText(value) {
 }
 function addStickyNote() {
   stickyNotes.unshift({
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+    id: stickyNotesUserId ? makeStickyNoteUuid() : (Date.now().toString(36) + Math.random().toString(36).slice(2, 7)),
     text: "",
     html: "",
     color: stickyNotePalette[stickyNotes.length % stickyNotePalette.length]
@@ -3221,6 +3347,9 @@ stickyNotesToggle.addEventListener("click", () => {
 document.getElementById("stickyNotesAdd").addEventListener("click", addStickyNote);
 document.getElementById("stickyNotesClose").addEventListener("click", () => stickyNotesWindow.hidden = true);
 renderStickyNotes();
+window.addEventListener("tdai-member-state", event => {
+  activateStickyNotesForUser(event.detail && event.detail.user ? event.detail.user : null);
+});
 
 /* Kéo cửa sổ Sticky Notes bằng thanh tiêu đề. */
 (function stickyNotesEnableDrag() {
@@ -3427,6 +3556,9 @@ aiRenderHistory();
   function closeModal() { modal.hidden = true; }
 
   function updateMemberUI(user) {
+    window.dispatchEvent(new CustomEvent("tdai-member-state", {
+      detail: { user: (user && user.email_confirmed_at) ? user : null }
+    }));
     if (user && user.email_confirmed_at) {
       entry.classList.add("signed-in");
       status.textContent = "Thành viên";
@@ -3476,6 +3608,8 @@ aiRenderHistory();
   supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
+  // Shared only with this page's Notes module; still uses the public publishable key.
+  window.__tdaiSupabaseClient = supabaseClient;
 
   form.addEventListener("submit", async event => {
     event.preventDefault();
