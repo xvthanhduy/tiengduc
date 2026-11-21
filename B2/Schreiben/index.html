@@ -42,12 +42,12 @@ button:disabled{opacity:.55;cursor:wait}
 .section-head strong{font-size:12px;color:#244d73}
 .section-head small{font-size:10px;color:#555}
 .section-body{padding:10px}
-.task-display{min-height:90px;max-height:220px;overflow:auto;white-space:pre-wrap;line-height:1.6;font-size:15px;background:#fff;border:1px solid #c3c3c3;padding:12px;color:#222;user-select:text}
+.task-display{min-height:90px;max-height:220px;overflow:auto;white-space:pre-wrap;line-height:1.7;font-size:18px;background:#fff;border:1px solid #c3c3c3;padding:12px;color:#222;user-select:text}
 .placeholder{color:#888;font-style:italic}
-textarea{width:100%;resize:vertical;border:1px solid #999;border-radius:0;background:#fff;padding:11px;line-height:1.6;font-size:13px;color:#222;outline:none}
+textarea{width:100%;resize:vertical;border:1px solid #999;border-radius:0;background:#fff;padding:11px;line-height:1.7;font-size:17px;color:#222;outline:none}
 textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 #answer{min-height:180px}
-.result{min-height:180px;max-height:620px;overflow:auto;padding:11px;background:#fff;border:1px solid #c3c3c3;font-size:12px;line-height:1.52;white-space:pre-wrap;overflow-wrap:anywhere}
+.result{min-height:180px;max-height:620px;overflow:auto;padding:11px;background:#fff;border:1px solid #c3c3c3;font-size:16px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
 .result.empty{color:#888;font-style:italic}
 
 .score-panel{border:1px solid #9aa9b8;background:#f7f9fb;margin:0;padding:9px;overflow-x:auto;min-width:0}
@@ -61,7 +61,7 @@ textarea:focus,select:focus{border-color:#3978af;box-shadow:0 0 0 1px #9bbbd9}
 .score-note{font-size:10px;line-height:1.4;color:#555;margin-top:7px}
 .correction-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start}
 .correction-content{min-width:0}
-.correction-content .result{margin:0;padding:12px 14px;line-height:1.65;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.correction-content .result{margin:0;padding:12px 14px;line-height:1.7;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
 .score-panel h3{font-size:12px}
 
 .action-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:9px}
@@ -315,6 +315,25 @@ function escapeHTML(value){
   }[ch]));
 }
 
+function renderCorrectionText(value){
+  const headings = [
+    /^1\.\s*NHẬN XÉT TỔNG QUAN\s*$/i,
+    /^2\.\s*PHÂN TÍCH LỖI\s*$/i,
+    /^3\.\s*TỪ VỰNG VÀ DIỄN ĐẠT\s*$/i,
+    /^4\.\s*BỐ CỤC VÀ MẠCH LẠC\s*$/i,
+    /^5\.\s*BÀI VIẾT HOÀN CHỈNH ĐÃ CHỈNH SỬA\s*$/i,
+    /^6\.\s*ĐIỂM CẦN GHI NHỚ\s*$/i,
+    /^7\.\s*ĐIỂM THEO TỪNG TIÊU CHÍ(?:\s*[–-].*)?$/i
+  ];
+
+  return String(value || "").split("\\n").map(line => {
+    const safeLine = escapeHTML(line);
+    return headings.some(pattern => pattern.test(line.trim()))
+      ? "<strong>" + safeLine + "</strong>"
+      : safeLine;
+  }).join("\\n");
+}
+
 function cleanCorrectionText(value){
   return String(value || "")
     // Xóa mục 7 do AI tự viết; giao diện sẽ tạo mục 7 duy nhất từ evaluation.
@@ -369,7 +388,7 @@ async function gradeAnswer(){
     } else {
       currentCorrection += "\n\n7. ĐIỂM THEO TỪNG TIÊU CHÍ\nAI chưa trả về dữ liệu điểm. Cậu hãy thử chấm lại bài.";
     }
-    $("correction").textContent = currentCorrection;
+    $("correction").innerHTML = renderCorrectionText(currentCorrection);
     $("correction").classList.remove("empty");
     setStatus("gradeStatus","Đã chấm và sửa bài thành công! Kết quả hiển thị ở khung 3.","success");
     $("appStatus").textContent = "Hoàn tất chấm và sửa bài";
@@ -464,7 +483,7 @@ try{
     }
     $("answer").value=saved.answer||"";
     if(currentCorrection){
-      $("correction").textContent=currentCorrection;
+      $("correction").innerHTML=renderCorrectionText(currentCorrection);
       $("correction").classList.remove("empty");
     }
     $("answer").dispatchEvent(new Event("input"));
