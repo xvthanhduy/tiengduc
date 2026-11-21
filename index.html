@@ -2283,7 +2283,7 @@ html.app-dark .focus-timer-custom input {
 #myVocabRandomButton{padding:7px 11px}
 
 
-/* DAILY VOCABULARY REVIEW — persistent white task card */
+/* DAILY VOCABULARY REVIEW — compact white task card */
 @keyframes dailyVocabHeartbeat {
   0%, 100% { transform: scale(1); }
   8% { transform: scale(1.025); }
@@ -2293,28 +2293,28 @@ html.app-dark .focus-timer-custom input {
 }
 .daily-vocab-task {
   position: fixed; z-index: 8500; right: 22px; top: 78px;
-  width: min(310px, calc(100vw - 28px)); padding: 14px 15px;
-  border: 1px solid rgba(35,55,85,.13); border-radius: 16px;
+  width: min(245px, calc(100vw - 28px)); padding: 9px 10px;
+  border: 1px solid rgba(35,55,85,.13); border-radius: 12px;
   background: rgba(255,255,255,.97); color: #263449;
-  box-shadow: 0 12px 34px rgba(20,35,55,.16); backdrop-filter: blur(14px);
+  box-shadow: 0 8px 22px rgba(20,35,55,.14); backdrop-filter: blur(12px);
   font-family: inherit; animation: dailyVocabHeartbeat 3.2s ease-in-out infinite;
   transform-origin: center;
 }
 .daily-vocab-task[hidden] { display:none !important; }
-.daily-vocab-task-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; }
-.daily-vocab-task-kicker { font-size:10px; letter-spacing:1.15px; font-weight:800; color:#607895; }
-.daily-vocab-task-status { font-size:10px; color:#607086; }
-.daily-vocab-task h3 { margin:0 0 5px; font-size:16px; color:#1e2c40; }
-.daily-vocab-task p { margin:0 0 11px; font-size:12px; line-height:1.5; color:#59697d; }
-.daily-vocab-progress { height:5px; background:rgba(35,55,85,.12); border-radius:10px; overflow:hidden; margin:8px 0 11px; }
+.daily-vocab-task-top { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:4px; }
+.daily-vocab-task-kicker { font-size:8px; letter-spacing:.8px; font-weight:800; color:#607895; }
+.daily-vocab-task-status { font-size:8px; color:#607086; }
+.daily-vocab-task h3 { margin:0 0 3px; font-size:12px; line-height:1.25; color:#1e2c40; }
+.daily-vocab-task p { margin:0 0 6px; font-size:9px; line-height:1.35; color:#59697d; }
+.daily-vocab-progress { height:4px; background:rgba(35,55,85,.12); border-radius:10px; overflow:hidden; margin:5px 0 7px; }
 .daily-vocab-progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,#75a9f7,#67c9a5); border-radius:10px; transition:width .25s; }
-.daily-vocab-task-actions { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.daily-vocab-task-actions small { font-size:10px; color:#718096; }
-.daily-vocab-task button { border:0; border-radius:10px; padding:9px 12px; background:#dceaff; color:#19365d; font:700 11px inherit; cursor:pointer; }
+.daily-vocab-task-actions { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.daily-vocab-task-actions small { font-size:8px; color:#718096; }
+.daily-vocab-task button { border:0; border-radius:8px; padding:6px 8px; background:#dceaff; color:#19365d; font:700 9px inherit; cursor:pointer; }
 .daily-vocab-task button:hover { filter:brightness(1.04); }
 @media (max-width:600px) {
-  .daily-vocab-task { top:72px; right:10px; width:min(285px,calc(100vw - 20px)); padding:11px 12px; }
-  .daily-vocab-task h3 { font-size:14px; }
+  .daily-vocab-task { top:72px; right:10px; width:min(220px,calc(100vw - 20px)); padding:8px 9px; }
+  .daily-vocab-task h3 { font-size:11px; }
 }
 </style>
 </head>
@@ -3845,7 +3845,38 @@ aiRenderHistory();
   let currentQuiz = null;
   let quizAnswered = false;
   const DAILY_REVIEW_KEY = "deutschLernen_daily_vocab_review_v1";
+  const QUIZ_STATS_KEY = "deutschLernen_vocab_quiz_stats_v1";
   const DAILY_REVIEW_TARGET = 5;
+  let quizStats = {};
+  try {
+    const savedStats = JSON.parse(localStorage.getItem(QUIZ_STATS_KEY) || "{}");
+    if (savedStats && typeof savedStats === "object" && !Array.isArray(savedStats)) quizStats = savedStats;
+  } catch (_) { quizStats = {}; }
+  function saveQuizStats() {
+    try { localStorage.setItem(QUIZ_STATS_KEY, JSON.stringify(quizStats)); } catch (_) {}
+  }
+  function getWordAccuracy(item) {
+    const stat = quizStats[item.id];
+    return stat && stat.attempts > 0 ? stat.correct / stat.attempts : null;
+  }
+  function pickWeightedWord(pool) {
+    if (!pool.length) return null;
+    const weighted = pool.map(item => {
+      const accuracy = getWordAccuracy(item);
+      // Unseen / below 30%: frequent practice. 30–69%: normal.
+      // 70% or higher: reduce frequency without removing the word.
+      const weight = accuracy === null || accuracy < 0.30 ? 2.5
+        : accuracy >= 0.70 ? 0.35 : 1;
+      return { item, weight };
+    });
+    const total = weighted.reduce((sum, entry) => sum + entry.weight, 0);
+    let ticket = Math.random() * total;
+    for (const entry of weighted) {
+      ticket -= entry.weight;
+      if (ticket <= 0) return entry.item;
+    }
+    return weighted[weighted.length - 1].item;
+  }
   const todayKey = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
@@ -4051,10 +4082,10 @@ Nếu là động từ, ghi dạng nguyên mẫu ở word và giải thích các
       area.innerHTML = '<div class="my-vocab-empty">Cần ít nhất 2 từ trong sổ để tạo Quiz A/B. Cậu hãy thêm vài từ mới trước nhé.</div>';
       currentQuiz = null; return;
     }
-    const unreviewedToday = words.filter(item => !dailyReview.reviewedIds.includes(item.id));
-    const pool = unreviewedToday.length ? unreviewedToday : words.slice();
-    const correct = pool[Math.floor(Math.random() * pool.length)];
-    let wrong = pool.filter(item => item.id !== correct.id)[Math.floor(Math.random() * (pool.length - 1))];
+    // Chọn từ mục tiêu theo tỷ lệ trả lời đúng đã lưu; từ yếu xuất hiện thường xuyên hơn.
+    const correct = pickWeightedWord(words);
+    const wrongPool = words.filter(item => item.id !== correct.id);
+    const wrong = wrongPool[Math.floor(Math.random() * wrongPool.length)];
     const options = Math.random() < .5
       ? [{label:"A", item:correct, ok:true},{label:"B", item:wrong, ok:false}]
       : [{label:"A", item:wrong, ok:false},{label:"B", item:correct, ok:true}];
@@ -4098,6 +4129,14 @@ Nếu là động từ, ghi dạng nguyên mẫu ở word và giải thích các
     feedback.textContent = chosen.ok
       ? "Chính xác! " + formatQuizGermanWord(currentQuiz.correct) + " — " + currentQuiz.correct.meaning
       : "Chưa chính xác. Đáp án đúng là " + formatQuizGermanWord(currentQuiz.correct) + " — " + currentQuiz.correct.meaning;
+
+    // Lưu kết quả cho chính từ được kiểm tra để điều chỉnh tần suất xuất hiện.
+    const stat = quizStats[currentQuiz.correct.id] || { attempts: 0, correct: 0 };
+    stat.attempts += 1;
+    if (chosen.ok) stat.correct += 1;
+    quizStats[currentQuiz.correct.id] = stat;
+    saveQuizStats();
+
     if (!dailyReview.reviewedIds.includes(currentQuiz.correct.id)) {
       dailyReview.reviewedIds.push(currentQuiz.correct.id);
       if (dailyReview.reviewedIds.length >= dailyTarget() && dailyTarget() > 0) dailyReview.completed = true;
