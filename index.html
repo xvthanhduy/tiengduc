@@ -1257,6 +1257,291 @@ body {
     line-height: 1;
 }
 
+
+/* =========================================
+   FLOATING DOCK + MINIMAL STACKED CARDS
+   Chỉ thay đổi cụm nút mở AI / Music.
+========================================= */
+.floating-dock {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    z-index: 10020;
+    width: 60px;
+    height: 60px;
+    isolation: isolate;
+}
+.floating-dock-main {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.78);
+    border-radius: 17px;
+    color: #244d73;
+    background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(235,241,248,.96));
+    box-shadow: 0 8px 24px rgba(12,25,42,.20), inset 0 1px 0 #fff;
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+}
+.floating-dock-main:hover,
+.floating-dock.open .floating-dock-main {
+    transform: translateY(-2px);
+    box-shadow: 0 11px 28px rgba(12,25,42,.25), 0 0 0 4px rgba(130,169,207,.12);
+}
+/* Stacked Cards – ba lớp thẻ xếp chồng, mở bung từ dưới lên mỗi 3 giây */
+.dock-stack-icon {
+    position: relative;
+    display: block;
+    width: 36px;
+    height: 36px;
+    perspective: 120px;
+}
+.dock-stack-icon i {
+    position: absolute;
+    left: 6px;
+    bottom: 5px;
+    display: block;
+    width: 25px;
+    height: 25px;
+    border: 1px solid rgba(45, 58, 72, .13);
+    border-radius: 7px;
+    transform: translateY(4px) rotate(45deg) scaleY(.72);
+    transform-origin: center;
+    box-shadow: 0 2px 3px rgba(30, 45, 60, .16);
+    animation: dock-card-unstack 3s ease-in-out infinite;
+}
+.dock-stack-icon i:nth-child(1) {
+    z-index: 3;
+    background: linear-gradient(145deg, #ffffff, #e9e9e9);
+    animation-delay: 0s;
+}
+.dock-stack-icon i:nth-child(2) {
+    z-index: 2;
+    background: linear-gradient(145deg, #eeeeef, #cfd2d6);
+    animation-delay: .045s;
+}
+.dock-stack-icon i:nth-child(3) {
+    z-index: 1;
+    background: linear-gradient(145deg, #70bafa, #2876cf);
+    border-color: rgba(35, 100, 175, .25);
+    animation-delay: .09s;
+}
+@keyframes dock-card-unstack {
+    0%, 9% {
+        transform: translateY(4px) rotate(45deg) scaleY(.72);
+        box-shadow: 0 2px 3px rgba(30,45,60,.16);
+    }
+    20%, 48% {
+        transform: translateY(var(--card-rise, 0px)) rotate(45deg) scaleY(.72);
+        box-shadow: 0 5px 7px rgba(30,45,60,.18);
+    }
+    67%, 100% {
+        transform: translateY(4px) rotate(45deg) scaleY(.72);
+        box-shadow: 0 2px 3px rgba(30,45,60,.16);
+    }
+}
+.dock-stack-icon i:nth-child(1) { --card-rise: -11px; }
+.dock-stack-icon i:nth-child(2) { --card-rise: 0px; }
+.dock-stack-icon i:nth-child(3) { --card-rise: 11px; }
+
+/* Nút tổng mang dáng nút công cụ kiểu Windows cổ điển, tối giản */
+.floating-dock-main {
+    border: 1px solid #8b8b8b;
+    border-radius: 8px;
+    color: #343a40;
+    background: linear-gradient(180deg, #ffffff 0%, #eeeeee 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 2px 6px rgba(0,0,0,.18);
+}
+.floating-dock-main:hover,
+.floating-dock.open .floating-dock-main {
+    background: linear-gradient(180deg, #ffffff 0%, #e5e5e5 100%);
+    border-color: #6f6f6f;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 3px 8px rgba(0,0,0,.22);
+    transform: translateY(-1px);
+}
+
+.floating-dock .ai-restore,
+.floating-dock .restore-button {
+    position: absolute !important;
+    left: auto !important;
+    right: 2px !important;
+    bottom: 0 !important;
+    z-index: 2;
+    display: flex !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(12px) scale(.88);
+    transition:
+        transform .28s cubic-bezier(.2,.8,.2,1),
+        opacity .2s ease,
+        visibility .2s ease,
+        box-shadow .2s ease;
+}
+.floating-dock .restore-button.show {
+    bottom: 64px !important;
+}
+.floating-dock .ai-restore.show {
+    bottom: 122px !important;
+}
+.floating-dock:hover .ai-restore.show,
+.floating-dock:hover .restore-button.show,
+.floating-dock.open .ai-restore.show,
+.floating-dock.open .restore-button.show,
+.floating-dock:focus-within .ai-restore.show,
+.floating-dock:focus-within .restore-button.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+.floating-dock .ai-restore.show {
+    animation: none !important;
+}
+.floating-dock .ai-restore.show::after {
+    animation: none !important;
+}
+.floating-dock .ai-restore.show:hover,
+.floating-dock .restore-button.show:hover {
+    transform: translateY(-3px) scale(1.04) !important;
+}
+@media (max-width: 600px) {
+    .floating-dock {
+        right: 12px;
+        bottom: 12px;
+    }
+    .floating-dock-main {
+        width: 54px;
+        height: 54px;
+    }
+    .floating-dock .ai-restore,
+    .floating-dock .restore-button {
+        right: 1px !important;
+    }
+}
+/* Respect system preference for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+    .floating-dock *,
+    .floating-dock *::before,
+    .floating-dock *::after {
+        transition-duration: .01ms !important;
+        animation: none !important;
+    }
+}
+
+
+/* =========================================
+   STACKED CARDS — TRANSPARENT, LARGER, DARKER + MOTION GLOW
+   Chỉ tinh chỉnh icon menu tổng; giữ nguyên cấu trúc/chức năng.
+========================================= */
+.floating-dock-main,
+.floating-dock-main:hover,
+.floating-dock.open .floating-dock-main {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+.floating-dock-main {
+    width: 60px;
+    height: 60px;
+}
+
+.dock-stack-icon {
+    width: 44px;
+    height: 44px;
+    transform: scale(1.08);
+    transform-origin: center;
+    filter: drop-shadow(0 4px 5px rgba(5, 24, 48, .28));
+    animation: dock-icon-motion-glow 3s ease-in-out infinite;
+}
+
+.dock-stack-icon i {
+    left: 7px;
+    bottom: 6px;
+    width: 29px;
+    height: 29px;
+    border-width: 1.5px;
+    border-radius: 8px;
+}
+
+.dock-stack-icon i:nth-child(1) {
+    background: linear-gradient(145deg, #f7f9fc 0%, #cbd4df 100%);
+    border-color: rgba(31, 49, 70, .48);
+}
+.dock-stack-icon i:nth-child(2) {
+    background: linear-gradient(145deg, #aebdce 0%, #687d95 100%);
+    border-color: rgba(24, 43, 65, .62);
+}
+.dock-stack-icon i:nth-child(3) {
+    background: linear-gradient(145deg, #258fe8 0%, #07539f 100%);
+    border-color: rgba(8, 53, 103, .78);
+}
+
+@keyframes dock-card-unstack {
+    0%, 9% {
+        transform: translateY(4px) rotate(45deg) scaleY(.72);
+        box-shadow: 0 2px 4px rgba(13, 31, 52, .28);
+        filter: brightness(1);
+    }
+    20%, 48% {
+        transform: translateY(var(--card-rise, 0px)) rotate(45deg) scaleY(.72);
+        box-shadow:
+            0 5px 8px rgba(8, 29, 55, .28),
+            0 0 9px 2px rgba(67, 166, 255, .48),
+            0 0 18px 4px rgba(35, 132, 235, .28);
+        filter: brightness(1.16);
+    }
+    67%, 100% {
+        transform: translateY(4px) rotate(45deg) scaleY(.72);
+        box-shadow: 0 2px 4px rgba(13, 31, 52, .28);
+        filter: brightness(1);
+    }
+}
+
+@keyframes dock-icon-motion-glow {
+    0%, 9%, 67%, 100% {
+        filter:
+            drop-shadow(0 4px 5px rgba(5, 24, 48, .28))
+            drop-shadow(0 0 0 rgba(53, 157, 255, 0));
+    }
+    20%, 48% {
+        filter:
+            drop-shadow(0 4px 5px rgba(5, 24, 48, .28))
+            drop-shadow(0 0 7px rgba(53, 157, 255, .72))
+            drop-shadow(0 0 14px rgba(30, 126, 235, .42));
+    }
+}
+
+@media (max-width: 600px) {
+    .floating-dock-main {
+        width: 58px;
+        height: 58px;
+    }
+    .dock-stack-icon {
+        transform: scale(1.04);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dock-stack-icon,
+    .dock-stack-icon i {
+        animation: none !important;
+    }
+}
+
 </style>
 </head>
 
@@ -1412,19 +1697,39 @@ body {
     <div class="ai-foot">Lịch sử trò chuyện được lưu trên trình duyệt này</div>
   </div>
 </section>
-<button class="ai-restore" id="aiRestore" type="button" onclick="aiShow()" title="Mở Trợ lí AI" aria-label="Mở Trợ lí AI"><span class="ai-restore-label">Trợ lí AI</span></button>
+<!-- FLOATING DOCK: AI + MUSIC -->
+<div class="floating-dock" id="floatingDock">
+    <button
+        class="ai-restore"
+        id="aiRestore"
+        type="button"
+        onclick="aiShow(); closeFloatingDock();"
+        title="Mở Trợ lí AI"
+        aria-label="Mở Trợ lí AI">
+        <span class="ai-restore-label">AI</span>
+    </button>
 
+    <button
+        class="restore-button"
+        id="restoreButton"
+        onclick="restorePlayer(); closeFloatingDock();"
+        title="Mở trình phát nhạc"
+        aria-label="Mở trình phát nhạc">
+        ♫
+    </button>
 
-<!-- FLOATING RESTORE BUTTON -->
-
-<button
-    class="restore-button"
-    id="restoreButton"
-    onclick="restorePlayer()"
-    title="Mở trình phát nhạc"
-    aria-label="Mở trình phát nhạc">
-    ♫
-</button>
+    <button
+        class="floating-dock-main"
+        id="floatingDockToggle"
+        type="button"
+        aria-label="Mở menu công cụ"
+        aria-expanded="false"
+        title="Công cụ">
+        <span class="dock-stack-icon" aria-hidden="true">
+            <i></i><i></i><i></i>
+        </span>
+    </button>
+</div>
 
 
 <script>
@@ -1833,6 +2138,7 @@ function hidePlayer() {
     musicPlayer.style.display = "none";
     restoreButton.classList.add("show");
     updateAIRestorePosition();
+    closeFloatingDock();
 }
 
 // ======================================
@@ -1887,6 +2193,28 @@ const aiInput = document.getElementById("aiInput");
 const aiSend = document.getElementById("aiSend");
 const AI_STORAGE_KEY = "deutschLernen_ai_chat_v1";
 let aiHistory = [];
+
+const floatingDock = document.getElementById("floatingDock");
+const floatingDockToggle = document.getElementById("floatingDockToggle");
+
+function closeFloatingDock() {
+  floatingDock.classList.remove("open");
+  floatingDockToggle.setAttribute("aria-expanded", "false");
+}
+
+floatingDockToggle.addEventListener("click", () => {
+  const isOpen = floatingDock.classList.toggle("open");
+  floatingDockToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeFloatingDock();
+});
+
+document.addEventListener("pointerdown", event => {
+  if (!floatingDock.contains(event.target)) closeFloatingDock();
+});
+
 updateAIRestorePosition();
 
 try {
@@ -1918,6 +2246,7 @@ function aiHide() {
   aiWindow.style.display = "none";
   aiRestoreButton.classList.add("show");
   updateAIRestorePosition();
+  closeFloatingDock();
 }
 function aiShow() {
   aiWindow.style.display = "flex";
