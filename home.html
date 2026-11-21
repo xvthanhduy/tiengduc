@@ -1355,7 +1355,110 @@ body {
 @media (min-width: 601px) and (max-width: 900px) {
     .quote-led { left: 40px; }
 }
-\n</style>
+\n
+
+/* =========================================
+   INTRO SLIDESHOW — ROBOT, LED & MAIN TITLE
+   Chỉ bổ sung hiệu ứng xuất hiện, giữ nguyên nội dung và chức năng.
+========================================= */
+
+/* Hình nền Robot AI trượt từ bên phải vào vị trí ban đầu. */
+body {
+    position: relative;
+    isolation: isolate;
+    background-image: none;
+    background-color: #07111d;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("11.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    animation: robot-background-slide-in 1.5s cubic-bezier(.18,.72,.24,1) .1s both;
+}
+@keyframes robot-background-slide-in {
+    from {
+        opacity: .25;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Bảng LED trượt từ trái vào. */
+.quote-led {
+    animation: led-slide-in-from-left 1.15s cubic-bezier(.18,.72,.24,1) .35s both;
+}
+@keyframes led-slide-in-from-left {
+    from {
+        opacity: 0;
+        transform: translateX(-115%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Tiêu đề sáng trắng như bóng đèn và trượt từ trên xuống. */
+.header h1 {
+    animation:
+        title-drop-in 1.25s cubic-bezier(.18,.72,.24,1) .25s both,
+        title-white-bulb-glow 2.8s ease-in-out 1.5s infinite;
+}
+@keyframes title-drop-in {
+    from {
+        opacity: 0;
+        transform: translateY(-75px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes title-white-bulb-glow {
+    0%, 100% {
+        color: #fff;
+        text-shadow:
+            0 0 3px rgba(255,255,255,.75),
+            0 0 9px rgba(255,255,255,.48),
+            0 0 18px rgba(255,255,255,.24);
+    }
+    50% {
+        color: #fff;
+        text-shadow:
+            0 0 5px rgba(255,255,255,1),
+            0 0 14px rgba(255,255,255,.9),
+            0 0 28px rgba(255,255,255,.62),
+            0 0 42px rgba(255,255,255,.32);
+    }
+}
+
+@media (max-width: 600px) {
+    body::before {
+        background-attachment: scroll;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before,
+    .quote-led,
+    .header h1 {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+</style>
 </head>
 
 <body>
