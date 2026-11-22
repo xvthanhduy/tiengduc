@@ -289,6 +289,267 @@ body {
   background-image:none !important;
 }
 
+
+/* ===== Keep KI-Korrektur and its action buttons within the viewport ===== */
+.app{
+  height:calc(100vh - 118px);
+  min-height:0;
+}
+.workspace{
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+}
+.main{
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(230px,.88fr) minmax(250px,1.12fr);
+  align-content:stretch;
+  gap:12px;
+}
+.main > .section{
+  height:100%;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+.main > .section:nth-child(3){
+  grid-column:1/-1;
+  min-height:0;
+}
+.main > .section:nth-child(3) .section-body{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.main > .section:nth-child(3) .correction-layout,
+.main > .section:nth-child(3) .correction-content{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+.main > .section:nth-child(3) .correction-content .result{
+  flex:1;
+  min-height:0;
+  max-height:none;
+  overflow:auto;
+}
+.main > .section:nth-child(3) .action-row{
+  flex:none;
+  margin-top:10px;
+  padding:2px 0 0;
+  background:#fff;
+}
+.main > .section:nth-child(3) .status{
+  flex:none;
+}
+@media(max-width:820px){
+  .app{
+    height:auto;
+    min-height:calc(100vh - 112px);
+  }
+  .workspace{
+    overflow:visible;
+  }
+  .main{
+    overflow:visible;
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto;
+  }
+  .main > .section,
+  .main > .section:nth-child(3){
+    height:auto;
+    min-height:0;
+  }
+  .main > .section:nth-child(3) .section-body{
+    display:block;
+    overflow:visible;
+  }
+  .main > .section:nth-child(3) .correction-layout,
+  .main > .section:nth-child(3) .correction-content{
+    display:block;
+  }
+  .main > .section:nth-child(3) .correction-content .result{
+    min-height:260px;
+    max-height:55vh;
+  }
+}
+@media(max-height:760px) and (min-width:821px){
+  .main{
+    grid-template-rows:minmax(190px,.78fr) minmax(220px,1.22fr);
+    gap:9px;
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+  .section-head{min-height:38px;padding-top:8px;padding-bottom:8px}
+  .main > .section:nth-child(3) .section-body{padding-bottom:10px}
+}
+
+
+/* ===== Final layout: all three panels fit; each long content scrolls inside ===== */
+@media(min-width:821px){
+  html,body{
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+  }
+  .app{
+    height:calc(100vh - 118px);
+    height:calc(100dvh - 118px);
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .workspace{
+    flex:1 1 auto;
+    height:calc(100% - 34px);
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .main{
+    flex:1 1 auto;
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-rows:minmax(0,0.88fr) minmax(0,1.12fr);
+    grid-auto-rows:minmax(0,1fr);
+    align-content:stretch;
+    gap:12px;
+    padding:12px 18px;
+  }
+  .main > .section{
+    height:100%;
+    min-width:0;
+    min-height:0;
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .main > .section:nth-child(1),
+  .main > .section:nth-child(2){
+    grid-row:1;
+  }
+  .main > .section:nth-child(3){
+    grid-column:1/-1;
+    grid-row:2;
+    min-height:0;
+  }
+  .main > .section:nth-child(1) .section-body,
+  .main > .section:nth-child(2) .section-body{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .main > .section:nth-child(1) #taskDisplay{
+    flex:1 1 auto;
+    min-height:0;
+    max-height:none;
+    overflow:auto;
+  }
+  .main > .section:nth-child(2) #answer{
+    flex:1 1 auto;
+    min-height:0;
+    height:100%;
+    max-height:none;
+    resize:none;
+    overflow:auto;
+  }
+  .main > .section:nth-child(1) .action-row,
+  .main > .section:nth-child(2) .action-row{
+    flex:none;
+  }
+  .main > .section:nth-child(3) .section-body{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .main > .section:nth-child(3) .correction-layout,
+  .main > .section:nth-child(3) .correction-content{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .main > .section:nth-child(3) .correction-content .result{
+    flex:1 1 auto;
+    min-height:0;
+    height:100%;
+    max-height:none;
+    overflow:auto;
+  }
+  .main > .section:nth-child(3) .action-row{
+    flex:none;
+    min-height:40px;
+    margin-top:9px;
+    padding:2px 0 0;
+    background:#fff;
+  }
+  .main > .section:nth-child(3) .status{
+    flex:none;
+  }
+}
+@media(max-width:820px){
+  html,body{height:auto;min-height:100%;overflow:auto}
+  .app{height:auto;min-height:calc(100vh - 112px)}
+  .workspace{height:auto;min-height:0;overflow:visible}
+  .main{
+    height:auto;
+    min-height:0;
+    overflow:visible;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto;
+  }
+  .main > .section,
+  .main > .section:nth-child(1),
+  .main > .section:nth-child(2),
+  .main > .section:nth-child(3){
+    grid-column:auto;
+    grid-row:auto;
+    height:auto;
+    min-height:0;
+    overflow:visible;
+  }
+  .main > .section .section-body{
+    display:block;
+    overflow:visible;
+  }
+  .main > .section:nth-child(1) #taskDisplay{
+    min-height:150px;
+    max-height:45vh;
+  }
+  .main > .section:nth-child(2) #answer{
+    min-height:220px;
+    height:auto;
+    resize:vertical;
+  }
+  .main > .section:nth-child(3) .correction-layout,
+  .main > .section:nth-child(3) .correction-content{
+    display:block;
+    overflow:visible;
+  }
+  .main > .section:nth-child(3) .correction-content .result{
+    min-height:240px;
+    max-height:55vh;
+  }
+}
+
 </style>
 </head>
 <body>
