@@ -2311,7 +2311,11 @@ html.app-dark .focus-timer-custom input {
 .daily-vocab-task-actions { display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .daily-vocab-task-actions small { font-size:10px; color:#65758b; font-weight:600; }
 .daily-vocab-task button { border:0; border-radius:9px; padding:8px 11px; background:#dceaff; color:#19365d; font:600 12px inherit; cursor:pointer; }
-.daily-vocab-task button:hover { filter:brightness(1.04); }
+.daily-vocab-task button:hover:not(:disabled) { filter:brightness(1.04); }
+.daily-vocab-task-buttons { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:6px; }
+.daily-vocab-task button:disabled { opacity:.48; cursor:not-allowed; filter:grayscale(.25); }
+.daily-vocab-task #dailyVocabCompleteButton { background:#d9f3e5; color:#17613d; }
+.daily-vocab-task #dailyVocabCompleteButton:disabled { background:#e7ebf0; color:#657184; }
 @media (max-width:600px) {
   .daily-vocab-task { top:76px; right:10px; width:min(270px,calc(100vw - 20px)); padding:11px 12px 12px; }
   .daily-vocab-task h3 { font-size:14px; }
@@ -2696,7 +2700,10 @@ html.app-dark .focus-timer-custom input {
   <div class="daily-vocab-progress"><span id="dailyVocabProgressBar"></span></div>
   <div class="daily-vocab-task-actions">
     <small id="dailyVocabProgressText">0/5 từ đã ôn</small>
-    <button type="button" id="dailyVocabStartButton">Bắt đầu ôn →</button>
+    <div class="daily-vocab-task-buttons">
+      <button type="button" id="dailyVocabStartButton">Bắt đầu ôn →</button>
+      <button type="button" id="dailyVocabCompleteButton" disabled>Hoàn thành nhiệm vụ</button>
+    </div>
   </div>
 </aside>
 <!-- FOCUS TIMER PANEL -->
@@ -3897,6 +3904,38 @@ aiRenderHistory();
     return { date: todayKey(), reviewedIds: [], submittedSentences: [], completed: false };
   }
   let dailyReview = loadDailyReview();
+
+  // Reset nhiệm vụ đúng một lần trong phiên bản thử nghiệm này để người dùng có thể kiểm tra lại từ đầu.
+  const DAILY_REVIEW_TEST_RESET_KEY = "deutschLernen_daily_vocab_review_test_reset_v1";
+  try {
+    if (localStorage.getItem(DAILY_REVIEW_TEST_RESET_KEY) !== "done") {
+      dailyReview = {
+        date: todayKey(),
+        reviewedIds: [],
+        submittedSentences: [],
+        completed: false
+      };
+      localStorage.setItem(DAILY_REVIEW_KEY, JSON.stringify(dailyReview));
+      localStorage.setItem(DAILY_REVIEW_TEST_RESET_KEY, "done");
+    }
+  } catch (_) {}
+
+  // Reset tiến độ nhiệm vụ thêm một lần cho đợt kiểm thử mới.
+  // Chỉ xóa tiến độ nhiệm vụ hằng ngày; không xóa sổ từ vựng hay thống kê quiz.
+  const DAILY_REVIEW_TEST_RESET_KEY_V2 = "deutschLernen_daily_vocab_review_test_reset_v2";
+  try {
+    if (localStorage.getItem(DAILY_REVIEW_TEST_RESET_KEY_V2) !== "done") {
+      dailyReview = {
+        date: todayKey(),
+        reviewedIds: [],
+        submittedSentences: [],
+        completed: false
+      };
+      localStorage.setItem(DAILY_REVIEW_KEY, JSON.stringify(dailyReview));
+      localStorage.setItem(DAILY_REVIEW_TEST_RESET_KEY_V2, "done");
+    }
+  } catch (_) {}
+
   function saveDailyReview() {
     try { localStorage.setItem(DAILY_REVIEW_KEY, JSON.stringify(dailyReview)); } catch (_) {}
   }
@@ -3904,24 +3943,26 @@ aiRenderHistory();
   function updateDailyTask() {
     const card = $("dailyVocabTask");
     if (!card) return;
-    const target = dailyTarget();
-    const wordsDone = Math.min(dailyReview.reviewedIds.length, target);
-    const sentencesDone = Math.min((dailyReview.submittedSentences || []).length, 3);
-    const complete = target > 0 && wordsDone >= target && sentencesDone >= 3;
-    dailyReview.completed = complete;
 
-    if (complete) {
+    // Sau khi bấm Hoàn thành nhiệm vụ, ẩn đến hết ngày; loadDailyReview tự làm mới vào ngày tiếp theo.
+    if (dailyReview.completed) {
       card.hidden = true;
-      saveDailyReview();
       return;
     }
 
+    const target = dailyTarget();
+    const wordsDone = Math.min(dailyReview.reviewedIds.length, target);
+    const sentencesDone = Math.min((dailyReview.submittedSentences || []).length, 3);
+    const readyToComplete = target > 0 && wordsDone >= target && sentencesDone >= 3;
+
     card.hidden = false;
-    $("dailyVocabTaskStatus").textContent = "Chưa hoàn thành";
-    $("dailyVocabTaskTitle").textContent = "Đã đến giờ ôn từ vựng!";
+    $("dailyVocabTaskStatus").textContent = readyToComplete ? "Đã đủ điều kiện ✓" : "Chưa hoàn thành";
+    $("dailyVocabTaskTitle").textContent = readyToComplete
+      ? "Cậu đã hoàn thành các phần ôn tập!"
+      : "Đã đến giờ ôn từ vựng!";
     $("dailyVocabTaskDescription").textContent = words.length < 2
       ? "Thêm ít nhất 2 từ vào sổ để bắt đầu ôn tập."
-      : "Ôn 5 từ vựng cũ và đặt 3 câu tiếng Đức. Câu đúng hay sai đều được tính.";
+      : "Hãy ôn lại 5 từ vựng cũ và đặt 3 câu tiếng Đức";
     $("dailyVocabProgressText").textContent =
       `${wordsDone}/${target || DAILY_REVIEW_TARGET} từ · ${sentencesDone}/3 câu`;
     const totalSteps = (target || DAILY_REVIEW_TARGET) + 3;
@@ -3929,6 +3970,12 @@ aiRenderHistory();
       `${Math.min(100, (wordsDone + sentencesDone) / totalSteps * 100)}%`;
     $("dailyVocabStartButton").textContent =
       words.length < 2 ? "Thêm từ →" : "Tiếp tục →";
+
+    const completeButton = $("dailyVocabCompleteButton");
+    if (completeButton) {
+      completeButton.disabled = !readyToComplete;
+      completeButton.textContent = "Hoàn thành nhiệm vụ";
+    }
   }
   function openDailyReview() {
     if (words.length < 2) {
@@ -4157,13 +4204,11 @@ Nếu là động từ, ghi dạng nguyên mẫu ở word và giải thích các
 
     if (!dailyReview.reviewedIds.includes(currentQuiz.correct.id)) {
       dailyReview.reviewedIds.push(currentQuiz.correct.id);
-      if (dailyReview.reviewedIds.length >= dailyTarget() && dailyTarget() > 0) dailyReview.completed = true;
+      // Chỉ ghi nhận tiến độ ôn từ; không tự hoàn thành nhiệm vụ tại đây.
+      // Nhiệm vụ chỉ được đánh dấu hoàn thành khi người dùng bấm nút xác nhận
+      // sau khi đã đủ cả số từ và 3 câu tiếng Đức.
       saveDailyReview();
       updateDailyTask();
-    }
-    if (dailyReview.completed) {
-      const nextButton = $("myVocabNextQuiz");
-      if (nextButton) nextButton.textContent = "Hoàn thành nhiệm vụ ✓";
     }
   }
   function switchReviewTab(tab) {
@@ -4236,6 +4281,16 @@ Trình bày rõ theo các mục: KẾT QUẢ, PHÂN TÍCH, CÂU ĐỀ XUẤT (n�
 
   $("myVocabularyToggle").addEventListener("click", () => showWindow(hub));
   $("dailyVocabStartButton").addEventListener("click", openDailyReview);
+  $("dailyVocabCompleteButton").addEventListener("click", () => {
+    const target = dailyTarget();
+    const wordsDone = Math.min(dailyReview.reviewedIds.length, target);
+    const sentencesDone = Math.min((dailyReview.submittedSentences || []).length, 3);
+    const readyToComplete = target > 0 && wordsDone >= target && sentencesDone >= 3;
+    if (!readyToComplete) return;
+    dailyReview.completed = true;
+    saveDailyReview();
+    updateDailyTask();
+  });
   $("myVocabOpenAdd").addEventListener("click", () => { renderWordList(); showWindow(addWindow); });
   $("myVocabOpenReview").addEventListener("click", () => {
     renderQuiz(); updateWordOptions(); assignRandomPracticeWord(); showWindow(reviewWindow);
