@@ -2292,29 +2292,30 @@ html.app-dark .focus-timer-custom input {
   34% { transform: scale(1); }
 }
 .daily-vocab-task {
-  position: fixed; z-index: 8500; right: 22px; top: 78px;
-  width: min(245px, calc(100vw - 28px)); padding: 9px 10px;
-  border: 1px solid rgba(35,55,85,.13); border-radius: 12px;
-  background: rgba(255,255,255,.97); color: #263449;
-  box-shadow: 0 8px 22px rgba(20,35,55,.14); backdrop-filter: blur(12px);
+  position: fixed; z-index: 8500; right: 22px; top: 82px;
+  width: min(290px, calc(100vw - 28px)); padding: 13px 15px 14px;
+  border: 1px solid rgba(35,55,85,.15); border-radius: 14px;
+  background: rgba(255,255,255,.98); color: #263449;
+  box-shadow: 0 9px 25px rgba(20,35,55,.16); backdrop-filter: blur(12px);
   font-family: inherit; animation: dailyVocabHeartbeat 3.2s ease-in-out infinite;
   transform-origin: center;
 }
 .daily-vocab-task[hidden] { display:none !important; }
-.daily-vocab-task-top { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:4px; }
-.daily-vocab-task-kicker { font-size:8px; letter-spacing:.8px; font-weight:800; color:#607895; }
-.daily-vocab-task-status { font-size:8px; color:#607086; }
-.daily-vocab-task h3 { margin:0 0 3px; font-size:12px; line-height:1.25; color:#1e2c40; }
-.daily-vocab-task p { margin:0 0 6px; font-size:9px; line-height:1.35; color:#59697d; }
-.daily-vocab-progress { height:4px; background:rgba(35,55,85,.12); border-radius:10px; overflow:hidden; margin:5px 0 7px; }
+.daily-vocab-task-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; }
+.daily-vocab-task-kicker { font-size:10px; letter-spacing:.85px; font-weight:800; color:#536d8d; }
+.daily-vocab-task-status { font-size:10px; color:#5d6d82; font-weight:600; }
+.daily-vocab-task h3 { margin:0 0 5px; font-size:15px; line-height:1.35; color:#1e2c40; }
+.daily-vocab-task p { margin:0 0 10px; font-size:12px; line-height:1.5; color:#526277; }
+.daily-vocab-progress { height:5px; background:rgba(35,55,85,.12); border-radius:10px; overflow:hidden; margin:8px 0 10px; }
 .daily-vocab-progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,#75a9f7,#67c9a5); border-radius:10px; transition:width .25s; }
-.daily-vocab-task-actions { display:flex; align-items:center; justify-content:space-between; gap:6px; }
-.daily-vocab-task-actions small { font-size:8px; color:#718096; }
-.daily-vocab-task button { border:0; border-radius:8px; padding:6px 8px; background:#dceaff; color:#19365d; font:700 9px inherit; cursor:pointer; }
+.daily-vocab-task-actions { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.daily-vocab-task-actions small { font-size:10px; color:#65758b; font-weight:600; }
+.daily-vocab-task button { border:0; border-radius:9px; padding:8px 11px; background:#dceaff; color:#19365d; font:600 12px inherit; cursor:pointer; }
 .daily-vocab-task button:hover { filter:brightness(1.04); }
 @media (max-width:600px) {
-  .daily-vocab-task { top:72px; right:10px; width:min(220px,calc(100vw - 20px)); padding:8px 9px; }
-  .daily-vocab-task h3 { font-size:11px; }
+  .daily-vocab-task { top:76px; right:10px; width:min(270px,calc(100vw - 20px)); padding:11px 12px 12px; }
+  .daily-vocab-task h3 { font-size:14px; }
+  .daily-vocab-task p { font-size:11px; }
 }
 </style>
 </head>
@@ -3885,10 +3886,15 @@ aiRenderHistory();
     try {
       const saved = JSON.parse(localStorage.getItem(DAILY_REVIEW_KEY) || "null");
       if (saved && saved.date === todayKey()) {
-        return { date: saved.date, reviewedIds: Array.isArray(saved.reviewedIds) ? saved.reviewedIds : [], completed: !!saved.completed, reminderSeen: !!saved.reminderSeen };
+        return {
+          date: saved.date,
+          reviewedIds: Array.isArray(saved.reviewedIds) ? saved.reviewedIds : [],
+          submittedSentences: Array.isArray(saved.submittedSentences) ? saved.submittedSentences : [],
+          completed: !!saved.completed
+        };
       }
     } catch (_) {}
-    return { date: todayKey(), reviewedIds: [], completed: false, reminderSeen: false };
+    return { date: todayKey(), reviewedIds: [], submittedSentences: [], completed: false };
   }
   let dailyReview = loadDailyReview();
   function saveDailyReview() {
@@ -3898,19 +3904,31 @@ aiRenderHistory();
   function updateDailyTask() {
     const card = $("dailyVocabTask");
     if (!card) return;
-    card.hidden = false;
     const target = dailyTarget();
-    const done = Math.min(dailyReview.reviewedIds.length, target);
-    const complete = dailyReview.completed || (target > 0 && done >= target);
-    $("dailyVocabTaskStatus").textContent = complete ? "Đã hoàn thành ✓" : "Chưa hoàn thành";
-    $("dailyVocabTaskTitle").textContent = complete ? "Tuyệt vời! Cậu đã ôn xong hôm nay." : "Đã đến giờ ôn từ vựng!";
+    const wordsDone = Math.min(dailyReview.reviewedIds.length, target);
+    const sentencesDone = Math.min((dailyReview.submittedSentences || []).length, 3);
+    const complete = target > 0 && wordsDone >= target && sentencesDone >= 3;
+    dailyReview.completed = complete;
+
+    if (complete) {
+      card.hidden = true;
+      saveDailyReview();
+      return;
+    }
+
+    card.hidden = false;
+    $("dailyVocabTaskStatus").textContent = "Chưa hoàn thành";
+    $("dailyVocabTaskTitle").textContent = "Đã đến giờ ôn từ vựng!";
     $("dailyVocabTaskDescription").textContent = words.length < 2
-      ? "Thêm ít nhất 2 từ vào sổ để bắt đầu Quiz A/B."
-      : complete ? "Nhiệm vụ hôm nay đã hoàn tất. Hẹn gặp lại cậu ngày mai!"
-      : "Ôn lại các từ đã học để chúng không bị lãng quên nhé.";
-    $("dailyVocabProgressText").textContent = `${done}/${target || DAILY_REVIEW_TARGET} từ đã ôn`;
-    $("dailyVocabProgressBar").style.width = `${target ? Math.min(100, done / target * 100) : 0}%`;
-    $("dailyVocabStartButton").textContent = complete ? "Ôn thêm →" : words.length < 2 ? "Thêm từ →" : "Bắt đầu ôn →";
+      ? "Thêm ít nhất 2 từ vào sổ để bắt đầu ôn tập."
+      : "Ôn 5 từ vựng cũ và đặt 3 câu tiếng Đức. Câu đúng hay sai đều được tính.";
+    $("dailyVocabProgressText").textContent =
+      `${wordsDone}/${target || DAILY_REVIEW_TARGET} từ · ${sentencesDone}/3 câu`;
+    const totalSteps = (target || DAILY_REVIEW_TARGET) + 3;
+    $("dailyVocabProgressBar").style.width =
+      `${Math.min(100, (wordsDone + sentencesDone) / totalSteps * 100)}%`;
+    $("dailyVocabStartButton").textContent =
+      words.length < 2 ? "Thêm từ →" : "Tiếp tục →";
   }
   function openDailyReview() {
     if (words.length < 2) {
@@ -4195,7 +4213,20 @@ YÊU CẦU BẮT BUỘC:
 Trình bày rõ theo các mục: KẾT QUẢ, PHÂN TÍCH, CÂU ĐỀ XUẤT (nếu cần), DỊCH NGHĨA, TRẢ LỜI CÂU HỎI THÊM (nếu có).`);
       answer.textContent = reply;
       answer.hidden = false;
-      setStatus(status, "Đã kiểm tra xong câu của cậu.");
+
+      // Mỗi câu khác nhau được AI kiểm tra đều được tính, không phụ thuộc đúng hay sai.
+      const normalizedSentence = sentence.toLocaleLowerCase("de").replace(/\\s+/g, " ").trim();
+      const submitted = dailyReview.submittedSentences ||
+        (dailyReview.submittedSentences = []);
+      if (!submitted.includes(normalizedSentence) && submitted.length < 3) {
+        submitted.push(normalizedSentence);
+        saveDailyReview();
+      }
+      updateDailyTask();
+      const sentenceProgress = Math.min(submitted.length, 3);
+      setStatus(status, dailyReview.completed
+        ? "Đã ghi nhận câu! Cậu đã hoàn thành nhiệm vụ hôm nay 🎉"
+        : `Đã ghi nhận câu (${sentenceProgress}/3). Câu đúng hay sai đều được tính.`);
     } catch (error) {
       setStatus(status, "Chưa kiểm tra được câu: " + error.message, true);
     } finally {
