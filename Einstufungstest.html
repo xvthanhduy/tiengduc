@@ -74,6 +74,16 @@ body.exam-active #taskArea textarea{user-select:text}
 .section-heading{margin:22px 0 8px;font-size:18px;color:#244e78}
 @media(max-width:650px){.level-summary{grid-template-columns:1fr}.result-table th,.result-table td{padding:9px;font-size:13px}}
 
+
+/* Local pronunciation prototype */
+.pronunciation-lab{margin-top:14px;padding:14px;border:1px solid #b9d3ec;border-radius:12px;background:#f0f7ff}
+.pronunciation-lab .pronunciation-action{border:1px solid #8db8e2;background:#e4f1ff;color:#174d83;border-radius:9px;padding:10px 13px;font-weight:750;cursor:pointer}
+.pronunciation-lab .pronunciation-status{font-size:13px;color:#52647a;margin:9px 0;line-height:1.55}
+.pronunciation-lab .pronunciation-output{display:grid;gap:8px;margin-top:10px}
+.pronunciation-lab .phoneme-line{padding:10px;border-radius:8px;background:#fff;border:1px solid #d7e3ef;overflow-wrap:anywhere}
+.pronunciation-lab .phoneme-line b{display:block;color:#245b91;font-size:12px;margin-bottom:5px}
+.pronunciation-caution{font-size:12px;color:#6b7280;margin-top:9px;line-height:1.5}
+
 </style>
 </head>
 <body>
@@ -524,6 +534,126 @@ function createRecorderControl(box,index,skill){
   box.append(note);
 }
 
+
+// ============================================================
+// LOCAL PRONUNCIATION PROTOTYPE — Hama NLP (browser / on-device)
+// Experimental feedback only; not a calibrated CEFR score.
+// ============================================================
+let hamaAsrModelPromise=null;
+let hamaG2pModelPromise=null;
+let hamaAudioContext=null;
+
+async function loadHamaPronunciationModels(){
+  if(!hamaAsrModelPromise){
+    hamaAsrModelPromise=(async()=>{
+      const {ASRBrowserModel}=await import('https://esm.sh/hama-js@1.7.0/asr/browser');
+      return ASRBrowserModel.create({
+        modelUrl:'https://cdn.jsdelivr.net/npm/hama-js@1.7.0/dist/assets/asr_waveform.hama'
+      });
+    })().catch(err=>{hamaAsrModelPromise=null;throw err;});
+  }
+  if(!hamaG2pModelPromise){
+    hamaG2pModelPromise=(async()=>{
+      const {G2PBrowserModel}=await import('https://esm.sh/hama-js@1.7.0/g2p/browser');
+      return G2PBrowserModel.create({
+        encoderUrl:'https://cdn.jsdelivr.net/npm/hama-js@1.7.0/dist/assets/encoder.hama',
+        decoderStepUrl:'https://cdn.jsdelivr.net/npm/hama-js@1.7.0/dist/assets/decoder_step.hama'
+      });
+    })().catch(err=>{hamaG2pModelPromise=null;throw err;});
+  }
+  const [asr,g2p]=await Promise.all([hamaAsrModelPromise,hamaG2pModelPromise]);
+  return {asr,g2p};
+}
+
+async function blobToMonoWaveform(blob){
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)throw new Error('Trình duyệt không hỗ trợ xử lý âm thanh.');
+  if(!hamaAudioContext)hamaAudioContext=new AudioCtx();
+  if(hamaAudioContext.state==='suspended')await hamaAudioContext.resume();
+  const buffer=await hamaAudioContext.decodeAudioData(await blob.arrayBuffer());
+  const mono=new Float32Array(buffer.length);
+  if(buffer.numberOfChannels===1){
+    mono.set(buffer.getChannelData(0));
+  }else{
+    for(let ch=0;ch<buffer.numberOfChannels;ch++){
+      const data=buffer.getChannelData(ch);
+      for(let i=0;i<data.length;i++)mono[i]+=data[i]/buffer.numberOfChannels;
+    }
+  }
+  return {waveform:mono,sampleRate:buffer.sampleRate};
+}
+
+function pronunciationTextLine(label,value){
+  const line=document.createElement('div');
+  line.className='phoneme-line';
+  const b=document.createElement('b');
+  b.textContent=label;
+  const content=document.createElement('span');
+  content.textContent=value||'Không có dữ liệu';
+  line.append(b,content);
+  return line;
+}
+
+async function runLocalPronunciationCheck(index,target,lab,status,output){
+  const blob=audioBlobs[index];
+  if(!blob||!blob.size)throw new Error('Chưa có bản ghi cho câu này. Cậu hãy thu âm trước.');
+  status.textContent='Đang tải mô hình âm vị lần đầu. Mô hình được tải về trình duyệt; quá trình phân tích chạy trên thiết bị...';
+  output.replaceChildren();
+
+  const {asr,g2p}=await loadHamaPronunciationModels();
+  status.textContent='Đang phân tích âm vị từ bản ghi...';
+  const audio=await blobToMonoWaveform(blob);
+  const heard=await asr.transcribeWaveform(audio.waveform,audio.sampleRate);
+  status.textContent='Đang chuyển câu mẫu sang IPA để đối chiếu...';
+  const expected=await g2p.predict(target,{preserveLiterals:'punct'});
+
+  output.append(
+    pronunciationTextLine('IPA tham chiếu từ câu mẫu',expected.displayIpa||expected.ipa||''),
+    pronunciationTextLine('Âm vị hệ thống nghe được',heard.phonemeText||''),
+    pronunciationTextLine('Âm vị theo từng từ',heard.wordPhonemeText||'')
+  );
+  status.textContent='Đã phân tích xong. Hãy xem đây là dữ liệu tham khảo để nghe và luyện lại, chưa phải điểm phát âm.';
+  const note=document.createElement('p');
+  note.className='pronunciation-caution';
+  note.textContent='Lưu ý: nhận diện âm vị có thể sai do tiếng ồn, micro, giọng vùng miền hoặc cách phát âm. Hệ thống chưa kết luận đúng/sai từng âm và không trừ điểm chỉ vì khác giọng chuẩn.';
+  output.append(note);
+}
+
+function createPronunciationLab(box,index,task){
+  const target=String(task.target||task.prompt||'').trim();
+  if(!target)return;
+  const lab=document.createElement('div');
+  lab.className='pronunciation-lab';
+  const button=document.createElement('button');
+  button.type='button';
+  button.className='pronunciation-action';
+  button.textContent='🔬 Phân tích âm vị trên thiết bị';
+  const status=document.createElement('p');
+  status.className='pronunciation-status';
+  status.textContent='Phân tích thử nghiệm cho câu này. Không gửi audio sang dịch vụ chấm phát âm bên ngoài.';
+  const output=document.createElement('div');
+  output.className='pronunciation-output';
+  button.onclick=async()=>{
+    button.disabled=true;
+    button.textContent='Đang phân tích...';
+    try{
+      await runLocalPronunciationCheck(index,target,lab,status,output);
+    }catch(err){
+      status.textContent='Chưa thể phân tích: '+(err?.message||String(err))+' Cậu vẫn có thể nghe lại bản ghi và nộp bài như bình thường.';
+    }finally{
+      button.disabled=false;
+      button.textContent='Phân tích lại âm vị';
+    }
+  };
+  lab.append(button,status,output);
+  const caution=document.createElement('p');
+  caution.className='pronunciation-caution';
+  caution.textContent='Mô hình cần tải về lần đầu (có thể mất thời gian và dữ liệu mạng). Kết quả phụ thuộc thiết bị và chất lượng thu âm.';
+  lab.append(caution);
+  box.append(lab);
+}
+
+
 // ============================================================
 // RENDER SKILL
 // ============================================================
@@ -650,6 +780,7 @@ function renderSkill(sk,t){
       });
     }else if(['Aussprache','Sprechen'].includes(sk.id)){
       createRecorderControl(box,i,sk.id);
+      if(sk.id==='Aussprache')createPronunciationLab(box,i,task);
     }else{
       const input=document.createElement('textarea');
       input.placeholder=sk.id==='Schreiben'
