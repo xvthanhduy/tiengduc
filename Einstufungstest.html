@@ -46,6 +46,10 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .skill-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .skill-chip{padding:12px;border:1px solid var(--line);border-radius:10px;background:#f3f7fc;color:#26384f}
 .calendar-note{color:var(--green);font-weight:700}
+.prep-disabled{opacity:.65}
+.prep-disabled .mic-record{pointer-events:none}
+body.exam-active{user-select:none}
+body.exam-active #taskArea textarea{user-select:text}
 .mic-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
 .mic-record{display:inline-flex;align-items:center;gap:8px;background:#fff0f0;color:#a3212b;border:1px solid #e6a8ad;border-radius:999px;padding:11px 17px;font-weight:800;cursor:pointer}
 .mic-record.recording{background:#b4232c;color:#fff;border-color:#b4232c;animation:micPulse 1.2s infinite}
@@ -117,11 +121,11 @@ button:disabled{opacity:.45;cursor:not-allowed}
 <h1>Chuẩn bị kiểm tra</h1>
 <p id="profileSummary"></p>
 <div class="notice">Bạn hãy làm bài đúng với khả năng thực tế để lộ trình được cá nhân hóa một cách tốt nhất.</div>
-<p>Hệ thống sẽ kiểm tra 5 kỹ năng theo thứ tự: Aussprache, Hören, Sprechen, Lesen và Schreiben. Mỗi phần có thời gian riêng. Khi hết giờ, bài sẽ tự động khóa và chuyển tiếp.</p>
+<p>Hệ thống sẽ kiểm tra 5 kỹ năng theo thứ tự: Aussprache, Hören, Sprechen, Lesen và Schreiben. Trong suốt bài thi, thanh công cụ tra cứu/dịch sẽ tạm khóa. Riêng Sprechen có 10 phút chuẩn bị độc lập; thời gian thi 15 phút chỉ bắt đầu sau khi cậu kết thúc chuẩn bị hoặc hết giờ chuẩn bị.</p>
 <div class="skill-list">
 <div class="skill-chip">🗣️ Aussprache · 10 câu</div>
 <div class="skill-chip">🎧 Hören · 20 phút</div>
-<div class="skill-chip">💬 Sprechen · 15 phút</div>
+<div class="skill-chip">💬 Sprechen · 10 phút chuẩn bị + 15 phút thi</div>
 <div class="skill-chip">📖 Lesen · 25 phút</div>
 <div class="skill-chip">✍️ Schreiben · 30 phút</div>
 </div>
@@ -140,6 +144,12 @@ button:disabled{opacity:.45;cursor:not-allowed}
 <div class="timer" id="timer">10:00</div>
 </div>
 <div class="progress"><i id="skillProgress"></i></div>
+<div id="speakingPrep" class="notice hidden" style="margin:12px 0 18px">
+  <strong>Thời gian chuẩn bị Sprechen</strong>
+  <p style="margin:6px 0">Cậu có tối đa 10 phút để đọc đề, sắp xếp ý tưởng và chuẩn bị câu trả lời. Thời gian thi nói chỉ bắt đầu sau khi cậu kết thúc phần chuẩn bị.</p>
+  <div class="timer" id="prepTimer" style="margin:8px 0">10:00</div>
+  <button type="button" class="primary" id="finishPrep">Hoàn thành chuẩn bị và bắt đầu thi</button>
+</div>
 <p id="skillInstruction"></p>
 <div id="passage" class="reading hidden"></div>
 <div id="taskArea"></div>
@@ -203,8 +213,100 @@ const skillOrder=[
 
 let profile={},skillIndex=0,activeTest=null,answers={},results=[],timerId=null,remaining=0,planData=null;
 let audioBlobs={},activeRecorders={},recordStopPromises={};
+let prepTimerId=null,prepRemaining=600,speakingPrepActive=false,toolbarPreviousDisplay=null;
 
 const $=id=>document.getElementById(id);
+
+function setExamToolbarLocked(locked){
+  try{
+    const doc=window.parent&&window.parent!==window?window.parent.document:document;
+    const dock=doc.querySelector('.floating-dock');
+    if(dock){
+      if(locked){
+        if(toolbarPreviousDisplay===null){
+          toolbarPreviousDisplay={display:dock.style.display,inert:dock.inert,ariaHidden:dock.getAttribute('aria-hidden')};
+        }
+        dock.style.display='none';
+        dock.inert=true;
+        dock.setAttribute('aria-hidden','true');
+      }else if(toolbarPreviousDisplay!==null){
+        dock.style.display=toolbarPreviousDisplay.display;
+        dock.inert=toolbarPreviousDisplay.inert;
+        if(toolbarPreviousDisplay.ariaHidden===null)dock.removeAttribute('aria-hidden');
+        else dock.setAttribute('aria-hidden',toolbarPreviousDisplay.ariaHidden);
+        toolbarPreviousDisplay=null;
+      }
+    }
+  }catch(e){
+    // Cross-origin embedding: local exam protections remain active.
+  }
+  document.body.classList.toggle('exam-active',locked);
+  $('testScreen')?.setAttribute('aria-label',locked?'Đang trong bài kiểm tra; thanh công cụ đã bị khóa':'');
+}
+
+// Prevent browser context menus and clipboard insertion inside the exam.
+document.addEventListener('contextmenu',e=>{
+  if(document.body.classList.contains('exam-active'))e.preventDefault();
+},true);
+document.addEventListener('paste',e=>{
+  if(document.body.classList.contains('exam-active') && e.target.closest('#taskArea textarea')){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    alert('Phần Schreiben không cho phép dán nội dung. Cậu hãy tự nhập bài làm nhé.');
+  }
+},true);
+
+function startSkillTimer(seconds){
+  clearInterval(timerId);
+  remaining=seconds;
+  updateTimer();
+  timerId=setInterval(()=>{
+    remaining--;
+    updateTimer();
+    if(remaining<=0){
+      clearInterval(timerId);
+      finishSkill(true);
+    }
+  },1000);
+}
+
+function startSpeakingExam(){
+  clearInterval(prepTimerId);
+  prepTimerId=null;
+  speakingPrepActive=false;
+  $('speakingPrep').classList.add('hidden');
+  $('taskArea').classList.remove('prep-disabled');
+  $('skillInstruction').textContent='Phần thi Sprechen đã bắt đầu. Hãy trả lời các nhiệm vụ bằng tiếng Đức.';
+  $('taskArea').querySelectorAll('button,textarea,input').forEach(el=>el.disabled=false);
+  $('submitSkill').disabled=false;
+  startSkillTimer(skillOrder[skillIndex].seconds);
+}
+
+function beginSpeakingPreparation(){
+  speakingPrepActive=true;
+  prepRemaining=600;
+  $('speakingPrep').classList.remove('hidden');
+  $('taskArea').classList.add('prep-disabled');
+  $('taskArea').querySelectorAll('button,textarea,input').forEach(el=>el.disabled=true);
+  $('submitSkill').disabled=true;
+  $('prepTimer').textContent='10:00';
+  $('timer').textContent='--:--';
+  $('skillProgress').style.width='0%';
+  $('finishPrep').disabled=false;
+  $('skillInstruction').textContent='Cậu đang ở giai đoạn chuẩn bị. Hãy đọc kỹ các đề Sprechen; chưa tính thời gian thi.';
+  clearInterval(timerId);
+  clearInterval(prepTimerId);
+  prepTimerId=setInterval(()=>{
+    prepRemaining--;
+    const m=Math.floor(prepRemaining/60),s=prepRemaining%60;
+    $('prepTimer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(prepRemaining<=0)startSpeakingExam();
+  },1000);
+}
+
+$('finishPrep').onclick=()=>{
+  if(speakingPrepActive)startSpeakingExam();
+};
 
 function show(id){
   ['profileScreen','introScreen','testScreen','resultScreen','planScreen']
@@ -267,6 +369,7 @@ $('continueProfile').onclick=()=>{
 $('backProfile').onclick=()=>show('profileScreen');
 
 $('startTest').onclick=async()=>{
+  setExamToolbarLocked(true);
   skillIndex=0;
   answers={};
   results=[];
@@ -308,20 +411,15 @@ async function loadSkill(){
     activeTest=d.test;
     renderSkill(sk,activeTest);
 
-    remaining=sk.seconds;
-    updateTimer();
-
-    timerId=setInterval(()=>{
-      remaining--;
-      updateTimer();
-      if(remaining<=0){
-        clearInterval(timerId);
-        finishSkill(true);
-      }
-    },1000);
+    if(sk.id==='Sprechen'){
+      beginSpeakingPreparation();
+    }else{
+      startSkillTimer(sk.seconds);
+    }
 
   }catch(e){
     alert('Không thể tạo bài kiểm tra: '+e.message);
+    setExamToolbarLocked(false);
     show('introScreen');
   }
 }
@@ -442,13 +540,51 @@ function renderSkill(sk,t){
   if(sk.id==='Hören'&&t.listeningScript){
     const a=document.createElement('button');
     a.className='secondary';
-    a.textContent='▶ Nghe đoạn tiếng Đức';
+    a.textContent='▶ Nghe đoạn tiếng Đức (giọng nam / nữ)';
     a.onclick=()=>{
       speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(t.listeningScript);
-      u.lang='de-DE';
-      u.rate=profile.currentLevel==='B1'?0.96:0.9;
-      speechSynthesis.speak(u);
+      const voices=speechSynthesis.getVoices();
+      const german=voices.filter(v=>/^de([-_]|$)/i.test(v.lang||''));
+      const maleHints=/male|markus|stefan|hans|daniel|bernd|thomas|klaus|google deutsch/i;
+      const femaleHints=/female|anna|petra|katja|helena|marlene|vicki|sandra|eva|julia|hedda/i;
+      const maleVoice=german.find(v=>maleHints.test(v.name))||german[0]||null;
+      const femaleVoice=german.find(v=>femaleHints.test(v.name)&&v!==maleVoice)||german.find(v=>v!==maleVoice)||maleVoice;
+      const speakerMap=t.speakerVoices||{};
+      const lines=String(t.listeningScript).split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      const labelPattern=/^([\p{L}][\p{L} .'-]{0,35}?)(?:\s*\((männlich|weiblich|male|female)\))?:\s*(.+)$/iu;
+      const chunks=[];
+      for(const line of lines){
+        const m=line.match(labelPattern);
+        if(m){
+          const speaker=m[1].trim();
+          const explicit=(m[2]||'').toLowerCase();
+          const mapped=speakerMap[speaker]||speakerMap[speaker.toLocaleLowerCase('de-DE')];
+          const gender=explicit.includes('weib')||explicit==='female'?'female':explicit.includes('männ')||explicit==='male'?'male':mapped;
+          chunks.push({speaker,text:m[3].trim(),gender});
+        }else{
+          chunks.push({speaker:'',text:line,gender:''});
+        }
+      }
+      if(!chunks.length)chunks.push({speaker:'',text:String(t.listeningScript),gender:''});
+      const isDialogue=chunks.some(c=>c.speaker);
+      let lastGender='female';
+      let index=0;
+      const speakNext=()=>{
+        if(index>=chunks.length)return;
+        const chunk=chunks[index++];
+        let gender=chunk.gender;
+        if(!gender&&isDialogue){gender=lastGender==='male'?'female':'male';}
+        if(gender)lastGender=gender;
+        const voice=gender==='male'?maleVoice:gender==='female'?femaleVoice:null;
+        const u=new SpeechSynthesisUtterance(chunk.text); // speaker name is intentionally never spoken
+        u.lang='de-DE';
+        u.rate=profile.currentLevel==='B1'?0.96:0.9;
+        if(voice)u.voice=voice;
+        u.onend=speakNext;
+        u.onerror=speakNext;
+        speechSynthesis.speak(u);
+      };
+      speakNext();
     };
     $('taskArea').append(a);
   }
@@ -520,11 +656,22 @@ function renderSkill(sk,t){
         ?'Hãy tự viết bài bằng tiếng Đức tại đây...'
         :'Viết câu trả lời của bạn tại đây...';
       if(sk.id==='Schreiben'){
-        input.addEventListener('paste',e=>{
+        const blockPaste=e=>{
           e.preventDefault();
+          e.stopPropagation();
           alert('Phần Schreiben không cho phép dán nội dung. Cậu hãy tự nhập bài làm nhé.');
+        };
+        input.addEventListener('paste',blockPaste);
+        input.addEventListener('beforeinput',e=>{
+          if(e.inputType==='insertFromPaste'||e.inputType==='insertFromDrop')blockPaste(e);
         });
-        input.addEventListener('drop',e=>e.preventDefault());
+        input.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();});
+        input.addEventListener('keydown',e=>{
+          if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='v'||e.shiftKey&&e.key==='Insert'){
+            e.preventDefault();
+            alert('Phần Schreiben không cho phép dán nội dung. Cậu hãy tự nhập bài làm nhé.');
+          }
+        });
         input.addEventListener('contextmenu',e=>e.preventDefault());
       }
       input.addEventListener('input',()=>answers[i]={value:input.value});
@@ -595,7 +742,10 @@ async function transcribeSpeechAudio(blob){
 // ============================================================
 
 async function finishSkill(auto){
+  if(speakingPrepActive)return;
   clearInterval(timerId);
+  clearInterval(prepTimerId);
+  prepTimerId=null;
   $('submitSkill').disabled=true;
 
   $('skillInstruction').textContent=auto
@@ -677,6 +827,7 @@ async function finishSkill(auto){
 // ============================================================
 
 async function finishAll(){
+  setExamToolbarLocked(false);
   show('resultScreen');
   $('overallResults').innerHTML=
     '<p>AI đang tổng hợp kết quả năm kỹ năng và xây dựng bảng đánh giá tổng thể...</p>';
@@ -953,7 +1104,7 @@ $('saveCalendar').onclick=()=>{
   $('saveCalendar').disabled=true;
 };
 
-$('goHome').onclick=()=>location.href='index.html';
+$('goHome').onclick=()=>{setExamToolbarLocked(false);location.href='index.html';};
 </script>
 </body>
 </html>
