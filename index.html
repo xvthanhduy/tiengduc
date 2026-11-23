@@ -1595,6 +1595,30 @@ body {
     pointer-events: none;
 }
 .dock-focus::before { content: "Focus Timer"; }
+
+.dock-calendar::before { content: "Lịch cá nhân của tôi"; }
+.floating-dock .dock-calendar { bottom: 354px !important; }
+.personal-calendar-window {
+  position:fixed; z-index:10045; right:96px; bottom:24px;
+  width:min(560px,calc(100vw - 28px)); max-height:min(78vh,720px);
+  display:flex; flex-direction:column; overflow:hidden;
+  color:#263447; background:#fbfcfe; border:1px solid #d9e2ee;
+  border-radius:16px; box-shadow:0 22px 70px rgba(8,22,40,.30);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
+.personal-calendar-window[hidden]{display:none!important}
+.personal-calendar-head{min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;background:#f1f5fa;border-bottom:1px solid #e0e7f0}
+.personal-calendar-head strong{font-size:15px}
+.personal-calendar-head button{width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:#53657b;font-size:20px;cursor:pointer}
+.personal-calendar-body{min-height:0;overflow:auto;padding:16px}
+.personal-calendar-empty{padding:24px 14px;text-align:center;color:#718096;background:#f5f8fc;border:1px dashed #cbd5e1;border-radius:12px;line-height:1.6}
+.personal-calendar-item{padding:14px;margin:0 0 12px;border:1px solid #dce5ef;border-radius:12px;background:#fff}
+.personal-calendar-item h3{margin:0 0 7px;font-size:15px;color:#24364b}
+.personal-calendar-item p{margin:6px 0;color:#64748b;font-size:12px;line-height:1.55}
+.personal-calendar-item ul{margin:8px 0 0;padding-left:20px;color:#475569;font-size:12px;line-height:1.6}
+.personal-calendar-item button{margin-top:10px;padding:7px 10px;border:1px solid #e0b7b7;border-radius:8px;background:#fff7f7;color:#a33b3b;cursor:pointer}
+@media(max-width:600px){.personal-calendar-window{right:10px;bottom:82px;width:calc(100vw - 20px);max-height:72vh}.floating-dock .dock-calendar{bottom:354px!important}}
+
 .floating-dock .ai-restore::before { content: "Trợ lí AI"; }
 .floating-dock .restore-button::before { content: "Music Player"; }
 .floating-dock .ai-restore::before,
@@ -2574,6 +2598,15 @@ html.app-dark .focus-timer-custom input {
     </button>
 
     <button
+        class="dock-tool dock-calendar"
+        id="personalCalendarToggle"
+        type="button"
+        title="Lịch cá nhân của tôi"
+        aria-label="Mở Lịch cá nhân của tôi">
+        <span class="dock-tool-symbol" aria-hidden="true">▦</span>
+    </button>
+
+    <button
         class="dock-tool dock-focus"
         id="focusTimerToggle"
         type="button"
@@ -2594,6 +2627,15 @@ html.app-dark .focus-timer-custom input {
         </span>
     </button>
 </div>
+
+<!-- PERSONAL STUDY CALENDAR -->
+<section class="personal-calendar-window" id="personalCalendarWindow" aria-label="Lịch cá nhân của tôi" hidden>
+  <div class="personal-calendar-head"><strong>▦ Lịch cá nhân của tôi</strong><button type="button" id="personalCalendarClose" aria-label="Đóng">×</button></div>
+  <div class="personal-calendar-body">
+    <p style="margin:0 0 13px;color:#718096;font-size:12px;line-height:1.55">Các lộ trình được lưu từ Einstufungstest sẽ xuất hiện tại đây trên trình duyệt này.</p>
+    <div id="personalCalendarList"></div>
+  </div>
+</section>
 
 <!-- WINDOWS-STYLE STICKY NOTES -->
 <section class="sticky-notes-window" id="stickyNotesWindow" aria-label="Sticky Notes" hidden>
@@ -4588,6 +4630,32 @@ Trình bày rõ theo các mục: KẾT QUẢ, PHÂN TÍCH, CÂU ĐỀ XUẤT (n�
 
   setTab("login");
 })();
+
+// PERSONAL STUDY CALENDAR — reads plans saved by Einstufungstest.html
+(function(){
+  const KEY='personalStudyCalendar_v1';
+  const win=document.getElementById('personalCalendarWindow');
+  const list=document.getElementById('personalCalendarList');
+  const toggle=document.getElementById('personalCalendarToggle');
+  const close=document.getElementById('personalCalendarClose');
+  if(!win||!list||!toggle||!close)return;
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  function readItems(){try{const data=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(data)?data:[]}catch{return []}}
+  function render(){
+    const items=readItems();
+    if(!items.length){list.innerHTML='<div class="personal-calendar-empty">Chưa có lộ trình nào được lưu.<br>Hoàn thành Einstufungstest và chọn “Lưu lại vào lịch cá nhân của tôi” để thêm lộ trình đầu tiên.</div>';return;}
+    list.innerHTML=items.slice().reverse().map(item=>{
+      const weeks=Array.isArray(item.weeklyPlan)?item.weeklyPlan:[];
+      const schedule=Array.isArray(item.weeklySchedule)?item.weeklySchedule:[];
+      return `<article class="personal-calendar-item"><h3>${esc(item.title||'Lộ trình tiếng Đức cá nhân')}</h3><p>Ngày lưu: ${esc(item.createdAt?new Date(item.createdAt).toLocaleString('vi-VN'):'Không rõ')} · ${esc(item.startingLevel||'')} → ${esc(item.target||'')}</p>${weeks.map(w=>`<p><b>${esc(w.week||'')}</b> · ${esc(w.focus||'')}<br>${(w.activities||[]).map(esc).join(' · ')}</p>`).join('')}${schedule.length?'<ul>'+schedule.map(x=>`<li><b>${esc(x.day||'')}</b> · ${esc(x.duration||'')} — ${(x.activities||[]).map(esc).join(', ')}</li>`).join('')+'</ul>':''}<button type="button" data-remove="${esc(item.id||'')}">Xóa lộ trình này</button></article>`;
+    }).join('');
+  }
+  toggle.addEventListener('click',()=>{render();win.hidden=!win.hidden;});
+  close.addEventListener('click',()=>win.hidden=true);
+  list.addEventListener('click',event=>{const button=event.target.closest('[data-remove]');if(!button)return;const id=button.dataset.remove;if(!confirm('Cậu có chắc muốn xóa lộ trình này khỏi lịch cá nhân không?'))return;const items=readItems().filter(x=>String(x.id||'')!==id);localStorage.setItem(KEY,JSON.stringify(items));render();});
+  window.addEventListener('storage',event=>{if(event.key===KEY&&!win.hidden)render();});
+})();
+
 </script>
 
 </body>
