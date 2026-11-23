@@ -1458,6 +1458,94 @@ body::before {
     }
 }
 
+
+
+/* =========================================
+   TRANG CHU TINH GON: KIEM TRA DAU VAO + LUA CHON KY NANG
+   Giu nguyen nen Robot AI va menu B2 hien co.
+========================================= */
+.placement-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 250px;
+    min-width: 250px;
+    min-height: 54px;
+    justify-content: center;
+    padding: 13px 15px;
+    border: 1px solid rgba(210, 228, 241, .88);
+    border-radius: 3px;
+    background: rgba(38, 54, 75, .94);
+    color: #fff;
+    text-decoration: none;
+    transition: background .25s ease, transform .25s ease, border-color .25s ease;
+    animation: levelSlideIn .8s ease-out 1s both;
+}
+.placement-card:hover,
+.placement-card:focus-visible {
+    background: #40566f;
+    border-color: #fff;
+    transform: translateY(-2px);
+    outline: none;
+}
+.placement-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+}
+
+
+/* Chi tat hoa tiet va chuyen dong Winter; giu nguyen mau va cach hien thi goc. */
+#levelB2::before,
+#levelB2::after {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+}
+#levelB2 {
+    width: 220px;
+    min-width: 220px;
+    min-height: 54px;
+    padding: 13px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Giu thoi diem xuat hien da can chinh truoc do. */
+.level-list > #levelB2 {
+    animation: levelSlideIn .8s ease-out 1s both;
+}
+#levelB2 .level-title {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .15px;
+    white-space: nowrap;
+}
+@media (max-width: 600px) {
+    .placement-card {
+        width: 250px;
+        min-width: 250px;
+        min-height: 54px;
+        padding: 13px 15px;
+    }
+    #levelB2 {
+        width: 220px;
+        min-width: 220px;
+        min-height: 54px;
+        padding: 13px 15px;
+    }
+    #levelB2 .level-title {
+        font-size: 17px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .placement-card {
+        animation: none;
+    }
+}
+
 </style>
 </head>
 
@@ -1478,131 +1566,11 @@ body::before {
 
 <main class="main">
     <div class="level-list">
-        <div class="level-card season-spring" id="levelA1">
-            <div class="level-title">A1</div>
-            <div class="menu">
-                <a href="A1/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
-                <a href="A1/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
-                <a href="A1/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <div class="menu-item schreiben-menu" id="schreibenA1">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
-                    <div class="submenu">
-                        <div class="menu-item">
-                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
-                            <div class="submenu">
-                                <a href="A1/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
-                                <a href="A1/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
-                                <a href="A1/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
-                            </div>
-                        </div>
-                        <div class="menu-item">
-                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
-                            <div class="submenu">
-                                <a href="A1/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
-                                <a href="A1/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="A1/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
-                <a href="A1/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
-                <div class="menu-item" id="wortschatzA1">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
-                    <div class="submenu">
-                        <a href="A1/Wortschatz/Alltag/index.html">Alltag</a>
-                        <a href="A1/Wortschatz/Technik/index.html">Technik</a>
-                        <a href="A1/Wortschatz/Medizin/index.html">Medizin</a>
-                        <a href="A1/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
-                        <a href="A1/Wortschatz/Umwelt/index.html">Umwelt</a>
-                        <a href="A1/Wortschatz/Beruf/index.html">Beruf</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="level-card season-summer" id="levelA2">
-            <div class="level-title">A2</div>
-            <div class="menu">
-                <a href="A2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
-                <a href="A2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
-                <a href="A2/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <div class="menu-item schreiben-menu" id="schreibenA2">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
-                    <div class="submenu">
-                        <div class="menu-item">
-                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
-                            <div class="submenu">
-                                <a href="A2/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
-                                <a href="A2/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
-                                <a href="A2/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
-                            </div>
-                        </div>
-                        <div class="menu-item">
-                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
-                            <div class="submenu">
-                                <a href="A2/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
-                                <a href="A2/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="A2/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
-                <a href="A2/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
-                <div class="menu-item" id="wortschatzA2">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
-                    <div class="submenu">
-                        <a href="A2/Wortschatz/Alltag/index.html">Alltag</a>
-                        <a href="A2/Wortschatz/Technik/index.html">Technik</a>
-                        <a href="A2/Wortschatz/Medizin/index.html">Medizin</a>
-                        <a href="A2/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
-                        <a href="A2/Wortschatz/Umwelt/index.html">Umwelt</a>
-                        <a href="A2/Wortschatz/Beruf/index.html">Beruf</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="level-card season-autumn" id="levelB1">
-            <div class="level-title">B1</div>
-            <div class="menu">
-                <a href="B1/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
-                <a href="B1/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
-                <a href="B1/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <div class="menu-item schreiben-menu" id="schreibenB1">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Schreiben – Viết</h2></a>
-                    <div class="submenu">
-                        <div class="menu-item">
-                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">Goethe</a>
-                            <div class="submenu">
-                                <a href="B1/Schreiben/index.html?exam=Goethe&teil=1">Teil 1</a>
-                                <a href="B1/Schreiben/index.html?exam=Goethe&teil=2">Teil 2</a>
-                                <a href="B1/Schreiben/index.html?exam=Goethe&teil=3">Teil 3</a>
-                            </div>
-                        </div>
-                        <div class="menu-item">
-                            <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false">telc</a>
-                            <div class="submenu">
-                                <a href="B1/Schreiben/index.html?exam=telc&teil=1">Teil 1</a>
-                                <a href="B1/Schreiben/index.html?exam=telc&teil=2">Teil 2</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="B1/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
-                <a href="B1/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
-                <div class="menu-item" id="wortschatzB1">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
-                    <div class="submenu">
-                        <a href="B1/Wortschatz/Alltag/index.html">Alltag</a>
-                        <a href="B1/Wortschatz/Technik/index.html">Technik</a>
-                        <a href="B1/Wortschatz/Medizin/index.html">Medizin</a>
-                        <a href="B1/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
-                        <a href="B1/Wortschatz/Umwelt/index.html">Umwelt</a>
-                        <a href="B1/Wortschatz/Beruf/index.html">Beruf</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <a class="placement-card" href="Einstufungstest.html">
+            <span class="placement-card-title">Kiểm tra trình độ đầu vào</span>
+        </a>
         <div class="level-card season-winter" id="levelB2">
-            <div class="level-title">B2</div>
+            <div class="level-title">Lựa chọn kỹ năng</div>
             <div class="menu">
                 <a href="B2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
                 <a href="B2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
