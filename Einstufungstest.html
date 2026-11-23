@@ -1,133 +1,826 @@
+
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Einstufungstest – Kiểm tra trình độ tiếng Đức</title>
 <style>
-:root{--bg:#ffffff;--panel:rgba(255,255,255,.96);--line:rgba(37,59,84,.18);--text:#17263a;--muted:#52647a;--blue:#2878c8;--gold:#9a6b12;--green:#18794e}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:linear-gradient(90deg,rgba(3,10,22,.48),rgba(3,10,22,.20)),url('11.jpg') center/cover fixed no-repeat}.page{width:min(880px,calc(100% - 34px));margin:28px auto 50px 4.2%;}.brand{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#edf4ff;margin:0 0 10px;text-shadow:0 1px 5px rgba(0,0,0,.65)}.panel{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:18px;padding:clamp(20px,3vw,32px);box-shadow:0 18px 55px rgba(0,0,0,.22),0 0 28px rgba(255,255,255,.20);backdrop-filter:blur(12px)}h1{font-size:clamp(26px,4vw,36px);margin:0 0 8px}h2{font-size:22px;margin:0 0 14px}p{color:var(--muted);line-height:1.65}.sub{margin:0 0 24px}.field{margin:18px 0}.field label{display:block;font-weight:650;margin:0 0 9px}.choices{display:flex;gap:10px;flex-wrap:wrap}.choice{border:1px solid #c3cfdd;background:#f1f5fa;color:#203047;border-radius:10px;padding:11px 15px;cursor:pointer}.choice.active{border-color:var(--blue);background:#e2effd;color:#174d83;box-shadow:0 0 0 1px var(--blue) inset}select,input,textarea{width:100%;border:1px solid #c3cfdd;border-radius:10px;background:#fff;color:#17263a;padding:13px;font:inherit}textarea{min-height:160px;resize:vertical;line-height:1.65}button.primary,button.secondary{border:0;border-radius:10px;padding:13px 18px;font-weight:750;font-size:15px;cursor:pointer}button.primary{background:linear-gradient(110deg,#2d75c9,#4b9ce9);color:white}button.secondary{background:#edf2f8;color:#26384f;border:1px solid #c3cfdd}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.notice{border:1px solid rgba(190,139,39,.35);background:#fff8e8;padding:15px;border-radius:12px;color:#725014;line-height:1.6}.hidden{display:none!important}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.pill{border:1px solid var(--line);border-radius:99px;padding:7px 12px;color:var(--muted);font-size:13px}.timer{font-size:23px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}.progress{height:7px;background:#dce4ee;border-radius:20px;overflow:hidden;margin:14px 0 22px}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#69aef5,#a9d4ff);transition:width .2s}.reading{white-space:pre-wrap;line-height:1.8;background:#f3f7fc;border:1px solid #d3deea;border-radius:12px;padding:16px;margin:15px 0;color:#203047}.task{padding:16px;border:1px solid var(--line);border-radius:12px;margin:14px 0;background:#f7f9fc}.task h3{font-size:17px;line-height:1.5;margin:0 0 12px}.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:11px 13px;background:#fff;border:1px solid #c3cfdd;border-radius:9px;color:#203047;cursor:pointer}.opt.active{border-color:var(--blue);background:#e2effd;color:#174d83}.micro{font-size:13px;color:#64748b}.result-card{padding:16px;border:1px solid var(--line);border-radius:12px;background:#f7f9fc;margin:12px 0}.result-card strong{color:#245b91}.skill-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.skill-chip{padding:12px;border:1px solid var(--line);border-radius:10px;background:#f3f7fc;color:#26384f}.calendar-note{color:var(--green);font-weight:700}
+:root{--panel:rgba(255,255,255,.97);--line:rgba(37,59,84,.18);--text:#17263a;--muted:#52647a;--blue:#2878c8;--gold:#9a6b12;--green:#18794e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:linear-gradient(90deg,rgba(3,10,22,.48),rgba(3,10,22,.20)),url('11.jpg') center/cover fixed no-repeat}
+.page{width:min(880px,calc(100% - 34px));margin:28px auto 50px 4.2%}
+.brand{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#edf4ff;margin:0 0 10px;text-shadow:0 1px 5px #000}
+.panel{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:18px;padding:clamp(20px,3vw,32px);box-shadow:0 18px 55px #0003,0 0 28px #fff3;backdrop-filter:blur(12px)}
+h1{font-size:clamp(26px,4vw,36px);margin:0 0 8px}
+h2{font-size:22px;margin:0 0 14px}
+p{color:var(--muted);line-height:1.65}
+.sub{margin:0 0 24px}
+.field{margin:18px 0}
+.field label{display:block;font-weight:650;margin:0 0 9px}
+.choices{display:flex;gap:10px;flex-wrap:wrap}
+.choice{border:1px solid #c3cfdd;background:#f1f5fa;color:#203047;border-radius:10px;padding:11px 15px;cursor:pointer}
+.choice.active{border-color:var(--blue);background:#e2effd;color:#174d83;box-shadow:0 0 0 1px var(--blue) inset}
+select,input,textarea{width:100%;border:1px solid #c3cfdd;border-radius:10px;background:#fff;color:#17263a;padding:13px;font:inherit}
+textarea{min-height:160px;resize:vertical;line-height:1.65}
+button.primary,button.secondary{border:0;border-radius:10px;padding:13px 18px;font-weight:750;font-size:15px;cursor:pointer}
+button.primary{background:linear-gradient(110deg,#2d75c9,#4b9ce9);color:#fff}
+button.secondary{background:#edf2f8;color:#26384f;border:1px solid #c3cfdd}
+button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.notice{border:1px solid #be8b2759;background:#fff8e8;padding:15px;border-radius:12px;color:#725014;line-height:1.6}
+.hidden{display:none!important}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.pill{border:1px solid var(--line);border-radius:99px;padding:7px 12px;color:var(--muted);font-size:13px}
+.timer{font-size:23px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+.progress{height:7px;background:#dce4ee;border-radius:20px;overflow:hidden;margin:14px 0 22px}
+.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#69aef5,#a9d4ff);transition:width .2s}
+.reading{white-space:pre-wrap;line-height:1.8;background:#f3f7fc;border:1px solid #d3deea;border-radius:12px;padding:16px;margin:15px 0;color:#203047}
+.task{padding:16px;border:1px solid var(--line);border-radius:12px;margin:14px 0;background:#f7f9fc}
+.task h3{font-size:17px;line-height:1.5;margin:0 0 12px}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:11px 13px;background:#fff;border:1px solid #c3cfdd;border-radius:9px;color:#203047;cursor:pointer}
+.opt.active{border-color:var(--blue);background:#e2effd;color:#174d83}
+.micro{font-size:13px;color:#64748b}
+.result-card{padding:16px;border:1px solid var(--line);border-radius:12px;background:#f7f9fc;margin:12px 0}
+.result-card strong{color:#245b91}
+.skill-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.skill-chip{padding:12px;border:1px solid var(--line);border-radius:10px;background:#f3f7fc;color:#26384f}
+.calendar-note{color:var(--green);font-weight:700}
 .mic-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
 .mic-record{display:inline-flex;align-items:center;gap:8px;background:#fff0f0;color:#a3212b;border:1px solid #e6a8ad;border-radius:999px;padding:11px 17px;font-weight:800;cursor:pointer}
 .mic-record.recording{background:#b4232c;color:#fff;border-color:#b4232c;animation:micPulse 1.2s infinite}
 .mic-status{font-size:13px;color:#52647a}
 .mic-preview{display:block;width:min(100%,420px);height:38px;margin-top:9px}
-@keyframes micPulse{50%{box-shadow:0 0 0 6px rgba(180,35,44,.13)}}
+@keyframes micPulse{50%{box-shadow:0 0 0 6px #b4232c22}}
 @media(max-width:650px){.page{margin:14px auto;width:calc(100% - 22px)}.skill-list{grid-template-columns:1fr}.topline{align-items:flex-start;flex-direction:column}}
-</style></head>
-<body><main class="page"><div class="brand">Deutsch Lernen · Persönlicher Einstufungstest</div>
-<section class="panel" id="profileScreen"><h1>Einstufungstest</h1><p class="sub">Kiểm tra trình độ đầu vào và xây dựng lộ trình học tiếng Đức phù hợp với năng lực thực tế của cậu.</p>
-<div class="field"><label>1. Bạn đã từng học tiếng Đức chưa?</label><div class="choices" data-group="studied"><button class="choice active" data-value="Đã từng học">Đã từng học</button><button class="choice" data-value="Chưa từng học">Chưa từng học</button></div></div>
-<div class="field"><label for="currentLevel">2. Trình độ hiện tại của bạn?</label><select id="currentLevel"><option>A1</option><option>A2</option><option selected>B1</option><option>B2</option><option>C1</option><option>C2</option></select><p class="micro">Đây là trình độ tự đánh giá ban đầu; hệ thống sẽ kiểm tra lại qua 5 kỹ năng.</p></div>
-<div class="field"><label>3. Tại sao bạn học tiếng Đức?</label><div class="choices" data-group="motivation"><button class="choice active" data-value="Tôi muốn đạt chứng chỉ">Tôi muốn đạt chứng chỉ</button><button class="choice" data-value="Tôi muốn nâng cao trình độ cá nhân">Tôi muốn nâng cao trình độ cá nhân</button><button class="choice" data-value="Lý do khác">Lý do khác</button></div><input id="otherReason" class="hidden" style="margin-top:10px" maxlength="500" placeholder="Hãy nhập lý do của bạn..."></div>
-<div class="actions"><button class="primary" id="continueProfile">Tiếp tục</button></div><p class="micro">Bài kiểm tra là công cụ chẩn đoán tham chiếu CEFR/GER, không thay thế kỳ thi chứng chỉ chính thức.</p></section>
-<section class="panel hidden" id="introScreen"><h1>Chuẩn bị kiểm tra</h1><p id="profileSummary"></p><div class="notice">Bạn hãy làm bài đúng với khả năng thực tế để lộ trình được cá nhân hóa một cách tốt nhất.</div><p>Hệ thống sẽ kiểm tra 5 kỹ năng theo thứ tự: Aussprache, Hören, Sprechen, Lesen và Schreiben. Mỗi phần có thời gian riêng. Khi hết giờ, bài sẽ tự động khóa và chuyển tiếp.</p><div class="skill-list"><div class="skill-chip">🗣️ Aussprache · 10 câu</div><div class="skill-chip">🎧 Hören · 20 phút</div><div class="skill-chip">💬 Sprechen · 15 phút</div><div class="skill-chip">📖 Lesen · 25 phút</div><div class="skill-chip">✍️ Schreiben · 30 phút</div></div><div class="actions"><button class="primary" id="startTest">Bắt đầu kiểm tra</button><button class="secondary" id="backProfile">Quay lại</button></div></section>
-<section class="panel hidden" id="testScreen"><div class="topline"><div><div class="pill" id="skillCount">Kỹ năng 1/5</div><h2 id="skillTitle" style="margin:10px 0 0">Aussprache</h2></div><div class="timer" id="timer">10:00</div></div><div class="progress"><i id="skillProgress"></i></div><p id="skillInstruction"></p><div id="passage" class="reading hidden"></div><div id="taskArea"></div><div class="actions"><button class="primary" id="submitSkill">Nộp bài và tiếp tục</button></div><p class="micro" id="timerHint">Khi hết giờ, hệ thống sẽ tự động khóa bài làm.</p></section>
-<section class="panel hidden" id="resultScreen"><h1>Kết quả Einstufungstest</h1><p>AI đã tổng hợp kết quả của 5 kỹ năng và ước lượng năng lực theo CEFR/GER.</p><div id="overallResults"></div><div class="field"><label>Bước tiếp theo của bạn</label><div class="task"><button class="primary" id="personalizeGoal">1. Hãy cá nhân hóa lộ trình của tôi</button><div id="goalFields" class="hidden"><p>Chọn trình độ bạn muốn đạt và tên kỳ thi.</p><select id="targetLevel"><option>A1</option><option>A2</option><option>B1</option><option selected>B2</option><option>C1</option><option>C2</option></select><input id="examName" maxlength="160" placeholder="Tên kỳ thi (ví dụ: Goethe-Zertifikat B2)" style="margin-top:10px"><button class="primary" id="makeGoalPlan" style="margin-top:10px">Tạo lộ trình</button></div></div><div class="task"><button class="secondary" id="improveGerman">2. Tôi cần nâng cao khả năng tiếng Đức của mình</button><div id="improveFields" class="hidden"><textarea id="improveReason" maxlength="800" placeholder="Bạn muốn cải thiện điều gì? Ví dụ: giao tiếp công việc, phát âm, viết học thuật..."></textarea><button class="primary" id="makeImprovePlan" style="margin-top:10px">Tạo lộ trình</button></div></div><div class="task"><button class="secondary" id="selfStudy">3. Tôi sẽ tự học theo lộ trình của cá nhân</button></div></div></section>
-<section class="panel hidden" id="planScreen"><h1>Mình đã cá nhân hóa lộ trình cho bạn</h1><div id="planContent"></div><div class="actions"><button class="primary" id="saveCalendar">Lưu lại vào lịch cá nhân của tôi</button><button class="secondary" id="goHome">Về trang chủ</button></div><p id="savedMessage" class="calendar-note hidden">Đã lưu vào lịch cá nhân ở thanh công cụ, bạn hãy bấm vào nút công cụ bên phải ở phía dưới để xem lại.</p></section>
+</style>
+</head>
+<body>
+<main class="page">
+<div class="brand">Deutsch Lernen · Persönlicher Einstufungstest</div>
+
+<section class="panel" id="profileScreen">
+<h1>Einstufungstest</h1>
+<p class="sub">Kiểm tra trình độ đầu vào và xây dựng lộ trình học tiếng Đức phù hợp với năng lực thực tế của cậu.</p>
+
+<div class="field">
+<label>1. Bạn đã từng học tiếng Đức chưa?</label>
+<div class="choices" data-group="studied">
+<button class="choice active" data-value="Đã từng học">Đã từng học</button>
+<button class="choice" data-value="Chưa từng học">Chưa từng học</button>
+</div>
+</div>
+
+<div class="field">
+<label for="currentLevel">2. Trình độ hiện tại của bạn?</label>
+<select id="currentLevel">
+<option>A1</option><option>A2</option><option selected>B1</option>
+<option>B2</option><option>C1</option><option>C2</option>
+</select>
+<p class="micro">Đây là trình độ tự đánh giá ban đầu; hệ thống sẽ kiểm tra lại qua 5 kỹ năng.</p>
+</div>
+
+<div class="field">
+<label>3. Tại sao bạn học tiếng Đức?</label>
+<div class="choices" data-group="motivation">
+<button class="choice active" data-value="Tôi muốn đạt chứng chỉ">Tôi muốn đạt chứng chỉ</button>
+<button class="choice" data-value="Tôi muốn nâng cao trình độ cá nhân">Tôi muốn nâng cao trình độ cá nhân</button>
+<button class="choice" data-value="Lý do khác">Lý do khác</button>
+</div>
+<input id="otherReason" class="hidden" style="margin-top:10px" maxlength="500" placeholder="Hãy nhập lý do của bạn...">
+</div>
+
+<div class="actions">
+<button class="primary" id="continueProfile">Tiếp tục</button>
+</div>
+<p class="micro">Bài kiểm tra là công cụ chẩn đoán tham chiếu CEFR/GER, không thay thế kỳ thi chứng chỉ chính thức.</p>
+</section>
+
+<section class="panel hidden" id="introScreen">
+<h1>Chuẩn bị kiểm tra</h1>
+<p id="profileSummary"></p>
+<div class="notice">Bạn hãy làm bài đúng với khả năng thực tế để lộ trình được cá nhân hóa một cách tốt nhất.</div>
+<p>Hệ thống sẽ kiểm tra 5 kỹ năng theo thứ tự: Aussprache, Hören, Sprechen, Lesen và Schreiben. Mỗi phần có thời gian riêng. Khi hết giờ, bài sẽ tự động khóa và chuyển tiếp.</p>
+<div class="skill-list">
+<div class="skill-chip">🗣️ Aussprache · 10 câu</div>
+<div class="skill-chip">🎧 Hören · 20 phút</div>
+<div class="skill-chip">💬 Sprechen · 15 phút</div>
+<div class="skill-chip">📖 Lesen · 25 phút</div>
+<div class="skill-chip">✍️ Schreiben · 30 phút</div>
+</div>
+<div class="actions">
+<button class="primary" id="startTest">Bắt đầu kiểm tra</button>
+<button class="secondary" id="backProfile">Quay lại</button>
+</div>
+</section>
+
+<section class="panel hidden" id="testScreen">
+<div class="topline">
+<div>
+<div class="pill" id="skillCount">Kỹ năng 1/5</div>
+<h2 id="skillTitle" style="margin:10px 0 0">Aussprache</h2>
+</div>
+<div class="timer" id="timer">10:00</div>
+</div>
+<div class="progress"><i id="skillProgress"></i></div>
+<p id="skillInstruction"></p>
+<div id="passage" class="reading hidden"></div>
+<div id="taskArea"></div>
+<div class="actions">
+<button class="primary" id="submitSkill">Nộp bài và tiếp tục</button>
+</div>
+<p class="micro">Khi hết giờ, hệ thống sẽ tự động khóa bài làm.</p>
+</section>
+
+<section class="panel hidden" id="resultScreen">
+<h1>Kết quả Einstufungstest</h1>
+<p>AI đã tổng hợp kết quả của 5 kỹ năng và ước lượng năng lực theo CEFR/GER.</p>
+<div id="overallResults"></div>
+<div class="field">
+<label>Bước tiếp theo của bạn</label>
+<div class="task">
+<button class="primary" id="personalizeGoal">1. Hãy cá nhân hóa lộ trình của tôi</button>
+<div id="goalFields" class="hidden">
+<p>Chọn trình độ bạn muốn đạt và tên kỳ thi.</p>
+<select id="targetLevel">
+<option>A1</option><option>A2</option><option>B1</option><option selected>B2</option><option>C1</option><option>C2</option>
+</select>
+<input id="examName" maxlength="160" placeholder="Tên kỳ thi (ví dụ: Goethe-Zertifikat B2)" style="margin-top:10px">
+<button class="primary" id="makeGoalPlan" style="margin-top:10px">Tạo lộ trình</button>
+</div>
+</div>
+<div class="task">
+<button class="secondary" id="improveGerman">2. Tôi cần nâng cao khả năng tiếng Đức của mình</button>
+<div id="improveFields" class="hidden">
+<textarea id="improveReason" maxlength="800" placeholder="Bạn muốn cải thiện điều gì? Ví dụ: giao tiếp công việc, phát âm, viết học thuật..."></textarea>
+<button class="primary" id="makeImprovePlan" style="margin-top:10px">Tạo lộ trình</button>
+</div>
+</div>
+<div class="task">
+<button class="secondary" id="selfStudy">3. Tôi sẽ tự học theo lộ trình của cá nhân</button>
+</div>
+</div>
+</section>
+
+<section class="panel hidden" id="planScreen">
+<h1>Mình đã cá nhân hóa lộ trình cho bạn</h1>
+<div id="planContent"></div>
+<div class="actions">
+<button class="primary" id="saveCalendar">Lưu lại vào lịch cá nhân của tôi</button>
+<button class="secondary" id="goHome">Về trang chủ</button>
+</div>
+<p id="savedMessage" class="calendar-note hidden">Đã lưu vào lịch cá nhân ở thanh công cụ, bạn hãy bấm vào nút công cụ bên phải ở phía dưới để xem lại.</p>
+</section>
 </main>
+
 <script>
 const WORKER_URL='https://german-einstufung-ai.xv-thanhduy.workers.dev';
-const skillOrder=[{id:'Aussprache',name:'Aussprache – Phát âm',seconds:600},{id:'Hören',name:'Hören – Nghe',seconds:1200},{id:'Sprechen',name:'Sprechen – Nói',seconds:900},{id:'Lesen',name:'Lesen – Đọc',seconds:1500},{id:'Schreiben',name:'Schreiben – Viết',seconds:1800}];
-let profile={},skillIndex=0,activeTest=null,answers={},results=[],timerId=null,remaining=0,planData=null,recognition=null;
+
+const skillOrder=[
+{id:'Aussprache',name:'Aussprache – Phát âm',seconds:600},
+{id:'Hören',name:'Hören – Nghe',seconds:1200},
+{id:'Sprechen',name:'Sprechen – Nói',seconds:900},
+{id:'Lesen',name:'Lesen – Đọc',seconds:1500},
+{id:'Schreiben',name:'Schreiben – Viết',seconds:1800}
+];
+
+let profile={},skillIndex=0,activeTest=null,answers={},results=[],timerId=null,remaining=0,planData=null;
 let audioBlobs={},activeRecorders={},recordStopPromises={};
-const $=id=>document.getElementById(id);function show(id){['profileScreen','introScreen','testScreen','resultScreen','planScreen'].forEach(x=>$(x).classList.toggle('hidden',x!==id));window.scrollTo({top:0,behavior:'smooth'});} 
-document.querySelectorAll('.choices').forEach(group=>group.addEventListener('click',e=>{let b=e.target.closest('.choice');if(!b)return;group.querySelectorAll('.choice').forEach(x=>x.classList.toggle('active',x===b));if(group.dataset.group==='motivation')$('otherReason').classList.toggle('hidden',b.dataset.value!=='Lý do khác');}));
-async function api(payload){let r=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let d=await r.json();if(!r.ok)throw new Error(d.details||d.error||'Không thể kết nối AI');return d;}
-$('continueProfile').onclick=()=>{profile.studied=document.querySelector('[data-group="studied"] .active').dataset.value;profile.currentLevel=$('currentLevel').value;profile.motivation=document.querySelector('[data-group="motivation"] .active').dataset.value;profile.otherReason=$('otherReason').value.trim();if(profile.motivation==='Lý do khác'&&!profile.otherReason){alert('Cậu hãy nhập lý do học tiếng Đức nhé.');return;}profile.motivationDetail=profile.motivation==='Lý do khác'?profile.otherReason:profile.motivation;$('profileSummary').textContent=`Thông tin ban đầu: ${profile.studied}; trình độ tự đánh giá: ${profile.currentLevel}; mục tiêu: ${profile.motivationDetail}.`;show('introScreen');};$('backProfile').onclick=()=>show('profileScreen');
-$('startTest').onclick=async()=>{skillIndex=0;answers={};results=[];await loadSkill();};
-async function loadSkill(){clearInterval(timerId);answers={};let sk=skillOrder[skillIndex];show('testScreen');$('skillCount').textContent=`Kỹ năng ${skillIndex+1}/5`;$('skillTitle').textContent=sk.name;$('taskArea').innerHTML='';$('passage').classList.add('hidden');$('skillInstruction').textContent='AI đang chuẩn bị bài kiểm tra phù hợp với hồ sơ của bạn...';$('submitSkill').disabled=true;try{let d=await api({mode:'generate',skill:sk.id,currentLevel:profile.currentLevel,motivation:profile.motivationDetail});activeTest=d.test;renderSkill(sk,activeTest);remaining=sk.seconds;updateTimer();timerId=setInterval(()=>{remaining--;updateTimer();if(remaining<=0){clearInterval(timerId);finishSkill(true);}},1000);}catch(e){alert('Không thể tạo bài kiểm tra: '+e.message);show('introScreen');}}
-function renderSkill(sk,t){
-$('skillInstruction').textContent=t.instruction||'Hãy hoàn thành các nhiệm vụ trong thời gian quy định.';
-if(t.passage){$('passage').textContent=t.passage;$('passage').classList.remove('hidden');}
-if(sk.id==='Hören'&&t.listeningScript){let a=document.createElement('button');a.className='secondary';a.textContent='▶ Nghe đoạn tiếng Đức';a.onclick=()=>{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t.listeningScript);u.lang='de-DE';u.rate=.88;speechSynthesis.speak(u);};$('taskArea').append(a);}
-let area=$('taskArea');
-(t.tasks||[]).forEach((task,i)=>{
- let box=document.createElement('div');box.className='task';
- let heading=document.createElement('h3');heading.textContent=`${i+1}. ${task.prompt}`;box.append(heading);
- if(task.options?.length){
-  task.options.forEach((op,j)=>{let b=document.createElement('button');b.className='opt';b.textContent=typeof op==='string'?op:op.text||op.label;b.onclick=()=>{box.querySelectorAll('.opt').forEach(x=>x.classList.remove('active'));b.classList.add('active');answers[i]={value:typeof op==='string'?op:(op.label||op.text),index:j};};box.append(b);});
- }else if(sk.id==='Aussprache'){
-  let row=document.createElement('div');row.className='mic-row';
-  let mic=document.createElement('button');mic.type='button';mic.className='mic-record';mic.innerHTML='🎙️ <span>Nhấn để thu âm</span>';
-  let status=document.createElement('span');status.className='mic-status';status.textContent='Chưa có bản ghi';
-  let preview=document.createElement('audio');preview.className='mic-preview';preview.controls=true;preview.hidden=true;
-  mic.onclick=async()=>{
-   if(activeRecorders[i]?.state==='recording'){activeRecorders[i].stop();return;}
-   if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){alert('Trình duyệt chưa hỗ trợ ghi âm. Hãy dùng Chrome/Edge mới và mở trang bằng HTTPS.');return;}
-   try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(x=>MediaRecorder.isTypeSupported(x));
-    const recorder=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream);
-    const chunks=[];activeRecorders[i]=recorder;mic.classList.add('recording');mic.querySelector('span').textContent='Dừng thu âm';status.textContent='Đang thu âm...';
-    recordStopPromises[i]=new Promise(resolve=>{
-     recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
-     recorder.onstop=()=>{
-      stream.getTracks().forEach(track=>track.stop());mic.classList.remove('recording');mic.querySelector('span').textContent='Thu âm lại';
-      const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});
-      if(blob.size){audioBlobs[i]=blob;const url=URL.createObjectURL(blob);preview.src=url;preview.hidden=false;status.textContent='Đã ghi âm · '+Math.max(1,Math.round(blob.size/1024))+' KB';}
-      else status.textContent='Bản ghi trống, cậu hãy thử lại.';
-      resolve();
-     };
-     recorder.start();
+
+const $=id=>document.getElementById(id);
+
+function show(id){
+  ['profileScreen','introScreen','testScreen','resultScreen','planScreen']
+    .forEach(x=>$(x).classList.toggle('hidden',x!==id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('.choices').forEach(group=>
+  group.addEventListener('click',e=>{
+    const b=e.target.closest('.choice');
+    if(!b)return;
+    group.querySelectorAll('.choice').forEach(x=>
+      x.classList.toggle('active',x===b)
+    );
+    if(group.dataset.group==='motivation'){
+      $('otherReason').classList.toggle('hidden',b.dataset.value!=='Lý do khác');
+    }
+  })
+);
+
+async function api(payload){
+  let r;
+  try{
+    r=await fetch(WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
     });
-   }catch(err){alert('Không thể truy cập micro. Cậu hãy cấp quyền sử dụng micro cho trình duyệt rồi thử lại.');}
-  };
-  row.append(mic,status);box.append(row,preview);
-  let note=document.createElement('p');note.className='micro';note.textContent='Đọc câu tiếng Đức ở trên, nhấn micro để thu âm. Cậu có thể nghe lại hoặc thu lại trước khi nộp bài.';box.append(note);
- }else if(sk.id==='Sprechen'){
-  let speak=document.createElement('button');speak.className='secondary';speak.textContent='🎙️ Đọc câu trả lời';speak.onclick=()=>startRecognition(i,input);box.append(speak);
-  let input=document.createElement('textarea');input.rows=2;input.placeholder='Nhập nội dung trả lời hoặc dùng nút đọc bằng giọng nói';input.addEventListener('input',()=>answers[i]={value:input.value});box.append(input);
- }else{
-  let input=document.createElement('textarea');input.placeholder='Viết câu trả lời của bạn tại đây...';
-  if(sk.id==='Schreiben'){input.addEventListener('paste',e=>{e.preventDefault();alert('Phần Schreiben không cho phép dán nội dung. Cậu hãy tự nhập bài làm nhé.');});input.addEventListener('drop',e=>e.preventDefault());input.addEventListener('contextmenu',e=>e.preventDefault());}
-  input.addEventListener('input',()=>answers[i]={value:input.value});box.append(input);
- }
- area.append(box);
-});
-$('submitSkill').disabled=false;
-}
-function startRecognition(i,input){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){alert('Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Cậu có thể tự nhập transcript.');return;}if(recognition)recognition.stop();recognition=new SR();recognition.lang='de-DE';recognition.interimResults=false;recognition.onresult=e=>{input.value=e.results[0][0].transcript;answers[i]={value:input.value,recognitionConfidence:e.results[0][0].confidence};};recognition.onerror=()=>alert('Không nhận diện được giọng nói. Cậu thử lại hoặc nhập transcript.');recognition.start();}
-function updateTimer(){let m=Math.floor(remaining/60),s=remaining%60;$('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;$('skillProgress').style.width=`${100*(1-remaining/skillOrder[skillIndex].seconds)}%`;}
-$('submitSkill').onclick=()=>finishSkill(false);
-async function transcribeAusspracheAudio(blob){
- const form=new FormData();form.append('mode','transcribe');
- const ext=(blob.type||'').includes('mp4')?'m4a':'webm';
- form.append('file',blob,'aussprache.'+ext);
- let response;try{response=await fetch(WORKER_URL,{method:'POST',body:form});}
- catch(e){throw new Error('Không kết nối được Worker để nhận diện audio.');}
- const data=await response.json().catch(()=>({error:'Worker không trả về JSON hợp lệ.'}));
- if(!response.ok)throw new Error(data.details||data.error||'Không thể nhận diện bản ghi.');
- return data.transcript||'';
-}
-async function finishSkill(auto){
- clearInterval(timerId);if(recognition)recognition.stop();
- $('submitSkill').disabled=true;
- $('skillInstruction').textContent=auto?'Đã hết giờ. Hệ thống đang gửi bài làm...':'Đang gửi bài làm lên hệ thống...';
- document.querySelectorAll('#taskArea input,#taskArea textarea,#taskArea button').forEach(x=>x.disabled=true);
- try{
-  const pending=Object.values(recordStopPromises);Object.values(activeRecorders).forEach(r=>{if(r?.state==='recording')r.stop();});
-  if(pending.length)await Promise.all(pending);
-  if(skillOrder[skillIndex].id==='Aussprache'){
-   const ids=Object.keys(audioBlobs);
-   if(!ids.length)throw new Error('Cậu chưa thu âm câu nào. Hãy nhấn micro để ghi âm trước khi nộp bài.');
-   $('skillInstruction').textContent='AI đang nhận diện các bản ghi tiếng Đức...';
-   for(const id of ids){const transcript=await transcribeAusspracheAudio(audioBlobs[id]);answers[id]={value:transcript,source:'audio-transcription'};}
+  }catch(e){
+    throw new Error('Không kết nối được Einstufung Worker.');
   }
-  let d=await api({mode:'evaluate',skill:skillOrder[skillIndex].id,currentLevel:profile.currentLevel,profile,test:activeTest,answers});
-  results.push(d.evaluation);audioBlobs={};activeRecorders={};recordStopPromises={};skillIndex++;
-  if(skillIndex<5){await loadSkill();}else{await finishAll();}
- }catch(e){
-  alert('Chưa thể gửi/chấm bài: '+e.message);
-  $('skillInstruction').textContent='Bài làm vẫn được giữ trong trang. Cậu có thể thu âm bổ sung hoặc thử nộp lại.';
-  $('submitSkill').disabled=false;
-  document.querySelectorAll('#taskArea button').forEach(x=>x.disabled=false);
- }
+
+  const d=await r.json().catch(()=>({error:'Worker không trả về JSON hợp lệ.'}));
+  if(!r.ok)throw new Error(d.details||d.error||'Không thể kết nối AI');
+  return d;
 }
-async function finishAll(){show('resultScreen');$('overallResults').innerHTML='<p>AI đang tổng hợp kết quả năm kỹ năng...</p>';try{let profileText=JSON.stringify({profile,results});let d=await api({mode:'evaluate',skill:'Gesamtauswertung',currentLevel:profile.currentLevel,profile:profileText,test:{title:'Tổng hợp 5 kỹ năng'},answers:{summary:JSON.stringify(results)}}); // final overall calibration
-let overall=d.evaluation;$('overallResults').innerHTML='';results.forEach(r=>{let el=document.createElement('div');el.className='result-card';el.innerHTML=`<strong>${escapeHtml(r.skill||'Kỹ năng')}</strong> · ${escapeHtml(r.estimatedLevel||'Chưa xác định')} · ${Number(r.score)||0}/100<p>${escapeHtml(r.feedback||'')}</p>`;$('overallResults').append(el);});let sum=document.createElement('div');sum.className='result-card';sum.innerHTML=`<strong>Đánh giá tổng thể tham chiếu: ${escapeHtml(overall.estimatedLevel||'Cần đánh giá thêm')}</strong><p>${escapeHtml(overall.feedback||'Kết quả được tổng hợp từ các kỹ năng.')}</p>`;$('overallResults').append(sum);profile.overall=overall;}catch(e){$('overallResults').textContent='Đã hoàn thành 5 kỹ năng. Kết quả từng phần được lưu trong phiên này; tổng hợp AI chưa thực hiện được: '+e.message;}}
-function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-$('personalizeGoal').onclick=()=>{$('goalFields').classList.toggle('hidden');$('improveFields').classList.add('hidden');};$('improveGerman').onclick=()=>{$('improveFields').classList.toggle('hidden');$('goalFields').classList.add('hidden');};$('selfStudy').onclick=()=>location.href='index.html';
-async function createPlan(targetLevel,examName,reason){$('overallResults').insertAdjacentHTML('beforeend','<p id="planLoading">AI đang phân tích và xây dựng lộ trình cá nhân...</p>');try{let d=await api({mode:'plan',profile:JSON.stringify({profile,results,overall:profile.overall}),targetLevel,examName,reason});planData=d.plan;renderPlan(planData);show('planScreen');}catch(e){alert('Chưa thể tạo lộ trình: '+e.message);$('planLoading')?.remove();}}
-$('makeGoalPlan').onclick=()=>{let exam=$('examName').value.trim();if(!exam){alert('Cậu hãy nhập tên kỳ thi nhé.');return;}createPlan($('targetLevel').value,exam,'Mục tiêu đạt chứng chỉ '+exam);};$('makeImprovePlan').onclick=()=>{let reason=$('improveReason').value.trim();if(!reason){alert('Cậu hãy nhập điều muốn cải thiện nhé.');return;}createPlan('', '',reason);};
-function renderPlan(p){let root=$('planContent');root.innerHTML=`<div class="result-card"><strong>${escapeHtml(p.headline)}</strong><p>${escapeHtml(p.summary)}</p><p>Trình độ hiện tại ước lượng: ${escapeHtml(p.startingLevel)} · Mục tiêu: ${escapeHtml(p.target)}</p></div>`;(p.weeklyPlan||[]).forEach(w=>{let d=document.createElement('div');d.className='result-card';d.innerHTML=`<strong>${escapeHtml(w.week)} · ${escapeHtml(w.focus)}</strong><ul>${(w.activities||[]).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')}</ul><p>Mốc đánh giá: ${escapeHtml(w.milestone)}</p>`;root.append(d);});let sched=document.createElement('div');sched.className='result-card';sched.innerHTML='<strong>Lịch học gợi ý</strong>'+(p.weeklySchedule||[]).map(x=>`<p><b>${escapeHtml(x.day)}</b> · ${escapeHtml(x.duration)}<br>${(x.activities||[]).map(escapeHtml).join(' · ')}</p>`).join('');root.append(sched);let metrics=document.createElement('div');metrics.className='result-card';metrics.innerHTML='<strong>Tiêu chí theo dõi tiến bộ</strong><ul>'+(p.successMetrics||[]).map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul><p>'+escapeHtml(p.note||'')+'</p>';root.append(metrics);}
-$('saveCalendar').onclick=()=>{if(!planData)return;let key='personalStudyCalendar_v1';let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(items))items=[];}catch{}items.push({id:'plan-'+Date.now(),type:'learning-plan',title:planData.headline||'Lộ trình tiếng Đức cá nhân',createdAt:new Date().toISOString(),startingLevel:planData.startingLevel,target:planData.target,weeklyPlan:planData.weeklyPlan||[],weeklySchedule:planData.weeklySchedule||[],successMetrics:planData.successMetrics||[],source:'Einstufungstest'});localStorage.setItem(key,JSON.stringify(items));$('savedMessage').classList.remove('hidden');$('saveCalendar').disabled=true;};$('goHome').onclick=()=>location.href='index.html';
-</script></body></html>
+
+$('continueProfile').onclick=()=>{
+  profile.studied=document.querySelector('[data-group="studied"] .active').dataset.value;
+  profile.currentLevel=$('currentLevel').value;
+  profile.motivation=document.querySelector('[data-group="motivation"] .active').dataset.value;
+  profile.otherReason=$('otherReason').value.trim();
+
+  if(profile.motivation==='Lý do khác'&&!profile.otherReason){
+    alert('Cậu hãy nhập lý do học tiếng Đức nhé.');
+    return;
+  }
+
+  profile.motivationDetail=
+    profile.motivation==='Lý do khác'
+      ?profile.otherReason
+      :profile.motivation;
+
+  $('profileSummary').textContent=
+    `Thông tin ban đầu: ${profile.studied}; trình độ tự đánh giá: ${profile.currentLevel}; mục tiêu: ${profile.motivationDetail}.`;
+
+  show('introScreen');
+};
+
+$('backProfile').onclick=()=>show('profileScreen');
+
+$('startTest').onclick=async()=>{
+  skillIndex=0;
+  answers={};
+  results=[];
+  audioBlobs={};
+  activeRecorders={};
+  recordStopPromises={};
+  await loadSkill();
+};
+
+async function loadSkill(){
+  clearInterval(timerId);
+  answers={};
+  audioBlobs={};
+  activeRecorders={};
+  recordStopPromises={};
+
+  const sk=skillOrder[skillIndex];
+
+  show('testScreen');
+  $('skillCount').textContent=`Kỹ năng ${skillIndex+1}/5`;
+  $('skillTitle').textContent=sk.name;
+  $('taskArea').innerHTML='';
+  $('passage').classList.add('hidden');
+  $('skillInstruction').textContent='AI đang chuẩn bị bài kiểm tra phù hợp với hồ sơ của bạn...';
+  $('submitSkill').disabled=true;
+
+  try{
+    const d=await api({
+      mode:'generate',
+      skill:sk.id,
+      currentLevel:profile.currentLevel,
+      motivation:profile.motivationDetail
+    });
+
+    if(!d.test||!Array.isArray(d.test.tasks)){
+      throw new Error('AI chưa trả về cấu trúc đề hợp lệ.');
+    }
+
+    activeTest=d.test;
+    renderSkill(sk,activeTest);
+
+    remaining=sk.seconds;
+    updateTimer();
+
+    timerId=setInterval(()=>{
+      remaining--;
+      updateTimer();
+      if(remaining<=0){
+        clearInterval(timerId);
+        finishSkill(true);
+      }
+    },1000);
+
+  }catch(e){
+    alert('Không thể tạo bài kiểm tra: '+e.message);
+    show('introScreen');
+  }
+}
+
+// ============================================================
+// MICROPHONE: DÙNG CHUNG CHO AUSSPRACHE VÀ SPRECHEN
+// ============================================================
+
+function createRecorderControl(box,index,skill){
+  const row=document.createElement('div');
+  row.className='mic-row';
+
+  const mic=document.createElement('button');
+  mic.type='button';
+  mic.className='mic-record';
+  mic.innerHTML='🎙️ <span>Nhấn để thu âm</span>';
+
+  const status=document.createElement('span');
+  status.className='mic-status';
+  status.textContent='Chưa có bản ghi';
+
+  const preview=document.createElement('audio');
+  preview.className='mic-preview';
+  preview.controls=true;
+  preview.hidden=true;
+
+  mic.onclick=async()=>{
+    if(activeRecorders[index]?.state==='recording'){
+      activeRecorders[index].stop();
+      return;
+    }
+
+    if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){
+      alert('Trình duyệt chưa hỗ trợ ghi âm. Hãy dùng Chrome/Edge mới và mở trang bằng HTTPS.');
+      return;
+    }
+
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+
+      const mime=[
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4'
+      ].find(x=>MediaRecorder.isTypeSupported(x));
+
+      const recorder=mime
+        ?new MediaRecorder(stream,{mimeType:mime})
+        :new MediaRecorder(stream);
+
+      const chunks=[];
+
+      activeRecorders[index]=recorder;
+      mic.classList.add('recording');
+      mic.querySelector('span').textContent='Dừng thu âm';
+      status.textContent='Đang thu âm...';
+
+      recordStopPromises[index]=new Promise(resolve=>{
+        recorder.ondataavailable=e=>{
+          if(e.data&&e.data.size)chunks.push(e.data);
+        };
+
+        recorder.onstop=()=>{
+          stream.getTracks().forEach(track=>track.stop());
+
+          mic.classList.remove('recording');
+          mic.querySelector('span').textContent='Thu âm lại';
+
+          const blob=new Blob(chunks,{
+            type:recorder.mimeType||'audio/webm'
+          });
+
+          if(blob.size){
+            audioBlobs[index]=blob;
+            preview.src=URL.createObjectURL(blob);
+            preview.hidden=false;
+            status.textContent='Đã ghi âm · '+Math.max(1,Math.round(blob.size/1024))+' KB';
+          }else{
+            status.textContent='Bản ghi trống, cậu hãy thử lại.';
+          }
+
+          resolve();
+        };
+
+        recorder.start();
+      });
+
+    }catch(err){
+      alert('Không thể truy cập micro. Cậu hãy cấp quyền sử dụng micro cho trình duyệt rồi thử lại.');
+    }
+  };
+
+  row.append(mic,status);
+  box.append(row,preview);
+
+  const note=document.createElement('p');
+  note.className='micro';
+  note.textContent=skill==='Aussprache'
+    ?'Đọc câu tiếng Đức ở trên. Cậu có thể nghe lại hoặc thu âm lại trước khi nộp.'
+    :'Trả lời nhiệm vụ bằng tiếng Đức. Cậu có thể nghe lại hoặc thu âm lại trước khi nộp.';
+
+  box.append(note);
+}
+
+// ============================================================
+// RENDER SKILL
+// ============================================================
+
+function renderSkill(sk,t){
+  $('skillInstruction').textContent=
+    t.instruction||'Hãy hoàn thành các nhiệm vụ trong thời gian quy định.';
+
+  if(t.passage){
+    $('passage').textContent=t.passage;
+    $('passage').classList.remove('hidden');
+  }
+
+  if(sk.id==='Hören'&&t.listeningScript){
+    const a=document.createElement('button');
+    a.className='secondary';
+    a.textContent='▶ Nghe đoạn tiếng Đức';
+
+    a.onclick=()=>{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(t.listeningScript);
+      u.lang='de-DE';
+      u.rate=profile.currentLevel==='B1'?0.96:0.9;
+      speechSynthesis.speak(u);
+    };
+
+    $('taskArea').append(a);
+  }
+
+  const area=$('taskArea');
+
+  (t.tasks||[]).forEach((task,i)=>{
+    const box=document.createElement('div');
+    box.className='task';
+
+    const h=document.createElement('h3');
+    h.textContent=`${i+1}. ${task.prompt}`;
+    box.append(h);
+
+    if(task.options?.length){
+      task.options.forEach((op,j)=>{
+        const b=document.createElement('button');
+        b.className='opt';
+        b.textContent=typeof op==='string'?op:op.text||op.label;
+
+        b.onclick=()=>{
+          box.querySelectorAll('.opt').forEach(x=>x.classList.remove('active'));
+          b.classList.add('active');
+          answers[i]={
+            value:typeof op==='string'?op:(op.label||op.text),
+            index:j
+          };
+        };
+
+        box.append(b);
+      });
+
+    }else if(['Aussprache','Sprechen'].includes(sk.id)){
+      createRecorderControl(box,i,sk.id);
+
+    }else{
+      const input=document.createElement('textarea');
+      input.placeholder='Viết câu trả lời của bạn tại đây...';
+
+      if(sk.id==='Schreiben'){
+        input.addEventListener('paste',e=>{
+          e.preventDefault();
+          alert('Phần Schreiben không cho phép dán nội dung. Cậu hãy tự nhập bài làm nhé.');
+        });
+        input.addEventListener('drop',e=>e.preventDefault());
+        input.addEventListener('contextmenu',e=>e.preventDefault());
+      }
+
+      input.addEventListener('input',()=>answers[i]={value:input.value});
+      box.append(input);
+    }
+
+    area.append(box);
+  });
+
+  $('submitSkill').disabled=false;
+}
+
+// ============================================================
+// TIMER
+// ============================================================
+
+function updateTimer(){
+  const m=Math.floor(remaining/60);
+  const s=remaining%60;
+
+  $('timer').textContent=
+    `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+  $('skillProgress').style.width=
+    `${100*(1-remaining/skillOrder[skillIndex].seconds)}%`;
+}
+
+$('submitSkill').onclick=()=>finishSkill(false);
+
+// ============================================================
+// SEND AUDIO TO WORKER TRANSCRIBE MODE
+// ============================================================
+
+async function transcribeSpeechAudio(blob){
+  const form=new FormData();
+  form.append('mode','transcribe');
+
+  const ext=(blob.type||'').includes('mp4')?'m4a':'webm';
+  form.append('file',blob,'german-speech.'+ext);
+
+  let response;
+
+  try{
+    response=await fetch(WORKER_URL,{
+      method:'POST',
+      body:form
+    });
+  }catch(e){
+    throw new Error('Không kết nối được Worker để nhận diện audio.');
+  }
+
+  const data=await response.json().catch(()=>
+    ({error:'Worker không trả về JSON hợp lệ.'})
+  );
+
+  if(!response.ok){
+    throw new Error(data.details||data.error||'Không thể nhận diện bản ghi.');
+  }
+
+  if(!data.transcript){
+    throw new Error('AI không nhận diện được lời nói. Cậu hãy thu âm lại.');
+  }
+
+  return data.transcript;
+}
+
+// ============================================================
+// SUBMIT AND EVALUATE
+// ============================================================
+
+async function finishSkill(auto){
+  clearInterval(timerId);
+  $('submitSkill').disabled=true;
+
+  $('skillInstruction').textContent=auto
+    ?'Đã hết giờ. Hệ thống đang gửi bài làm...'
+    :'Đang gửi bài làm lên hệ thống...';
+
+  document.querySelectorAll(
+    '#taskArea input,#taskArea textarea,#taskArea button'
+  ).forEach(x=>x.disabled=true);
+
+  try{
+    const pending=Object.values(recordStopPromises);
+
+    Object.values(activeRecorders).forEach(r=>{
+      if(r?.state==='recording')r.stop();
+    });
+
+    if(pending.length)await Promise.all(pending);
+
+    const activeSkill=skillOrder[skillIndex].id;
+
+    if(['Aussprache','Sprechen'].includes(activeSkill)){
+      const ids=Object.keys(audioBlobs);
+
+      if(!ids.length){
+        throw new Error('Cậu chưa thu âm câu trả lời nào. Hãy nhấn micro để ghi âm trước khi nộp bài.');
+      }
+
+      $('skillInstruction').textContent=
+        'AI đang nhận diện các bản ghi tiếng Đức...';
+
+      for(const id of ids){
+        const transcript=await transcribeSpeechAudio(audioBlobs[id]);
+
+        answers[id]={
+          value:transcript,
+          source:'audio-transcription',
+          skill:activeSkill
+        };
+      }
+    }
+
+    const d=await api({
+      mode:'evaluate',
+      skill:activeSkill,
+      currentLevel:profile.currentLevel,
+      profile,
+      test:activeTest,
+      answers
+    });
+
+    results.push(d.evaluation);
+    skillIndex++;
+
+    if(skillIndex<5){
+      await loadSkill();
+    }else{
+      await finishAll();
+    }
+
+  }catch(e){
+    alert('Chưa thể gửi/chấm bài: '+e.message);
+
+    $('skillInstruction').textContent=
+      'Bài làm vẫn được giữ trong trang. Cậu có thể thử nộp lại.';
+
+    $('submitSkill').disabled=false;
+
+    document.querySelectorAll('#taskArea button').forEach(x=>{
+      x.disabled=false;
+    });
+  }
+}
+
+// ============================================================
+// OVERALL RESULTS
+// ============================================================
+
+async function finishAll(){
+  show('resultScreen');
+  $('overallResults').innerHTML=
+    '<p>AI đang tổng hợp kết quả năm kỹ năng...</p>';
+
+  try{
+    const profileText=JSON.stringify({profile,results});
+
+    const d=await api({
+      mode:'evaluate',
+      skill:'Gesamtauswertung',
+      currentLevel:profile.currentLevel,
+      profile:profileText,
+      test:{title:'Tổng hợp 5 kỹ năng'},
+      answers:{summary:JSON.stringify(results)}
+    });
+
+    const overall=d.evaluation;
+    $('overallResults').innerHTML='';
+
+    results.forEach(r=>{
+      const el=document.createElement('div');
+      el.className='result-card';
+      el.innerHTML=
+        `<strong>${escapeHtml(r.skill||'Kỹ năng')}</strong> · ${escapeHtml(r.estimatedLevel||'Chưa xác định')} · ${Number(r.score)||0}/100<p>${escapeHtml(r.feedback||'')}</p>`;
+      $('overallResults').append(el);
+    });
+
+    const sum=document.createElement('div');
+    sum.className='result-card';
+    sum.innerHTML=
+      `<strong>Đánh giá tổng thể tham chiếu: ${escapeHtml(overall.estimatedLevel||'Cần đánh giá thêm')}</strong><p>${escapeHtml(overall.feedback||'')}</p>`;
+
+    $('overallResults').append(sum);
+    profile.overall=overall;
+
+  }catch(e){
+    $('overallResults').textContent=
+      'Đã hoàn thành 5 kỹ năng. Tổng hợp AI chưa thực hiện được: '+e.message;
+  }
+}
+
+function escapeHtml(s){
+  return String(s??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+// ============================================================
+// LEARNING PLAN
+// ============================================================
+
+$('personalizeGoal').onclick=()=>{
+  $('goalFields').classList.toggle('hidden');
+  $('improveFields').classList.add('hidden');
+};
+
+$('improveGerman').onclick=()=>{
+  $('improveFields').classList.toggle('hidden');
+  $('goalFields').classList.add('hidden');
+};
+
+$('selfStudy').onclick=()=>location.href='index.html';
+
+async function createPlan(targetLevel,examName,reason){
+  $('overallResults').insertAdjacentHTML(
+    'beforeend',
+    '<p id="planLoading">AI đang phân tích và xây dựng lộ trình cá nhân...</p>'
+  );
+
+  try{
+    const d=await api({
+      mode:'plan',
+      profile:JSON.stringify({profile,results,overall:profile.overall}),
+      targetLevel,
+      examName,
+      reason
+    });
+
+    planData=d.plan;
+    renderPlan(planData);
+    show('planScreen');
+
+  }catch(e){
+    alert('Chưa thể tạo lộ trình: '+e.message);
+    $('planLoading')?.remove();
+  }
+}
+
+$('makeGoalPlan').onclick=()=>{
+  const exam=$('examName').value.trim();
+
+  if(!exam){
+    alert('Cậu hãy nhập tên kỳ thi nhé.');
+    return;
+  }
+
+  createPlan(
+    $('targetLevel').value,
+    exam,
+    'Mục tiêu đạt chứng chỉ '+exam
+  );
+};
+
+$('makeImprovePlan').onclick=()=>{
+  const reason=$('improveReason').value.trim();
+
+  if(!reason){
+    alert('Cậu hãy nhập điều muốn cải thiện nhé.');
+    return;
+  }
+
+  createPlan('', '', reason);
+};
+
+function renderPlan(p){
+  const root=$('planContent');
+
+  root.innerHTML=
+    `<div class="result-card"><strong>${escapeHtml(p.headline)}</strong><p>${escapeHtml(p.summary)}</p><p>Trình độ hiện tại ước lượng: ${escapeHtml(p.startingLevel)} · Mục tiêu: ${escapeHtml(p.target)}</p></div>`;
+
+  (p.weeklyPlan||[]).forEach(w=>{
+    const d=document.createElement('div');
+    d.className='result-card';
+
+    d.innerHTML=
+      `<strong>${escapeHtml(w.week)} · ${escapeHtml(w.focus)}</strong><ul>${(w.activities||[]).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')}</ul><p>Mốc đánh giá: ${escapeHtml(w.milestone)}</p>`;
+
+    root.append(d);
+  });
+
+  const sched=document.createElement('div');
+  sched.className='result-card';
+
+  sched.innerHTML=
+    '<strong>Lịch học gợi ý</strong>'+
+    (p.weeklySchedule||[]).map(x=>
+      `<p><b>${escapeHtml(x.day)}</b> · ${escapeHtml(x.duration)}<br>${(x.activities||[]).map(escapeHtml).join(' · ')}</p>`
+    ).join('');
+
+  root.append(sched);
+
+  const metrics=document.createElement('div');
+  metrics.className='result-card';
+
+  metrics.innerHTML=
+    '<strong>Tiêu chí theo dõi tiến bộ</strong><ul>'+
+    (p.successMetrics||[]).map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+
+    '</ul><p>'+escapeHtml(p.note||'')+'</p>';
+
+  root.append(metrics);
+}
+
+// ============================================================
+// SAVE TO PERSONAL CALENDAR
+// ============================================================
+
+$('saveCalendar').onclick=()=>{
+  if(!planData)return;
+
+  const key='personalStudyCalendar_v1';
+  let items=[];
+
+  try{
+    items=JSON.parse(localStorage.getItem(key)||'[]');
+    if(!Array.isArray(items))items=[];
+  }catch{}
+
+  items.push({
+    id:'plan-'+Date.now(),
+    type:'learning-plan',
+    title:planData.headline||'Lộ trình tiếng Đức cá nhân',
+    createdAt:new Date().toISOString(),
+    startingLevel:planData.startingLevel,
+    target:planData.target,
+    weeklyPlan:planData.weeklyPlan||[],
+    weeklySchedule:planData.weeklySchedule||[],
+    successMetrics:planData.successMetrics||[],
+    source:'Einstufungstest'
+  });
+
+  localStorage.setItem(key,JSON.stringify(items));
+  $('savedMessage').classList.remove('hidden');
+  $('saveCalendar').disabled=true;
+};
+
+$('goHome').onclick=()=>location.href='index.html';
+</script>
+</body>
+</html>
