@@ -53,6 +53,23 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .mic-preview{display:block;width:min(100%,420px);height:38px;margin-top:9px}
 @keyframes micPulse{50%{box-shadow:0 0 0 6px #b4232c22}}
 @media(max-width:650px){.page{margin:14px auto;width:calc(100% - 22px)}.skill-list{grid-template-columns:1fr}.topline{align-items:flex-start;flex-direction:column}}
+
+.result-table-wrap{overflow-x:auto;margin:14px 0}
+.result-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #d5dfeb;border-radius:12px;overflow:hidden}
+.result-table th,.result-table td{padding:11px 12px;border-bottom:1px solid #e3eaf2;text-align:left;vertical-align:top;line-height:1.55}
+.result-table th{background:#eaf2fb;color:#244e78;font-size:13px}
+.result-table td{font-size:14px}
+.result-table tr:last-child td{border-bottom:0}
+.level-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.level-box{padding:14px;border:1px solid #cbd9e8;border-radius:12px;background:#f3f8fe}
+.level-box strong{display:block;color:#245b91;margin-bottom:5px}
+.week-card{padding:16px;border:1px solid #d4dfeb;border-radius:12px;background:#fff;margin:12px 0}
+.week-card h3{margin:0 0 8px;color:#245b91;font-size:17px}
+.week-card p{margin:7px 0}
+.week-card ul{margin:8px 0;padding-left:22px;line-height:1.7;color:#33465c}
+.section-heading{margin:22px 0 8px;font-size:18px;color:#244e78}
+@media(max-width:650px){.level-summary{grid-template-columns:1fr}.result-table th,.result-table td{padding:9px;font-size:13px}}
+
 </style>
 </head>
 <body>
@@ -426,7 +443,6 @@ function renderSkill(sk,t){
     const a=document.createElement('button');
     a.className='secondary';
     a.textContent='▶ Nghe đoạn tiếng Đức';
-
     a.onclick=()=>{
       speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(t.listeningScript);
@@ -434,13 +450,37 @@ function renderSkill(sk,t){
       u.rate=profile.currentLevel==='B1'?0.96:0.9;
       speechSynthesis.speak(u);
     };
-
     $('taskArea').append(a);
   }
 
   const area=$('taskArea');
+  let tasks=Array.isArray(t.tasks)?t.tasks:[];
 
-  (t.tasks||[]).forEach((task,i)=>{
+  // Backward-compatible handling for Workers that return the writing prompt
+  // at the top level instead of inside tasks[0].
+  if(sk.id==='Schreiben'){
+    const topPrompt=t.prompt||t.question||t.task||t.writingPrompt;
+    if(!tasks.length&&topPrompt){
+      tasks=[{
+        prompt:typeof topPrompt==='string'?topPrompt:(topPrompt.prompt||topPrompt.text||''),
+        target:t.target||t.wordCount||'',
+        expectedPoints:t.expectedPoints||[]
+      }];
+    }
+    tasks=tasks.map(task=>({
+      ...task,
+      prompt:task.prompt||task.question||task.text||task.instruction||''
+    })).filter(task=>task.prompt.trim());
+    if(!tasks.length){
+      const warning=document.createElement('div');
+      warning.className='notice';
+      warning.textContent='AI chưa gửi đề bài Schreiben hợp lệ. Cậu hãy thử tải lại phần kiểm tra; hệ thống chưa tính đây là một bài làm hoàn chỉnh.';
+      area.append(warning);
+      throw new Error('Worker không trả về đề Schreiben. Cần kiểm tra dữ liệu mode=generate của Worker.');
+    }
+  }
+
+  tasks.forEach((task,i)=>{
     const box=document.createElement('div');
     box.className='task';
 
@@ -448,31 +488,37 @@ function renderSkill(sk,t){
     h.textContent=`${i+1}. ${task.prompt}`;
     box.append(h);
 
+    if(sk.id==='Schreiben'){
+      const meta=[];
+      if(task.target||task.wordCount)meta.push('Độ dài gợi ý: '+(task.target||task.wordCount));
+      if(task.expectedPoints?.length)meta.push('Nội dung cần đề cập: '+task.expectedPoints.join(' · '));
+      if(meta.length){
+        const info=document.createElement('p');
+        info.className='micro';
+        info.textContent=meta.join(' | ');
+        box.append(info);
+      }
+    }
+
     if(task.options?.length){
       task.options.forEach((op,j)=>{
         const b=document.createElement('button');
         b.className='opt';
-        b.textContent=typeof op==='string'?op:op.text||op.label;
-
+        b.textContent=typeof op==='string'?op:op.text||op.label||'';
         b.onclick=()=>{
           box.querySelectorAll('.opt').forEach(x=>x.classList.remove('active'));
           b.classList.add('active');
-          answers[i]={
-            value:typeof op==='string'?op:(op.label||op.text),
-            index:j
-          };
+          answers[i]={value:typeof op==='string'?op:(op.label||op.text),index:j};
         };
-
         box.append(b);
       });
-
     }else if(['Aussprache','Sprechen'].includes(sk.id)){
       createRecorderControl(box,i,sk.id);
-
     }else{
       const input=document.createElement('textarea');
-      input.placeholder='Viết câu trả lời của bạn tại đây...';
-
+      input.placeholder=sk.id==='Schreiben'
+        ?'Hãy tự viết bài bằng tiếng Đức tại đây...'
+        :'Viết câu trả lời của bạn tại đây...';
       if(sk.id==='Schreiben'){
         input.addEventListener('paste',e=>{
           e.preventDefault();
@@ -481,11 +527,9 @@ function renderSkill(sk,t){
         input.addEventListener('drop',e=>e.preventDefault());
         input.addEventListener('contextmenu',e=>e.preventDefault());
       }
-
       input.addEventListener('input',()=>answers[i]={value:input.value});
       box.append(input);
     }
-
     area.append(box);
   });
 
@@ -600,7 +644,9 @@ async function finishSkill(auto){
       currentLevel:profile.currentLevel,
       profile,
       test:activeTest,
-      answers
+      answers,
+      responseLanguage:'Vietnamese',
+      feedbackLanguage:'Vietnamese'
     });
 
     results.push(d.evaluation);
@@ -633,37 +679,77 @@ async function finishSkill(auto){
 async function finishAll(){
   show('resultScreen');
   $('overallResults').innerHTML=
-    '<p>AI đang tổng hợp kết quả năm kỹ năng...</p>';
+    '<p>AI đang tổng hợp kết quả năm kỹ năng và xây dựng bảng đánh giá tổng thể...</p>';
 
   try{
     const profileText=JSON.stringify({profile,results});
-
     const d=await api({
       mode:'evaluate',
       skill:'Gesamtauswertung',
       currentLevel:profile.currentLevel,
       profile:profileText,
       test:{title:'Tổng hợp 5 kỹ năng'},
-      answers:{summary:JSON.stringify(results)}
+      answers:{summary:JSON.stringify(results)},
+      responseLanguage:'Vietnamese',
+      feedbackLanguage:'Vietnamese'
     });
 
-    const overall=d.evaluation;
+    const overall=d.evaluation||{};
     $('overallResults').innerHTML='';
 
+    const level=document.createElement('div');
+    level.className='level-summary';
+    level.innerHTML=`
+      <div class="level-box"><strong>Trình độ tổng thể ước lượng</strong>
+      <span>${escapeHtml(overall.estimatedLevel||'Chưa đủ dữ liệu')}</span></div>
+      <div class="level-box"><strong>Trình độ tự đánh giá ban đầu</strong>
+      <span>${escapeHtml(profile.currentLevel||'—')}</span></div>`;
+    $('overallResults').append(level);
+
+    const heading=document.createElement('h2');
+    heading.className='section-heading';
+    heading.textContent='Bảng đánh giá chi tiết 5 kỹ năng';
+    $('overallResults').append(heading);
+
+    const wrap=document.createElement('div');
+    wrap.className='result-table-wrap';
+    const table=document.createElement('table');
+    table.className='result-table';
+    table.innerHTML='<thead><tr><th>Kỹ năng</th><th>Trình độ ước lượng</th><th>Điểm</th><th>Nhận xét và năng lực thể hiện</th></tr></thead>';
+    const tbody=document.createElement('tbody');
+
+    const skillNames={
+      'Aussprache':'Phát âm (Aussprache)',
+      'Hören':'Nghe (Hören)',
+      'Sprechen':'Nói (Sprechen)',
+      'Lesen':'Đọc (Lesen)',
+      'Schreiben':'Viết (Schreiben)'
+    };
+
     results.forEach(r=>{
-      const el=document.createElement('div');
-      el.className='result-card';
-      el.innerHTML=
-        `<strong>${escapeHtml(r.skill||'Kỹ năng')}</strong> · ${escapeHtml(r.estimatedLevel||'Chưa xác định')} · ${Number(r.score)||0}/100<p>${escapeHtml(r.feedback||'')}</p>`;
-      $('overallResults').append(el);
+      const tr=document.createElement('tr');
+      const feedback=[r.feedback,r.strengths,r.weaknesses,r.recommendation,r.nextStep]
+        .filter(Boolean).join(' ');
+      tr.innerHTML=`
+        <td><strong>${escapeHtml(skillNames[r.skill]||r.skill||'Kỹ năng')}</strong></td>
+        <td>${escapeHtml(r.estimatedLevel||'Chưa xác định')}</td>
+        <td><strong>${Number.isFinite(Number(r.score))?Number(r.score):'—'}</strong>${r.score!==undefined?'/100':''}</td>
+        <td>${escapeHtml(feedback||'Chưa có nhận xét chi tiết.')}</td>`;
+      tbody.append(tr);
     });
+    table.append(tbody);
+    wrap.append(table);
+    $('overallResults').append(wrap);
 
-    const sum=document.createElement('div');
-    sum.className='result-card';
-    sum.innerHTML=
-      `<strong>Đánh giá tổng thể tham chiếu: ${escapeHtml(overall.estimatedLevel||'Cần đánh giá thêm')}</strong><p>${escapeHtml(overall.feedback||'')}</p>`;
-
-    $('overallResults').append(sum);
+    const summary=document.createElement('div');
+    summary.className='result-card';
+    summary.innerHTML=`
+      <strong>Đánh giá tổng thể</strong>
+      <p>${escapeHtml(overall.feedback||overall.summary||'AI chưa cung cấp phần nhận xét tổng thể chi tiết.')}</p>
+      ${overall.strengths?'<p><b>Điểm mạnh:</b> '+escapeHtml(overall.strengths)+'</p>':''}
+      ${overall.weaknesses?'<p><b>Điểm cần cải thiện:</b> '+escapeHtml(overall.weaknesses)+'</p>':''}
+      ${overall.recommendation?'<p><b>Định hướng:</b> '+escapeHtml(overall.recommendation)+'</p>':''}`;
+    $('overallResults').append(summary);
     profile.overall=overall;
 
   }catch(e){
@@ -710,10 +796,14 @@ async function createPlan(targetLevel,examName,reason){
       profile:JSON.stringify({profile,results,overall:profile.overall}),
       targetLevel,
       examName,
-      reason
+      reason,
+      responseLanguage:'Vietnamese',
+      planLanguage:'Vietnamese',
+      weeks:12
     });
 
-    planData=d.plan;
+    planData=d.plan||{};
+    $('planLoading')?.remove();
     renderPlan(planData);
     show('planScreen');
 
@@ -751,40 +841,82 @@ $('makeImprovePlan').onclick=()=>{
 
 function renderPlan(p){
   const root=$('planContent');
+  root.innerHTML='';
 
-  root.innerHTML=
-    `<div class="result-card"><strong>${escapeHtml(p.headline)}</strong><p>${escapeHtml(p.summary)}</p><p>Trình độ hiện tại ước lượng: ${escapeHtml(p.startingLevel)} · Mục tiêu: ${escapeHtml(p.target)}</p></div>`;
+  const intro=document.createElement('div');
+  intro.className='result-card';
+  intro.innerHTML=`
+    <strong>${escapeHtml(p.headline||'Lộ trình học tiếng Đức cá nhân hóa')}</strong>
+    <p>${escapeHtml(p.summary||p.overview||'Lộ trình được đề xuất dựa trên kết quả đánh giá đầu vào.')}</p>
+    <p><b>Trình độ hiện tại:</b> ${escapeHtml(p.startingLevel||profile.overall?.estimatedLevel||'Chưa xác định')}
+    · <b>Mục tiêu:</b> ${escapeHtml(p.target||'Tiếp tục nâng cao năng lực')}</p>
+    ${p.rationale?'<p><b>Cơ sở xây dựng lộ trình:</b> '+escapeHtml(p.rationale)+'</p>':''}`;
+  root.append(intro);
 
-  (p.weeklyPlan||[]).forEach(w=>{
-    const d=document.createElement('div');
-    d.className='result-card';
+  const heading=document.createElement('h2');
+  heading.className='section-heading';
+  heading.textContent='Kế hoạch học tập chi tiết trong 12 tuần';
+  root.append(heading);
 
-    d.innerHTML=
-      `<strong>${escapeHtml(w.week)} · ${escapeHtml(w.focus)}</strong><ul>${(w.activities||[]).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')}</ul><p>Mốc đánh giá: ${escapeHtml(w.milestone)}</p>`;
+  const weeks=Array.isArray(p.weeklyPlan)?p.weeklyPlan:[];
+  if(weeks.length){
+    weeks.forEach((w,i)=>{
+      const card=document.createElement('div');
+      card.className='week-card';
+      const weekLabel=w.week||w.title||('Tuần '+(i+1));
+      const focus=w.focus||w.goal||w.topic||'Trọng tâm học tập';
+      const activities=w.activities||w.tasks||w.practice||[];
+      const activityList=Array.isArray(activities)
+        ?activities.map(a=>'<li>'+escapeHtml(typeof a==='string'?a:(a.activity||a.task||a.description||JSON.stringify(a)))+'</li>').join('')
+        :'<li>'+escapeHtml(activities)+'</li>';
+      card.innerHTML=`
+        <h3>${escapeHtml(weekLabel)} · ${escapeHtml(focus)}</h3>
+        ${w.objective||w.goalDescription?'<p><b>Mục tiêu tuần:</b> '+escapeHtml(w.objective||w.goalDescription)+'</p>':''}
+        <p><b>Việc cần thực hiện:</b></p>
+        <ul>${activityList||'<li>AI chưa cung cấp hoạt động cụ thể.</li>'}</ul>
+        ${w.milestone||w.assessment?'<p><b>Mốc tự đánh giá:</b> '+escapeHtml(w.milestone||w.assessment)+'</p>':''}
+        ${w.expectedOutcome?'<p><b>Kết quả mong đợi:</b> '+escapeHtml(w.expectedOutcome)+'</p>':''}`;
+      root.append(card);
+    });
+    if(weeks.length!==12){
+      const note=document.createElement('p');
+      note.className='micro';
+      note.textContent=`Worker hiện trả về ${weeks.length} tuần. Để có đủ lộ trình 12 tuần, Worker cần được cấu hình trả về đúng 12 mục weeklyPlan.`;
+      root.append(note);
+    }
+  }else{
+    const note=document.createElement('div');
+    note.className='notice';
+    note.textContent='Worker chưa trả về danh sách weeklyPlan. Cần cập nhật Worker để tạo đủ 12 tuần học tập chi tiết bằng tiếng Việt.';
+    root.append(note);
+  }
 
-    root.append(d);
-  });
+  const schedule=p.weeklySchedule||p.schedule;
+  if(Array.isArray(schedule)&&schedule.length){
+    const sh=document.createElement('h2');
+    sh.className='section-heading';
+    sh.textContent='Lịch học gợi ý linh hoạt';
+    root.append(sh);
+    schedule.forEach(x=>{
+      const d=document.createElement('div');
+      d.className='result-card';
+      const acts=Array.isArray(x.activities)?x.activities:[];
+      d.innerHTML=`<strong>${escapeHtml(x.day||x.period||'Buổi học')} · ${escapeHtml(x.duration||'Thời lượng linh hoạt')}</strong>
+        ${acts.length?'<ul>'+acts.map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul>':''}
+        ${x.note?'<p>'+escapeHtml(x.note)+'</p>':''}`;
+      root.append(d);
+    });
+  }
 
-  const sched=document.createElement('div');
-  sched.className='result-card';
-
-  sched.innerHTML=
-    '<strong>Lịch học gợi ý</strong>'+
-    (p.weeklySchedule||[]).map(x=>
-      `<p><b>${escapeHtml(x.day)}</b> · ${escapeHtml(x.duration)}<br>${(x.activities||[]).map(escapeHtml).join(' · ')}</p>`
-    ).join('');
-
-  root.append(sched);
-
-  const metrics=document.createElement('div');
-  metrics.className='result-card';
-
-  metrics.innerHTML=
-    '<strong>Tiêu chí theo dõi tiến bộ</strong><ul>'+
-    (p.successMetrics||[]).map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+
-    '</ul><p>'+escapeHtml(p.note||'')+'</p>';
-
-  root.append(metrics);
+  const metrics=p.successMetrics||p.progressMetrics||[];
+  if(metrics.length||p.note){
+    const m=document.createElement('div');
+    m.className='result-card';
+    m.innerHTML='<strong>Tiêu chí theo dõi tiến bộ</strong>'+
+      (metrics.length?'<ul>'+metrics.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'')+
+      (p.note?'<p>'+escapeHtml(p.note)+'</p>':'');
+    root.append(m);
+  }
 }
 
 // ============================================================
@@ -811,7 +943,8 @@ $('saveCalendar').onclick=()=>{
     target:planData.target,
     weeklyPlan:planData.weeklyPlan||[],
     weeklySchedule:planData.weeklySchedule||[],
-    successMetrics:planData.successMetrics||[],
+    successMetrics:planData.successMetrics||planData.progressMetrics||[],
+    language:'vi',
     source:'Einstufungstest'
   });
 
