@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#09111f">
+<title>Aussprache AI — Luyện phát âm tiếng Đức</title>
+<style>
+:root{--bg:#09111f;--panel:#111e32;--panel2:#172741;--line:#ffffff19;--text:#f2f6ff;--muted:#9aabc5;--cyan:#6de4dc;--blue:#91aaff;--violet:#c5a1ff;--good:#8de0b0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 8% 0%,#1a3656 0,transparent 36%),radial-gradient(ellipse at 92% 12%,#29244b 0,transparent 30%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button,select{font:inherit}button{cursor:pointer}.wrap{width:min(1120px,calc(100% - 34px));margin:auto}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:17px}.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:grid;place-items:center;color:#071426;font-size:20px}.brand small{display:block;color:var(--muted);font-size:10px;font-weight:500;margin-top:2px}
+.header-right{font-size:12px;color:var(--muted)}
+.hero{text-align:center;padding:54px 0 28px}.eyebrow{display:inline-block;padding:7px 12px;border-radius:99px;border:1px solid #6de4dc55;background:#6de4dc12;color:var(--cyan);font-size:10px;font-weight:900;letter-spacing:1.2px}
+h1{font-size:clamp(34px,5vw,54px);line-height:1.05;letter-spacing:-1.8px;margin:17px 0 12px}.grad{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet));color:transparent;background-clip:text}.hero p{max-width:650px;margin:auto;color:var(--muted);line-height:1.7;font-size:14px}
+.workspace{display:grid;grid-template-columns:300px 1fr;gap:17px;align-items:start;margin:24px 0 60px}
+.panel{background:linear-gradient(155deg,#152640,#101a2d);border:1px solid var(--line);border-radius:19px;padding:20px;box-shadow:0 20px 50px #0002}
+.panel h2{font-size:16px;margin:0 0 7px}.hint{color:var(--muted);font-size:11px;line-height:1.6;margin:0 0 17px}
+.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 16px}
+.level{border:1px solid var(--line);border-radius:10px;background:#ffffff08;color:#b8c6de;padding:10px 2px;font-size:12px;font-weight:850}
+.level.active{background:linear-gradient(140deg,#6de4dc,#91aaff);color:#071426;border-color:transparent;box-shadow:0 7px 20px #6de4dc25}
+.level-desc{border:1px solid var(--line);border-radius:12px;padding:12px;background:#ffffff06;margin-bottom:17px}
+.level-desc strong{font-size:13px}.level-desc p{font-size:11px;color:var(--muted);line-height:1.5;margin:5px 0 0}
+.field-label{font-size:11px;color:#c4d0e4;font-weight:750;display:block;margin:15px 0 7px}
+select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:#0b1628;color:var(--text);outline:none}
+.checkrow{display:flex;align-items:flex-start;gap:9px;color:var(--muted);font-size:11px;line-height:1.5;margin-top:14px}.checkrow input{accent-color:#6de4dc;margin-top:2px}
+.primary,.secondary{border:0;border-radius:11px;padding:12px 15px;font-size:12px;font-weight:850}
+.primary{background:linear-gradient(100deg,var(--cyan),var(--blue));color:#081426}.secondary{background:#ffffff0b;border:1px solid var(--line);color:#e9f0ff}
+.full{width:100%;margin-top:17px}
+.mainpanel{padding:22px}.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}.pill{font-size:10px;font-weight:850;color:var(--cyan);background:#6de4dc13;border:1px solid #6de4dc35;padding:7px 10px;border-radius:99px}
+.exercise-title{font-size:21px;font-weight:850;letter-spacing:-.5px;margin:0 0 5px}.exercise-sub{font-size:12px;color:var(--muted);margin:0 0 18px}
+.word-card{background:linear-gradient(135deg,#1b3150,#17233e);border:1px solid #91aaff30;border-radius:17px;padding:24px;text-align:center;margin-bottom:15px}
+.word{font-size:clamp(31px,5vw,46px);font-weight:850;letter-spacing:-1px}.translation{font-size:12px;color:#b7c6df;margin-top:5px}.ipa{font-size:13px;color:var(--cyan);margin-top:12px;font-family:ui-monospace,monospace}
+.audio-row{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:17px}
+.action{padding:10px 13px;border-radius:10px;border:1px solid var(--line);background:#ffffff0b;color:#eaf1ff;font-size:11px;font-weight:750}.action:hover{background:#ffffff15}
+.recorder{border:1px solid var(--line);border-radius:15px;padding:17px;margin:15px 0;background:#ffffff05}
+.recorder-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.recorder-head strong{font-size:13px}.record-state{font-size:10px;color:var(--muted)}
+.mic{width:62px;height:62px;border-radius:50%;border:1px solid #6de4dc66;background:#6de4dc12;color:var(--cyan);display:grid;place-items:center;font-size:25px;margin:16px auto 10px;transition:.2s}.mic.recording{background:#ff647b25;border-color:#ff647b;color:#ff8394;box-shadow:0 0 0 9px #ff647b13}
+.timer{text-align:center;color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}.rec-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+.feedback{border:1px solid #6de4dc33;background:#6de4dc0b;border-radius:14px;padding:15px;margin-top:15px;display:none}.feedback.show{display:block}.feedback h3{font-size:13px;margin:0 0 7px}.feedback p{font-size:11px;color:#c2d1e6;line-height:1.65;margin:0}.submit-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:13px}.submit-btn{background:linear-gradient(100deg,#6de4dc,#91aaff);color:#081426;border:0;border-radius:10px;padding:12px 17px;font-size:12px;font-weight:900}.submit-btn:disabled{opacity:.45;cursor:not-allowed}.assessment{display:none;margin-top:16px;border:1px solid #91aaff45;background:#91aaff0c;border-radius:15px;padding:16px}.assessment.show{display:block}.assessment-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.assessment h3{font-size:14px;margin:0}.score{font-size:27px;font-weight:900;color:var(--cyan)}.assessment p,.assessment li{font-size:11px;color:#c5d2e7;line-height:1.6}.assessment ul{padding-left:18px}.assessment .disclaimer{font-size:10px;color:#91a0ba;border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}.step{border:1px solid var(--line);border-radius:12px;padding:12px}.step b{font-size:11px;display:block;margin-bottom:5px}.step span{font-size:10px;color:var(--muted);line-height:1.5}
+footer{padding:0 0 28px;color:#7485a3;font-size:10px;line-height:1.6;text-align:center}
+@media(max-width:800px){.workspace{grid-template-columns:1fr}.levels{max-width:430px}.hero{padding-top:40px}}
+@media(max-width:480px){.wrap{width:calc(100% - 22px)}header{height:66px}.header-right{display:none}.panel{padding:16px}.mainpanel{padding:15px}.steps{grid-template-columns:1fr}.word-card{padding:19px 12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">Ä</div><div>Aussprache <span class="grad">AI</span><small>Deutsch pronunciation trainer</small></div></div>
+  <div class="header-right">Học phát âm tiếng Đức cùng AI</div>
+</header>
+<section class="hero">
+  <div class="eyebrow">✦ DEUTSCHE AUSSPRACHE</div>
+  <h1>Phát âm chuẩn hơn,<br><span class="grad">tự tin hơn mỗi ngày.</span></h1>
+  <p>Chọn trình độ từ A1 đến C1, nghe phát âm mẫu và luyện đọc theo từng cấp độ. Bắt đầu từ âm đơn, từ vựng đến câu nói tự nhiên.</p>
+</section>
+<div class="workspace">
+  <aside class="panel">
+    <h2>Thiết lập bài luyện</h2>
+    <p class="hint">Chọn cấp độ phù hợp với năng lực hiện tại. Bạn có thể thay đổi bất cứ lúc nào.</p>
+    <span class="field-label">Trình độ tiếng Đức</span>
+    <div class="levels" role="group" aria-label="Chọn trình độ">
+      <button class="level active" data-level="A1">A1</button><button class="level" data-level="A2">A2</button><button class="level" data-level="B1">B1</button><button class="level" data-level="B2">B2</button><button class="level" data-level="C1">C1</button>
+    </div>
+    <div class="level-desc"><strong id="levelName">A1 · Anfänger</strong><p id="levelDesc">Làm quen với âm cơ bản, từ thông dụng và câu ngắn trong giao tiếp hằng ngày.</p></div>
+    <label class="field-label" for="topic">Chủ đề luyện tập</label>
+    <select id="topic">
+      <option value="basics">Âm cơ bản & nguyên âm</option>
+      <option value="words">Từ vựng và trọng âm</option>
+      <option value="sentences">Đọc câu hoàn chỉnh</option>
+      <option value="dialogue">Hội thoại thực tế</option>
+    </select>
+    <label class="field-label" for="voice">Giọng mẫu</label>
+    <select id="voice">
+      <option value="de-DE">Hochdeutsch · Đức chuẩn</option>
+      <option value="de-AT">Österreichisches Deutsch · Áo</option>
+    </select>
+    <label class="checkrow"><input type="checkbox" id="showIPA" checked> Hiển thị phiên âm IPA và hướng dẫn khẩu hình.</label>
+    <button class="primary full" id="newExercise">↻ Đổi bài luyện</button>
+  </aside>
+  <main class="panel mainpanel">
+    <div class="topline"><span class="pill" id="levelPill">A1 · BASICS</span><span class="record-state">Bài luyện mẫu · 01</span></div>
+    <h2 class="exercise-title" id="exerciseTitle">Làm quen với nguyên âm Ü</h2>
+    <p class="exercise-sub" id="exerciseSub">Nghe mẫu trước, sau đó ghi âm giọng đọc của bạn.</p>
+    <div class="word-card">
+      <div class="word" id="target">über</div>
+      <div class="translation" id="meaning">ở phía trên · qua</div>
+      <div class="ipa" id="ipa">/ˈyːbɐ/</div>
+      <div class="audio-row">
+        <button class="action" id="speak">▶ Nghe phát âm mẫu</button>
+        <button class="action" id="slowSpeak">◷ Nghe chậm</button>
+      </div>
+    </div>
+    <div class="recorder">
+      <div class="recorder-head"><strong>🎙️ Ghi âm phát âm của bạn</strong><span class="record-state" id="recordState">Chưa ghi âm</span></div>
+      <button class="mic" id="mic" aria-label="Bắt đầu ghi âm">🎙</button>
+      <div class="timer" id="timer">00:00</div>
+      <div class="rec-actions">
+        <button class="primary" id="start">Bắt đầu ghi âm</button>
+        <button class="secondary" id="stop" disabled>Dừng ghi âm</button>
+        <button class="secondary" id="playback" disabled>▶ Nghe lại</button>
+      </div>
+      <div class="submit-row">
+        <button class="submit-btn" id="submitRecording" disabled>Gửi bài &amp; đánh giá phát âm</button>
+      </div>
+    </div>
+    <div class="feedback" id="feedback"><h3>Gợi ý tự luyện tập</h3><p id="feedbackText"></p></div>
+    <div class="assessment" id="assessment">
+      <div class="assessment-head"><h3>📊 Kết quả đánh giá Aussprache</h3><div class="score" id="scoreValue">—</div></div>
+      <p id="assessmentSummary"></p>
+      <div id="assessmentDetails"></div>
+      <p class="disclaimer" id="assessmentDisclaimer">Kết quả chỉ mang tính hỗ trợ học tập; không phải chứng nhận trình độ hoặc đánh giá chuyên môn.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><b>1. Listen</b><span>Nghe kỹ giọng mẫu và chú ý âm mục tiêu.</span></div>
+      <div class="step"><b>2. Repeat</b><span>Đọc chậm, rõ, không cố nói quá nhanh.</span></div>
+      <div class="step"><b>3. Compare</b><span>Nghe lại bản ghi và tự đối chiếu với mẫu.</span></div>
+    </div>
+  </main>
+</div>
+<footer>Bản giao diện thử nghiệm Aussprache AI · Ghi âm được xử lý trong trình duyệt và không tải lên máy chủ.<br>Nhận xét hiện tại là hướng dẫn tự luyện, chưa phải kết quả chấm phát âm bằng mô hình chuyên dụng.</footer>
+</div>
+<script>
+const levels={
+ A1:{name:"A1 · Anfänger",desc:"Làm quen với âm cơ bản, từ thông dụng và câu ngắn trong giao tiếp hằng ngày.",pill:"A1 · BASICS"},
+ A2:{name:"A2 · Grundstufe",desc:"Luyện phát âm từ quen thuộc, cụm từ, trọng âm và câu giao tiếp đơn giản.",pill:"A2 · ELEMENTARY"},
+ B1:{name:"B1 · Mittelstufe",desc:"Tập trung vào nhịp điệu câu, phụ âm khó và diễn đạt rõ ràng trong tình huống thường gặp.",pill:"B1 · INTERMEDIATE"},
+ B2:{name:"B2 · Gute Mittelstufe",desc:"Luyện câu dài, ngữ điệu, trọng âm câu và cách nói tự nhiên trong thảo luận.",pill:"B2 · UPPER INTERMEDIATE"},
+ C1:{name:"C1 · Fortgeschritten",desc:"Tinh chỉnh ngữ điệu, nhịp điệu, độ rõ và sắc thái phát âm trong diễn đạt phức tạp.",pill:"C1 · ADVANCED"}
+};
+const exercises={
+ A1:[
+  ["Làm quen với nguyên âm Ü","Nghe mẫu trước, sau đó ghi âm giọng đọc của bạn.","über","ở phía trên · qua","/ˈyːbɐ/","Giữ lưỡi gần vị trí phát âm /iː/, đồng thời làm tròn môi. Đừng thay /yː/ bằng /uː/."],
+  ["Phân biệt Ö và O","Chú ý hình dáng môi và vị trí lưỡi.","schön","đẹp","/ʃøːn/","Với /øː/, giữ lưỡi ở vị trí gần /eː/ nhưng làm tròn môi."],
+  ["Âm CH trong ich","Luyện âm xát mềm ở phía trước miệng.","ich","tôi","/ɪç/","Nâng phần giữa lưỡi gần vòm miệng, để luồng hơi đi qua khe hẹp."]
+ ],
+ A2:[
+  ["Nguyên âm dài và ngắn","Nghe sự khác biệt về trường độ nguyên âm.","Stadt","thành phố","/ʃtat/","Giữ nguyên âm ngắn gọn; tránh kéo dài quá mức."],
+  ["Phụ âm W và V","Luyện sự khác nhau giữa các chữ cái trong từ Đức.","Wasser","nước","/ˈvasɐ/","Chữ W trong tiếng Đức thường được phát âm gần /v/."],
+  ["Trọng âm từ","Đặt trọng âm đúng trong từ quen thuộc.","beginnen","bắt đầu","/bəˈɡɪnən/","Chú ý âm tiết thứ hai mang trọng âm chính."]
+ ],
+ B1:[
+  ["Âm CH mềm và cứng","Phân biệt hai cách phát âm CH theo ngữ cảnh.","Buch","quyển sách","/buːx/","Trong Buch là âm /x/ ở phía sau miệng; khác với /ç/ trong ich."],
+  ["Phụ âm cuối","Chú ý hiện tượng vô thanh hóa phụ âm cuối.","Tag","ngày","/taːk/","Âm /g/ viết ở cuối từ được phát âm thành /k/ trong từ này."],
+  ["Nhịp điệu câu","Đọc câu có nhịp tự nhiên, không tách từng từ.","Ich lerne jeden Tag Deutsch.","Tôi học tiếng Đức mỗi ngày.","","Nhấn vào thông tin quan trọng, nối các từ một cách tự nhiên."]
+ ],
+ B2:[
+  ["Ngữ điệu trong câu phụ","Luyện nhịp và ngữ điệu của câu phức.","Obwohl es schwierig ist, übe ich weiter.","Mặc dù khó, tôi vẫn tiếp tục luyện tập.","","Giữ mạch câu liên tục; chú ý vị trí động từ ở cuối mệnh đề phụ."],
+  ["Trọng âm câu","Làm nổi bật thông tin đối lập trong câu.","Ich habe das nicht gestern gesagt.","Tôi không nói điều đó hôm qua.","","Thay đổi trọng âm theo ý muốn nhấn mạnh; tránh nhấn đều mọi từ."],
+  ["Cụm phụ âm","Luyện chuyển tiếp giữa nhiều phụ âm.","Sprachkenntnisse","kiến thức ngôn ngữ","/ˈʃpʁaːxˌkɛntnɪsə/","Giữ rõ cụm phụ âm nhưng không chèn thêm nguyên âm."]
+ ],
+ C1:[
+  ["Ngữ điệu diễn đạt quan điểm","Điều chỉnh ngữ điệu trong lập luận dài.","Meines Erachtens sollte man diese Entwicklung kritisch betrachten.","Theo quan điểm của tôi, cần nhìn nhận sự phát triển này một cách phản biện.","","Tổ chức câu thành các cụm ý; dùng ngữ điệu để thể hiện cấu trúc lập luận."],
+  ["Nhịp điệu và độ trôi chảy","Luyện câu dài với nhịp nói ổn định.","Die zunehmende Digitalisierung verändert unseren Alltag grundlegend.","Sự số hóa ngày càng tăng đang thay đổi căn bản đời sống hằng ngày.","","Giữ nhịp đều, giảm ngắt nghỉ không cần thiết và phát âm rõ các âm tiết không mang trọng âm."],
+  ["Sắc thái phát âm","Luyện cách nhấn để thể hiện thái độ và ý nghĩa.","Das ist keineswegs eine selbstverständliche Lösung.","Đó hoàn toàn không phải là một giải pháp hiển nhiên.","","Nhấn vào từ phủ định và từ mang ý nghĩa đánh giá để truyền tải đúng sắc thái."]
+ ]
+};
+let level="A1", current=0, mediaRecorder=null, chunks=[], recordedBlob=null, stream=null, seconds=0, interval=null;
+/*
+  KẾT NỐI AI:
+  Điền URL Cloudflare Worker chuyên xử lý đánh giá phát âm vào biến dưới đây.
+  Worker nhận multipart/form-data: audio, target_text, level, locale, exercise_title.
+  Worker nên trả JSON: { score, summary, transcript, strengths:[], improvements:[], phoneme_feedback:[] }.
+  Không đặt Groq API Key hoặc secret trong file HTML.
+*/
+const PRONUNCIATION_API_URL = "";
+const $=id=>document.getElementById(id);
+function render(){
+ const arr=exercises[level]; current=current%arr.length; const e=arr[current];
+ $("levelName").textContent=levels[level].name;$("levelDesc").textContent=levels[level].desc;$("levelPill").textContent=levels[level].pill;
+ $("exerciseTitle").textContent=e[0];$("exerciseSub").textContent=e[1];$("target").textContent=e[2];$("meaning").textContent=e[3];$("ipa").textContent=e[4]||"Luyện ngữ điệu và nhịp điệu";
+ $("ipa").style.display=$("showIPA").checked?"block":"none";$("feedback").classList.remove("show");
+ $("recordState").textContent="Chưa ghi âm";$("timer").textContent="00:00";$("playback").disabled=true;$("submitRecording").disabled=true;recordedBlob=null;
+ $("assessment").classList.remove("show");$("feedback").classList.remove("show");
+}
+document.querySelectorAll(".level").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".level").forEach(b=>b.classList.remove("active"));btn.classList.add("active");level=btn.dataset.level;current=0;render()}));
+$("showIPA").addEventListener("change",()=>{$("ipa").style.display=$("showIPA").checked?"block":"none"});
+$("newExercise").addEventListener("click",()=>{current=(current+1)%exercises[level].length;render()});
+$("topic").addEventListener("change",()=>{const idx={basics:0,words:1,sentences:2,dialogue:2}[$("topic").value]||0;current=idx%exercises[level].length;render()});
+function speak(text,rate=1){if(!("speechSynthesis"in window)){alert("Trình duyệt này chưa hỗ trợ đọc văn bản.");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=$("voice").value;u.rate=rate;const voices=speechSynthesis.getVoices();const preferred=voices.find(v=>v.lang.toLowerCase().startsWith($("voice").value.toLowerCase()));if(preferred)u.voice=preferred;speechSynthesis.speak(u)}
+$("speak").onclick=()=>speak($("target").textContent,1);$("slowSpeak").onclick=()=>speak($("target").textContent,.72);
+function resetTimer(){seconds=0;$("timer").textContent="00:00"}
+$("start").onclick=async()=>{
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){alert("Trình duyệt hoặc kết nối hiện tại chưa hỗ trợ ghi âm. Hãy dùng trình duyệt mới và HTTPS hoặc localhost.");return}
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recordedBlob=null;
+  const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"";
+  mediaRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+  mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  mediaRecorder.onstop=()=>{recordedBlob=new Blob(chunks,{type:mediaRecorder.mimeType||"audio/webm"});$("playback").disabled=false;$("submitRecording").disabled=false;$("recordState").textContent="Đã ghi âm · sẵn sàng gửi đánh giá";$("feedbackText").textContent=exercises[level][current][5]+" Bạn có thể nghe lại hoặc gửi bản ghi để hệ thống đánh giá."; $("feedback").classList.add("show");stream?.getTracks().forEach(t=>t.stop())};
+  mediaRecorder.start();$("start").disabled=true;$("stop").disabled=false;$("mic").classList.add("recording");$("recordState").textContent="Đang ghi âm…";resetTimer();interval=setInterval(()=>{seconds++;$("timer").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");if(seconds>=30)$("stop").click()},1000);
+ }catch(err){alert("Không thể truy cập microphone. Hãy cấp quyền sử dụng microphone cho trang web.")}
+};
+$("stop").onclick=()=>{if(mediaRecorder&&mediaRecorder.state!=="inactive"){mediaRecorder.stop();clearInterval(interval);$("start").disabled=false;$("stop").disabled=true;$("mic").classList.remove("recording")}};
+$("mic").onclick=()=>{if(mediaRecorder?.state==="recording")$("stop").click();else $("start").click()};
+$("playback").onclick=()=>{if(recordedBlob){const url=URL.createObjectURL(recordedBlob);const audio=new Audio(url);audio.play();audio.onended=()=>URL.revokeObjectURL(url)}};
+
+$("submitRecording").onclick=async()=>{
+ if(!recordedBlob){alert("Bạn cần ghi âm trước khi gửi bài.");return}
+ if(!PRONUNCIATION_API_URL){
+   $("assessment").classList.add("show");
+   $("scoreValue").textContent="—";
+   $("assessmentSummary").textContent="Bản ghi đã sẵn sàng, nhưng trang chưa được kết nối với dịch vụ AI đánh giá phát âm.";
+   $("assessmentDetails").innerHTML="<p><strong>Để bật đánh giá thật:</strong> cần triển khai một Cloudflare Worker nhận tệp âm thanh, phân tích phát âm và trả về điểm số cùng nhận xét. Sau đó cấu hình URL Worker trong biến PRONUNCIATION_API_URL ở cuối file HTML.</p><p>Không nên tự tạo điểm số giả từ bản ghi hoặc chỉ dựa vào nhận dạng văn bản, vì điều đó không phản ánh chính xác chất lượng phát âm.</p>";
+   $("assessmentDisclaimer").textContent="Hiện tại chưa có điểm đánh giá AI. Bản ghi chỉ được lưu tạm trong trình duyệt và chưa được gửi đi đâu.";
+   $("assessment").scrollIntoView({behavior:"smooth",block:"nearest"});
+   return;
+ }
+ const btn=$("submitRecording");btn.disabled=true;btn.textContent="Đang gửi và phân tích…";
+ $("assessment").classList.add("show");$("scoreValue").textContent="…";
+ $("assessmentSummary").textContent="Đang tải bản ghi lên dịch vụ đánh giá. Vui lòng chờ trong giây lát.";
+ $("assessmentDetails").innerHTML="";
+ $("assessmentDisclaimer").textContent="Không đóng trang trong khi hệ thống đang phân tích.";
+ try{
+   const form=new FormData();
+   form.append("audio",recordedBlob,"aussprache-recording.webm");
+   form.append("target_text",$("target").textContent);
+   form.append("level",level);
+   form.append("locale",$("voice").value);
+   form.append("exercise_title",$("exerciseTitle").textContent);
+   form.append("topic",$("topic").value);
+   const response=await fetch(PRONUNCIATION_API_URL,{method:"POST",body:form});
+   if(!response.ok)throw new Error("Máy chủ trả về mã lỗi "+response.status);
+   const data=await response.json();
+   if(typeof data.score!=="number")throw new Error("Phản hồi máy chủ thiếu trường score hợp lệ.");
+   $("scoreValue").textContent=Math.max(0,Math.min(100,Math.round(data.score)))+"/100";
+   $("assessmentSummary").textContent=data.summary||"Đã nhận kết quả phân tích phát âm.";
+   const groups=[
+     ["Bản nhận dạng",data.transcript?[data.transcript]:[]],
+     ["Điểm tốt",data.strengths||[]],
+     ["Cần cải thiện",data.improvements||[]],
+     ["Phân tích âm cụ thể",data.phoneme_feedback||[]]
+   ];
+   $("assessmentDetails").innerHTML=groups.filter(g=>g[1]&&g[1].length).map(g=>"<p><strong>"+g[0]+"</strong></p><ul>"+g[1].map(x=>"<li>"+String(typeof x==="string"?x:(x.detail||x.message||JSON.stringify(x))).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))+"</li>").join("")+"</ul>").join("");
+   $("assessmentDisclaimer").textContent="Điểm số phụ thuộc vào chất lượng ghi âm, dữ liệu và mô hình đánh giá. Hãy dùng kết quả như phản hồi luyện tập, không phải chứng nhận CEFR.";
+ }catch(err){
+   $("scoreValue").textContent="—";
+   $("assessmentSummary").textContent="Chưa thể hoàn thành đánh giá: "+err.message;
+   $("assessmentDetails").innerHTML="<p>Kiểm tra URL Worker, quyền truy cập mạng, định dạng âm thanh và cấu trúc JSON phản hồi.</p>";
+   $("assessmentDisclaimer").textContent="Bản ghi vẫn còn trong phiên trình duyệt; bạn có thể thử gửi lại sau khi kiểm tra máy chủ.";
+ }finally{btn.disabled=false;btn.textContent="Gửi lại & đánh giá"}
+};
+
+render();
+</script>
+</body>
+</html>
