@@ -1,1711 +1,249 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Tiếng Đức cùng Artificial Intelligence</title>
-
-<!-- FONT CHỮ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<meta name="theme-color" content="#09111f">
+<title>Aussprache AI — Luyện phát âm tiếng Đức</title>
 <style>
-
-/* =========================
-   THIẾT LẬP CHUNG
-========================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    min-height: 100%;
-}
-
-body {
-    min-height: 100vh;
-    min-height: 100svh;
-
-    font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
-
-    color: white;
-
-    background-image: url("11.jpg");
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-
-    overflow-x: hidden;
-}
-
-/* =========================
-   TIÊU ĐỀ GÓC TRÊN BÊN TRÁI
-========================= */
-
-.header {
-    position: absolute;
-    top: 45px;
-    left: 65px;
-
-    z-index: 10;
-}
-
-.header h1 {
-    font-family: 'Be Vietnam Pro', sans-serif;
-
-    font-size: clamp(24px, 3vw, 36px);
-    font-weight: 800;
-    letter-spacing: 1px;
-
-    color: #ffffff;
-
-    text-shadow: 0 3px 15px rgba(0,0,0,0.55);
-}
-
-/* =========================
-   KHU VỰC CHÍNH
-========================= */
-
-.main {
-    min-height: 100vh;
-    min-height: 100svh;
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
-    padding-left: 65px;
-    padding-right: 30px;
-}
-
-/* =========================
-   KHUNG B2
-========================= */
-
-.level-card {
-    position: relative;
-
-    width: fit-content;
-    min-width: 0;
-    padding: 12px 22px;
-
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 0;
-
-    background: rgba(255,255,255,0.13);
-
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    box-shadow: 0 8px 30px rgba(0,0,0,0.16);
-
-    cursor: pointer;
-
-    transition:
-        background 0.3s ease,
-        transform 0.3s ease;
-}
-
-.level-card:hover {
-    background: rgba(255,255,255,0.20);
-    transform: translateY(-3px);
-}
-
-/* =========================
-   CHỮ B2
-========================= */
-
-.level-title {
-    font-family: 'Inter', sans-serif;
-
-    font-size: 30px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    white-space: nowrap;
-
-    text-align: left;
-    color: white;
-
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-/* =========================
-   GỢI Ý RÊ CHUỘT
-========================= */
-
-.hint {
-    display: none;
-    margin-top: 8px;
-
-    font-size: 10px;
-    text-align: center;
-
-    color: rgba(255,255,255,0.9);
-
-    transition: opacity 0.3s ease;
-}
-
-.level-card:hover .hint,
-.level-card.open .hint {
-    opacity: 0;
-}
-
-/* =========================
-   MENU CON - MÁY TÍNH
-   SỔ NGANG SANG PHẢI
-   SAU ĐÓ XẾP DỌC
-========================= */
-
-.menu {
-    position: absolute;
-
-    top: 0;
-    left: calc(100% + 18px);
-
-    width: 180px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    max-height: 0;
-    opacity: 0;
-
-    overflow: hidden;
-
-    transform: translateX(-20px);
-
-    transition:
-        max-height 0.65s ease,
-        opacity 0.4s ease,
-        transform 0.5s ease;
-}
-
-/* MỞ MENU */
-
-.level-card:hover .menu,
-.level-card.open .menu {
-    max-height: 180px;
-    opacity: 1;
-
-    overflow: visible;
-
-    transform: translateX(0);
-}
-
-/* =========================
-   CÁC THƯ MỤC NHỎ
-========================= */
-
-.menu > a,
-.menu-item > .submenu-trigger {
-    display: block;
-    width: 100%;
-    text-decoration: none;
-    color: white;
-    padding: 18px 12px;
-    border: 1px solid rgba(255,255,255,0.42);
-    border-radius: 11px;
-    background: rgba(19, 32, 55, 0.88);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-    opacity: 0;
-    transform: translateY(-12px);
-    transition:
-        opacity 0.4s ease,
-        transform 0.4s ease,
-        background 0.3s ease,
-        border-color 0.3s ease;
-}
-
-.menu-item {
-    position: relative;
-    width: 100%;
-}
-
-.level-card:hover .menu > a,
-.level-card.open .menu > a,
-.level-card:hover .menu-item > .submenu-trigger,
-.level-card.open .menu-item > .submenu-trigger {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* MENU CHỦ ĐỀ SỔ RA BÊN PHẢI WORTSCHATZ */
-.submenu {
-    position: absolute;
-    top: 0;
-    /* Bắt đầu sát mép Wortschatz; phần đệm tạo cầu hover vô hình,
-       giúp con trỏ không bị rơi khỏi mục khi di chuyển sang submenu. */
-    left: 100%;
-    width: 194px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 0 0 0 14px;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateX(-12px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-}
-
-.menu-item:hover > .submenu,
-.menu-item:focus-within > .submenu,
-.menu-item.submenu-open > .submenu {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(0);
-}
-
-.submenu a {
-    display: block;
-    width: 100%;
-    padding: 13px 12px;
-    border: 1px solid rgba(255,255,255,0.42);
-    border-radius: 11px;
-    background: rgba(19, 32, 55, 0.90);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    color: white;
-    text-decoration: none;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-    transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-.submenu a:hover,
-.menu > a:hover,
-.menu-item > .submenu-trigger:hover {
-    background: rgba(43, 61, 91, 0.97);
-    border-color: rgba(255,255,255,0.9);
-}
-
-/* CHỮ TRONG MENU */
-
-.menu h2 {
-    font-size: 15px;
-    font-weight: 600;
-
-    margin-bottom: 5px;
-}
-
-.menu p {
-    font-size: 12px;
-    color: #ffffff;
-}
-
-/* =========================
-   SLOGAN GÓC DƯỚI BÊN TRÁI
-========================= */
-
-.footer {
-    position: absolute;
-
-    bottom: 35px;
-    left: 65px;
-
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
-
-    color: #ffffff;
-
-    text-shadow: 0 2px 10px rgba(0,0,0,0.55);
-}
-
-/* =========================
-   ĐIỆN THOẠI VÀ MÀN HÌNH NHỎ
-========================= */
-
-@media (max-width: 600px) {
-
-    body {
-        background-attachment: scroll;
-    }
-
-    /* TIÊU ĐỀ */
-
-    .header {
-        top: 28px;
-        left: 25px;
-        right: 20px;
-    }
-
-    .header h1 {
-        font-size: clamp(21px, 6vw, 26px);
-        line-height: 1.4;
-    }
-
-    /* KHU VỰC CHÍNH */
-
-    .main {
-        justify-content: center;
-
-        padding-left: 20px;
-        padding-right: 20px;
-
-        padding-top: 100px;
-        padding-bottom: 100px;
-    }
-
-    /* KHUNG B2 */
-
-    .level-card {
-        width: fit-content;
-        min-width: 0;
-        padding: 12px 22px;
-    }
-
-    /* MENU CHUYỂN XUỐNG BÊN DƯỚI B2 */
-
-    .menu {
-        position: static;
-
-        width: 180px;
-
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-
-        max-height: 0;
-        margin-top: 0;
-
-        transform: translateY(-12px);
-    }
-
-    .level-card:hover .menu,
-    .level-card.open .menu {
-        max-height: 700px;
-        margin-top: 16px;
-
-        opacity: 1;
-        transform: translateY(0);
-
-        overflow: visible;
-    }
-
-    /* THƯ MỤC NHỎ */
-
-    .menu > a,
-    .menu-item > .submenu-trigger {
-        padding: 16px 12px;
-    }
-
-    /* Trên điện thoại, menu chủ đề mở xuống bên dưới Wortschatz */
-    .menu-item {
-        position: static;
-    }
-
-    .submenu {
-        position: static;
-        width: 100%;
-        max-height: 0;
-        margin-top: 0;
-        padding-left: 12px;
-        overflow: hidden;
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transform: translateY(-8px);
-        transition: max-height 0.35s ease, opacity 0.3s ease, transform 0.3s ease, margin 0.3s ease;
-    }
-
-    .menu-item:hover > .submenu,
-    .menu-item:focus-within > .submenu,
-    .menu-item.submenu-open > .submenu {
-        max-height: 500px;
-        margin-top: 10px;
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transform: translateY(0);
-    }
-
-    .submenu a {
-        padding: 13px 12px;
-    }
-
-    .menu h2 {
-        font-size: 15px;
-    }
-
-    .menu p {
-        font-size: 12px;
-    }
-
-    /* SLOGAN */
-
-    .footer {
-        left: 25px;
-        bottom: 25px;
-
-        font-size: 11px;
-        letter-spacing: 0.5px;
-    }
-}
-
-/* =========================
-   TABLET
-========================= */
-
-@media (min-width: 601px) and (max-width: 900px) {
-
-    .header {
-        left: 40px;
-        top: 35px;
-    }
-
-    .main {
-        padding-left: 40px;
-    }
-
-    .footer {
-        left: 40px;
-    }
-
-}
-
-/* =========================
-   GIẢM CHUYỂN ĐỘNG
-========================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        transition-duration: 0.01ms !important;
-        transition-delay: 0ms !important;
-    }
-
-}
-
-
-/* =========================
-   MENU PHONG CACH WINDOWS CLASSIC
-   Chi thay doi bo cuc, giu nguyen mau sac hien tai
-========================= */
-
-/* Khung menu chinh: cac muc nam lien tiep nhu context menu Windows */
-.menu {
-    width: 190px;
-    gap: 0;
-    padding: 0;
-    border: 1px solid rgba(255,255,255,0.42);
-    background: rgba(19, 32, 55, 0.88);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-}
-
-/* Moi muc la mot dong ngang, can le trai */
-.menu > a,
-.menu-item > .submenu-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 43px;
-    padding: 9px 12px;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    text-align: left;
-}
-
-/* Giu nguyen mau chu va mau nen hover da co */
-.menu > a:hover,
-.menu-item > .submenu-trigger:hover {
-    background: rgba(43, 61, 91, 0.97);
-}
-
-/* Hien thi tieu de tren mot dong; an dong mo ta de giong menu Windows */
-.menu h2 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.menu p {
-    display: none;
-}
-
-/* Mui ten ben phai cho muc co menu con */
-.menu-item > .submenu-trigger::after {
-    content: "›";
-    margin-left: 18px;
-    font-size: 23px;
-    line-height: 1;
-    font-weight: 400;
-}
-
-/* Menu con: cac chu de xep thanh danh sach lien tuc */
-.submenu {
-    width: 194px;
-    gap: 0;
-    padding: 0;
-    border: 1px solid rgba(255,255,255,0.42);
-    background: rgba(19, 32, 55, 0.90);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-}
-
-.submenu a {
-    min-height: 39px;
-    padding: 10px 13px;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    text-align: left;
-    font-size: 13px;
-}
-
-/* Duong ngan cach giua cac muc, dung cung tong mau hien tai */
-.menu > a + .menu-item {
-    border-top: 1px solid rgba(255,255,255,0.28);
-}
-
-.submenu a + a {
-    border-top: 1px solid rgba(255,255,255,0.20);
-}
-
-/* Mobile: giu cach mo menu cam ung, chi chuyen danh sach xuong dong */
-@media (max-width: 600px) {
-    .menu {
-        width: 180px;
-        border: 1px solid rgba(255,255,255,0.42);
-    }
-
-    .menu > a,
-    .menu-item > .submenu-trigger {
-        min-height: 43px;
-        padding: 10px 12px;
-    }
-
-    .submenu {
-        width: 100%;
-        border: 1px solid rgba(255,255,255,0.42);
-    }
-
-    .submenu a {
-        min-height: 38px;
-        padding: 10px 12px;
-    }
-}
-
-
-/* =========================
-   MO RONG 4 CAP DO A1-A2-B1-B2
-   Giu nguyen tong mau va phong cach Windows Classic
-========================= */
-.main {
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.level-list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.level-card {
-    width: 92px;
-    min-width: 92px;
-    padding: 10px 14px;
-}
-
-.level-title {
-    font-size: 24px;
-    letter-spacing: 2px;
-}
-
-.level-card:hover .menu,
-.level-card.open .menu {
-    max-height: 520px;
-}
-
-.menu-item > .submenu-trigger {
-    cursor: pointer;
-}
-
-/* Dấu phân cách cho mọi mục menu cấp độ */
-.menu > a + .menu-item,
-.menu > .menu-item + .menu-item {
-    border-top: 1px solid rgba(255,255,255,0.28);
-}
-
-/* Bố cục menu trên điện thoại */
-@media (max-width: 600px) {
-    .main {
-        justify-content: center;
-        padding-top: 115px;
-        padding-bottom: 100px;
-    }
-
-    .level-list {
-        width: 100%;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .level-card {
-        width: 92px;
-        min-width: 92px;
-        padding: 10px 14px;
-    }
-
-    .level-card:hover .menu,
-    .level-card.open .menu {
-        max-height: 1000px;
-    }
-
-    .menu {
-        width: 210px;
-    }
-}
-
-
-/* =========================
-   MENU CAP DO: MO NGANG SANG PHAI TREN MAY TINH
-   Giu nguyen mau sac va phong cach Windows Classic
-========================= */
-@media (min-width: 601px) {
-    .level-list {
-        overflow: visible;
-    }
-
-    .level-card {
-        position: relative;
-        overflow: visible;
-    }
-
-    /* Menu cua ca 4 cap do se mo ngang, voi mep duoi cung hang voi mep duoi B2. */
-    .level-card > .menu {
-        position: absolute;
-        top: 0; /* JavaScript tinh lai top de can mep duoi theo B2 */
-        left: calc(100% + 18px);
-        right: auto;
-        width: 230px;
-        max-height: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        overflow: hidden;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateX(-12px);
-        transform-origin: left bottom;
-        z-index: 100;
-        transition: max-height .35s ease, opacity .25s ease,
-                    transform .25s ease, visibility .25s ease;
-    }
-
-    /* Menu con canh giua theo chinh hang A1, A2, B1 hoac B2 dang duoc hover.
-       Vi vay bang menu luon mo ngang sang phai, khong bi day xuong duoi. */
-    .level-card:hover > .menu,
-    .level-card.open > .menu,
-    .level-card:focus-within > .menu {
-        max-height: 600px;
-        overflow: visible;
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(0);
-    }
-
-    /* Moi muc co menu con deu mo tiep sang phai, canh theo dung hang cua muc do. */
-    /* Menu chu de Wortschatz mo sang phai va can mep duoi cung hang B2. */
-    .menu-item {
-        position: relative;
-    }
-
-    .menu-item > .submenu {
-        position: absolute;
-        top: auto;
-        bottom: 0;
-        left: 100%;
-        right: auto;
-        margin: 0;
-        z-index: 110;
-        transform: translateX(-12px);
-        transform-origin: left bottom;
-    }
-
-    .menu-item:hover > .submenu,
-    .menu-item:focus-within > .submenu,
-    .menu-item.submenu-open > .submenu {
-        transform: translateX(0);
-    }
-}
-
-/* Nhãn Wortschatz hiển thị rõ phần giải nghĩa tiếng Việt */
-.menu-item > .submenu-trigger h2 {
-    white-space: nowrap;
-}
-
-
-/* =========================
-   CAN CHINH KICH THUOC VA VI TRI MENU
-   Giu nguyen mau sac va cac chuc nang hien tai
-========================= */
-@media (min-width: 601px) {
-    /* Tang kich thuoc 4 thu muc cap do va tao them khoang cach */
-    .level-list {
-        gap: 16px;
-    }
-
-    .level-card {
-        width: 108px;
-        min-width: 108px;
-        padding: 13px 16px;
-    }
-
-    .level-title {
-        font-size: 27px;
-        letter-spacing: 2.5px;
-    }
-
-    /* Bo cac lech vi tri rieng tung cap do: tat ca dung chung mep duoi B2. */
-}
-
-@media (max-width: 600px) {
-    /* Tren dien thoai giu kich thuoc va khoang cach vua man hinh */
-    .level-list {
-        gap: 14px;
-    }
-
-    .level-card {
-        width: 100px;
-        min-width: 100px;
-        padding: 12px 14px;
-    }
-
-    .level-title {
-        font-size: 25px;
-    }
-}
-
-
-/* SCHREIBEN: dinh dang cac dong Goethe va telc theo Windows Classic */
-@media (min-width: 601px) {
-    .schreiben-menu > .submenu {
-        bottom: 0;
-        top: auto;
-        left: 100%;
-        margin: 0;
-    }
-
-    .schreiben-menu > .submenu > .menu-item {
-        position: relative;
-    }
-
-    .schreiben-menu > .submenu > .menu-item > .submenu-trigger {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        min-height: 39px;
-        padding: 10px 13px;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        color: white;
-        text-decoration: none;
-        text-align: left;
-        font-size: 13px;
-        font-weight: 600;
-    }
-
-    .schreiben-menu > .submenu > .menu-item > .submenu-trigger:hover {
-        background: rgba(43, 61, 91, 0.97);
-    }
-
-    .schreiben-menu > .submenu > .menu-item > .submenu-trigger::after {
-        content: "›";
-        margin-left: 14px;
-        font-size: 21px;
-        line-height: 1;
-    }
-
-    .schreiben-menu > .submenu > .menu-item > .submenu {
-        top: auto;
-        bottom: 0;
-        left: 100%;
-        margin: 0;
-    }
-}
-
-
-/* =========================
-   BON THU MUA CHO 4 THU MUC LON A1-A2-B1-B2
-   Chi tac dong den 4 level-card; khong thay doi menu con
-========================= */
-
-.level-card.season-spring {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(255,224,238,.24), transparent 34%),
-        linear-gradient(145deg, rgba(117,180,132,.34), rgba(53,112,91,.25));
-    border-color: rgba(203,245,205,.72);
-    box-shadow: 0 8px 28px rgba(35,91,60,.22), inset 0 0 18px rgba(224,255,225,.07);
-}
-
-.level-card.season-spring::after {
-    content: "";
-    color: rgba(231,255,229,.86);
-}
-
-.level-card.season-summer {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(255,218,112,.42), transparent 35%),
-        linear-gradient(145deg, rgba(230,126,42,.48), rgba(190,75,42,.34));
-    border-color: rgba(255,204,132,.88);
-    box-shadow: 0 8px 28px rgba(155,75,24,.26), inset 0 0 18px rgba(255,230,180,.10);
-}
-
-.level-card.season-summer::after {
-    content: "";
-    color: rgba(255,246,211,.90);
-}
-
-.level-card.season-autumn {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(255,197,126,.28), transparent 35%),
-        linear-gradient(145deg, rgba(174,99,55,.38), rgba(111,70,65,.30));
-    border-color: rgba(255,203,157,.76);
-    box-shadow: 0 8px 28px rgba(105,55,30,.22), inset 0 0 18px rgba(255,224,190,.07);
-}
-
-.level-card.season-autumn::after {
-    content: "";
-    color: rgba(255,229,205,.90);
-}
-
-.level-card.season-winter {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(235,250,255,.48), transparent 36%),
-        linear-gradient(145deg, rgba(126,190,230,.46), rgba(48,91,158,.48));
-    border-color: rgba(226,248,255,.94);
-    box-shadow: 0 8px 28px rgba(28,72,132,.30), inset 0 0 20px rgba(235,250,255,.16);
-}
-
-.level-card.season-winter::after {
-    content: "";
-    color: rgba(236,249,255,.92);
-}
-
-/* Nhan mua nho nam ben trong goc duoi cua tung thu muc lon */
-.level-card.season-spring::after,
-.level-card.season-summer::after,
-.level-card.season-autumn::after,
-.level-card.season-winter::after {
-    position: absolute;
-    right: 7px;
-    bottom: 5px;
-    font-family: 'Inter', sans-serif;
-    font-size: 6px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    line-height: 1;
-    pointer-events: none;
-    opacity: .9;
-}
-
-/* Hieu ung hover rieng cho 4 thu muc lon, khong anh huong submenu */
-.level-card.season-spring:hover {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(255,224,238,.36), transparent 34%),
-        linear-gradient(145deg, rgba(133,198,146,.48), rgba(60,133,106,.38));
-}
-
-.level-card.season-summer:hover {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(255,226,132,.52), transparent 35%),
-        linear-gradient(145deg, rgba(245,139,42,.60), rgba(204,76,39,.48));
-}
-
-.level-card.season-autumn:hover {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(255,197,126,.40), transparent 35%),
-        linear-gradient(145deg, rgba(190,112,65,.52), rgba(128,79,71,.40));
-}
-
-.level-card.season-winter:hover {
-    background:
-        radial-gradient(circle at 88% 18%, rgba(244,253,255,.58), transparent 36%),
-        linear-gradient(145deg, rgba(150,213,245,.62), rgba(55,105,183,.58));
-}
-
-
-
-/* =========================
-   BANG MAU MOI: MAU MIN, PHANG, KHONG HIEU UNG BONG/PHAT SANG
-   Chi ghi de mau sac va hieu ung; giu nguyen cau truc va chuc nang.
-========================= */
-
-/* Loai bo bong do va bong chu */
-.level-card,
-.menu,
-.submenu,
-.menu > a,
-.menu-item > .submenu-trigger,
-.submenu a {
-    box-shadow: none !important;
-    text-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-}
-
-.header h1,
-.level-title,
-.footer {
-    text-shadow: none !important;
-}
-
-/* Menu cap 1 va cap 2: nen don sac, mau xanh than mem */
-.menu {
-    background: #26364b !important;
-    border-color: #53657a !important;
-}
-
-.submenu {
-    background: #2d4057 !important;
-    border-color: #60748a !important;
-}
-
-.menu > a:hover,
-.menu-item > .submenu-trigger:hover,
-.submenu a:hover {
-    background: #40566f !important;
-}
-
-.menu > a + .menu-item,
-.submenu a + a {
-    border-color: rgba(220, 232, 244, 0.20) !important;
-}
-
-/* A1 - xanh la pastel, mau phang */
-.level-card.season-spring,
-.level-card.season-spring:hover {
-    background: #a9cbb0 !important;
-    border-color: #d2e5d3 !important;
-}
-
-/* A2 - vang cam pastel, khong qua ruc */
-.level-card.season-summer,
-.level-card.season-summer:hover {
-    background: #e8bd83 !important;
-    border-color: #f4d7ad !important;
-}
-
-/* B1 - nau cam pastel */
-.level-card.season-autumn,
-.level-card.season-autumn:hover {
-    background: #c99d7d !important;
-    border-color: #e5c4a8 !important;
-}
-
-/* B2 - xanh bang pastel */
-.level-card.season-winter,
-.level-card.season-winter:hover {
-    background: #a9c7df !important;
-    border-color: #d2e4f1 !important;
-}
-
-/* Khong hien thi ky hieu/trang tri mua */
-.level-card.season-spring::after,
-.level-card.season-summer::after,
-.level-card.season-autumn::after,
-.level-card.season-winter::after {
-    content: none !important;
-    display: none !important;
-}
-
-/* Hover chi thay doi nhe, khong tao glow */
-.level-card:hover {
-    filter: brightness(0.97);
-}
-
-
-
-/* =========================
-   SLIDESHOW: A1 -> A2 -> B1 -> B2
-   Cac thu muc lan luot truot tu ben trai vao vi tri ban dau
-   Khong ghi de transform hover/menu hien co
-========================= */
-
-@keyframes levelSlideIn {
-    from {
-        opacity: 0;
-        translate: -100px 0;
-    }
-
-    to {
-        opacity: 1;
-        translate: 0 0;
-    }
-}
-
-.level-list > #levelA1,
-.level-list > #levelA2,
-.level-list > #levelB1,
-.level-list > #levelB2 {
-    animation: levelSlideIn 0.8s ease-out both;
-}
-
-.level-list > #levelA1 {
-    animation-delay: 0.1s;
-}
-
-.level-list > #levelA2 {
-    animation-delay: 0.4s;
-}
-
-.level-list > #levelB1 {
-    animation-delay: 0.7s;
-}
-
-.level-list > #levelB2 {
-    animation-delay: 1s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .level-list > #levelA1,
-    .level-list > #levelA2,
-    .level-list > #levelB1,
-    .level-list > #levelB2 {
-        animation: none;
-        opacity: 1;
-        translate: none;
-    }
-}
-
-
-
-/* =========================
-   HIEU UNG BON MUA CHO A1-A2-B1-B2
-   Chi them hoa tiet chuyen dong; giu nguyen bo cuc va chuc nang
-========================= */
-
-.level-card {
-    overflow: visible;
-}
-
-/* Hoa tiet mua an di khi chua hover */
-.level-card::before,
-.level-card::after {
-    position: absolute;
-    right: 7px;
-    top: 4px;
-    z-index: 2;
-    pointer-events: none;
-    line-height: 1;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-/* Chi hien hoa tiet mua khi di chuot vao thu muc */
-.level-card:hover::before,
-.level-card:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* A1 - MUA XUAN: canh hoa rung nhe */
-.level-card.season-spring::before {
-    content: "🌸";
-    font-size: 15px;
-    animation: none;
-}
-
-.level-card.season-spring::after {
-    content: "✿" !important;
-    display: block !important;
-    right: 22px;
-    top: 13px;
-    color: #fff4d9;
-    font-size: 9px;
-    animation: none;
-}
-
-/* A2 - MUA HE: mat troi toa nang */
-.level-card.season-summer::before {
-    content: "☀️";
-    font-size: 16px;
-    transform-origin: center;
-    animation: none;
-}
-
-.level-card.season-summer::after {
-    content: "✦" !important;
-    display: block !important;
-    right: 23px;
-    top: 14px;
-    color: #fff6d8;
-    font-size: 9px;
-    animation: none;
-}
-
-/* B1 - MUA THU: la vang roi nhe */
-.level-card.season-autumn::before {
-    content: "🍂";
-    font-size: 16px;
-    animation: none;
-}
-
-.level-card.season-autumn::after {
-    content: "🍁" !important;
-    display: block !important;
-    right: 24px;
-    top: 15px;
-    font-size: 10px;
-    animation: none;
-}
-
-/* B2 - MUA DONG: bong tuyet lanh */
-.level-card.season-winter::before {
-    content: "❄";
-    color: #ffffff;
-    font-size: 17px;
-    animation: none;
-}
-
-.level-card.season-winter::after {
-    content: "✧" !important;
-    display: block !important;
-    right: 24px;
-    top: 14px;
-    color: #ffffff;
-    font-size: 11px;
-    animation: none;
-}
-
-
-
-/* Chi chay hieu ung mua khi di chuot vao tung thu muc */
-.level-card.season-spring:hover::before {
-    animation: springFlowerFloat 3s ease-in-out infinite;
-}
-.level-card.season-spring:hover::after {
-    animation: springPetalDrift 3.8s ease-in-out infinite;
-}
-
-.level-card.season-summer:hover::before {
-    animation: summerSunPulse 3s ease-in-out infinite;
-}
-.level-card.season-summer:hover::after {
-    animation: summerSparkle 2.4s ease-in-out infinite;
-}
-
-.level-card.season-autumn:hover::before {
-    animation: autumnLeafFall 3.6s ease-in-out infinite;
-}
-.level-card.season-autumn:hover::after {
-    animation: autumnLeafDrift 4.2s ease-in-out infinite;
-}
-
-.level-card.season-winter:hover::before {
-    animation: winterSnowTurn 4s linear infinite;
-}
-.level-card.season-winter:hover::after {
-    animation: winterSnowTwinkle 2s ease-in-out infinite;
-}
-
-/* Chuyen dong rieng cho tung mua */
-@keyframes springFlowerFloat {
-    0%, 100% { transform: translateY(0) rotate(-8deg); }
-    50% { transform: translateY(-4px) rotate(8deg); }
-}
-
-@keyframes springPetalDrift {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: .65; }
-    50% { transform: translate(-3px, 4px) rotate(35deg); opacity: 1; }
-}
-
-@keyframes summerSunPulse {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.16) rotate(12deg); }
-}
-
-@keyframes summerSparkle {
-    0%, 100% { transform: scale(.75); opacity: .45; }
-    50% { transform: scale(1.2); opacity: 1; }
-}
-
-@keyframes autumnLeafFall {
-    0%, 100% { transform: translate(0, 0) rotate(-8deg); }
-    50% { transform: translate(-3px, 5px) rotate(24deg); }
-}
-
-@keyframes autumnLeafDrift {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: .7; }
-    50% { transform: translate(-4px, 5px) rotate(-30deg); opacity: 1; }
-}
-
-@keyframes winterSnowTurn {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(45deg) scale(1.12); }
-}
-
-@keyframes winterSnowTwinkle {
-    0%, 100% { transform: scale(.7); opacity: .45; }
-    50% { transform: scale(1.25); opacity: 1; }
-}
-
-/* Ton trong cai dat giam chuyen dong cua thiet bi */
-@media (prefers-reduced-motion: reduce) {
-    .level-card.season-spring::before,
-    .level-card.season-spring::after,
-    .level-card.season-summer::before,
-    .level-card.season-summer::after,
-    .level-card.season-autumn::before,
-    .level-card.season-autumn::after,
-    .level-card.season-winter::before,
-    .level-card.season-winter::after {
-        animation: none !important;
-    }
-}
-
-
-/* =========================
-   BANG LED CHAM NGON - THIET KE TOI GIAN
-   Kich thuoc tuong duong hang slogan cu
-========================= */
-.quote-led {
-    position: fixed;
-    left: 65px;
-    bottom: 35px;
-    z-index: 20;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    width: fit-content;
-    max-width: min(620px, calc(100vw - 130px));
-    min-height: 34px;
-    padding: 7px 12px;
-    border: 1px solid rgba(104, 190, 230, .42);
-    border-radius: 3px;
-    background: rgba(7, 19, 31, .78);
-    color: #c9f2ff;
-    box-shadow: inset 0 0 8px rgba(75, 190, 255, .08);
-    font-family: "Courier New", "Lucida Console", monospace;
-}
-.quote-led::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: .12;
-    background: repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 2px,
-        rgba(120, 215, 255, .24) 3px
-    );
-}
-.quote-led-status {
-    position: relative;
-    flex: 0 0 7px;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #64e6ad;
-    box-shadow: 0 0 6px rgba(100, 230, 173, .75);
-}
-.quote-led p {
-    position: relative;
-    margin: 0;
-    color: #d8f5ff;
-    font-family: "Courier New", "Lucida Console", monospace;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.35;
-    letter-spacing: .35px;
-    text-shadow: 0 0 5px rgba(108, 211, 255, .36);
-    overflow-wrap: anywhere;
-    transition: opacity .45s ease;
-}
-.quote-led p.is-changing { opacity: 0; }
-@media (max-width: 600px) {
-    .quote-led {
-        left: 25px;
-        right: 20px;
-        bottom: 25px;
-        max-width: none;
-        width: fit-content;
-        min-height: 32px;
-        padding: 7px 10px;
-    }
-    .quote-led p {
-        font-size: 12px;
-        letter-spacing: .2px;
-    }
-}
-@media (min-width: 601px) and (max-width: 900px) {
-    .quote-led { left: 40px; }
-}
-\n
-
-/* =========================================
-   INTRO SLIDESHOW — ROBOT, LED & MAIN TITLE
-   Chỉ bổ sung hiệu ứng xuất hiện, giữ nguyên nội dung và chức năng.
-========================================= */
-
-/* Hình nền Robot AI trượt từ bên phải vào vị trí ban đầu. */
-body {
-    position: relative;
-    isolation: isolate;
-    background-image: none;
-    background-color: #07111d;
-}
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background-image: url("11.jpg");
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    animation: robot-background-slide-in 1.5s cubic-bezier(.18,.72,.24,1) .1s both;
-}
-@keyframes robot-background-slide-in {
-    from {
-        opacity: .25;
-        transform: translateX(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Bảng LED trượt từ trái vào. */
-.quote-led {
-    animation: led-slide-in-from-left 1.15s cubic-bezier(.18,.72,.24,1) .35s both;
-}
-@keyframes led-slide-in-from-left {
-    from {
-        opacity: 0;
-        transform: translateX(-115%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Tiêu đề sáng trắng như bóng đèn và trượt từ trên xuống. */
-.header h1 {
-    animation:
-        title-drop-in 1.25s cubic-bezier(.18,.72,.24,1) .25s both,
-        title-white-bulb-glow 2.8s ease-in-out 1.5s infinite;
-}
-@keyframes title-drop-in {
-    from {
-        opacity: 0;
-        transform: translateY(-75px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-@keyframes title-white-bulb-glow {
-    0%, 100% {
-        color: #fff;
-        text-shadow:
-            0 0 3px rgba(255,255,255,.75),
-            0 0 9px rgba(255,255,255,.48),
-            0 0 18px rgba(255,255,255,.24);
-    }
-    50% {
-        color: #fff;
-        text-shadow:
-            0 0 5px rgba(255,255,255,1),
-            0 0 14px rgba(255,255,255,.9),
-            0 0 28px rgba(255,255,255,.62),
-            0 0 42px rgba(255,255,255,.32);
-    }
-}
-
-@media (max-width: 600px) {
-    body::before {
-        background-attachment: scroll;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    body::before,
-    .quote-led,
-    .header h1 {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
-    }
-}
-
-
-
-/* =========================================
-   TRANG CHU TINH GON: KIEM TRA DAU VAO + LUA CHON KY NANG
-   Giu nguyen nen Robot AI va menu B2 hien co.
-========================================= */
-.placement-card {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 250px;
-    min-width: 250px;
-    min-height: 54px;
-    justify-content: center;
-    padding: 13px 15px;
-    border: 1px solid rgba(210, 228, 241, .88);
-    border-radius: 3px;
-    background: rgba(38, 54, 75, .94);
-    color: #fff;
-    text-decoration: none;
-    transition: background .25s ease, transform .25s ease, border-color .25s ease;
-    animation: levelSlideIn .8s ease-out 1s both;
-}
-.placement-card:hover,
-.placement-card:focus-visible {
-    background: #40566f;
-    border-color: #fff;
-    transform: translateY(-2px);
-    outline: none;
-}
-.placement-card-title {
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.4;
-    text-align: center;
-}
-
-
-/* Chi tat hoa tiet va chuyen dong Winter; giu nguyen mau va cach hien thi goc. */
-#levelB2::before,
-#levelB2::after {
-    content: none !important;
-    display: none !important;
-    animation: none !important;
-}
-#levelB2 {
-    width: 250px;
-    min-width: 250px;
-    min-height: 54px;
-    padding: 13px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(38, 54, 75, .94) !important;
-    border-color: rgba(210, 228, 241, .88) !important;
-}
-#levelB2:hover {
-    background: #40566f !important;
-    border-color: #fff !important;
-    filter: none !important;
-}
-/* Giu thoi diem xuat hien da can chinh truoc do. */
-.level-list > #levelB2 {
-    animation: levelSlideIn .8s ease-out 1s both;
-}
-#levelB2 .level-title {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: .15px;
-    white-space: nowrap;
-}
-@media (max-width: 600px) {
-    .placement-card {
-        width: 250px;
-        min-width: 250px;
-        min-height: 54px;
-        padding: 13px 15px;
-    }
-    #levelB2 {
-        width: 250px;
-        min-width: 250px;
-        min-height: 54px;
-        padding: 13px 15px;
-    }
-    #levelB2 .level-title {
-        font-size: 17px;
-    }
-}
-@media (prefers-reduced-motion: reduce) {
-    .placement-card {
-        animation: none;
-    }
-}
-
+:root{--bg:#09111f;--panel:#111e32;--panel2:#172741;--line:#ffffff19;--text:#f2f6ff;--muted:#9aabc5;--cyan:#6de4dc;--blue:#91aaff;--violet:#c5a1ff;--good:#8de0b0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 8% 0%,#1a3656 0,transparent 36%),radial-gradient(ellipse at 92% 12%,#29244b 0,transparent 30%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button,select{font:inherit}button{cursor:pointer}.wrap{width:min(1120px,calc(100% - 34px));margin:auto}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:17px}.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:grid;place-items:center;color:#071426;font-size:20px}.brand small{display:block;color:var(--muted);font-size:10px;font-weight:500;margin-top:2px}
+.header-right{font-size:12px;color:var(--muted)}
+.hero{text-align:center;padding:54px 0 28px}.eyebrow{display:inline-block;padding:7px 12px;border-radius:99px;border:1px solid #6de4dc55;background:#6de4dc12;color:var(--cyan);font-size:10px;font-weight:900;letter-spacing:1.2px}
+h1{font-size:clamp(34px,5vw,54px);line-height:1.05;letter-spacing:-1.8px;margin:17px 0 12px}.grad{background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet));color:transparent;background-clip:text}.hero p{max-width:650px;margin:auto;color:var(--muted);line-height:1.7;font-size:14px}
+.workspace{display:grid;grid-template-columns:300px 1fr;gap:17px;align-items:start;margin:24px 0 60px}
+.panel{background:linear-gradient(155deg,#152640,#101a2d);border:1px solid var(--line);border-radius:19px;padding:20px;box-shadow:0 20px 50px #0002}
+.panel h2{font-size:16px;margin:0 0 7px}.hint{color:var(--muted);font-size:11px;line-height:1.6;margin:0 0 17px}
+.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 16px}
+.level{border:1px solid var(--line);border-radius:10px;background:#ffffff08;color:#b8c6de;padding:10px 2px;font-size:12px;font-weight:850}
+.level.active{background:linear-gradient(140deg,#6de4dc,#91aaff);color:#071426;border-color:transparent;box-shadow:0 7px 20px #6de4dc25}
+.level-desc{border:1px solid var(--line);border-radius:12px;padding:12px;background:#ffffff06;margin-bottom:17px}
+.level-desc strong{font-size:13px}.level-desc p{font-size:11px;color:var(--muted);line-height:1.5;margin:5px 0 0}
+.field-label{font-size:11px;color:#c4d0e4;font-weight:750;display:block;margin:15px 0 7px}
+select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:#0b1628;color:var(--text);outline:none}
+.checkrow{display:flex;align-items:flex-start;gap:9px;color:var(--muted);font-size:11px;line-height:1.5;margin-top:14px}.checkrow input{accent-color:#6de4dc;margin-top:2px}
+.primary,.secondary{border:0;border-radius:11px;padding:12px 15px;font-size:12px;font-weight:850}
+.primary{background:linear-gradient(100deg,var(--cyan),var(--blue));color:#081426}.secondary{background:#ffffff0b;border:1px solid var(--line);color:#e9f0ff}
+.full{width:100%;margin-top:17px}
+.mainpanel{padding:22px}.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}.pill{font-size:10px;font-weight:850;color:var(--cyan);background:#6de4dc13;border:1px solid #6de4dc35;padding:7px 10px;border-radius:99px}
+.exercise-title{font-size:21px;font-weight:850;letter-spacing:-.5px;margin:0 0 5px}.exercise-sub{font-size:12px;color:var(--muted);margin:0 0 18px}
+.word-card{background:linear-gradient(135deg,#1b3150,#17233e);border:1px solid #91aaff30;border-radius:17px;padding:24px;text-align:center;margin-bottom:15px}
+.word{font-size:clamp(31px,5vw,46px);font-weight:850;letter-spacing:-1px}.translation{font-size:12px;color:#b7c6df;margin-top:5px}.ipa{font-size:13px;color:var(--cyan);margin-top:12px;font-family:ui-monospace,monospace}
+.audio-row{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:17px}
+.action{padding:10px 13px;border-radius:10px;border:1px solid var(--line);background:#ffffff0b;color:#eaf1ff;font-size:11px;font-weight:750}.action:hover{background:#ffffff15}
+.recorder{border:1px solid var(--line);border-radius:15px;padding:17px;margin:15px 0;background:#ffffff05}
+.recorder-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.recorder-head strong{font-size:13px}.record-state{font-size:10px;color:var(--muted)}
+.mic{width:62px;height:62px;border-radius:50%;border:1px solid #6de4dc66;background:#6de4dc12;color:var(--cyan);display:grid;place-items:center;font-size:25px;margin:16px auto 10px;transition:.2s}.mic.recording{background:#ff647b25;border-color:#ff647b;color:#ff8394;box-shadow:0 0 0 9px #ff647b13}
+.timer{text-align:center;color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}.rec-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+.feedback{border:1px solid #6de4dc33;background:#6de4dc0b;border-radius:14px;padding:15px;margin-top:15px;display:none}.feedback.show{display:block}.feedback h3{font-size:13px;margin:0 0 7px}.feedback p{font-size:11px;color:#c2d1e6;line-height:1.65;margin:0}.submit-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:13px}.submit-btn{background:linear-gradient(100deg,#6de4dc,#91aaff);color:#081426;border:0;border-radius:10px;padding:12px 17px;font-size:12px;font-weight:900}.submit-btn:disabled{opacity:.45;cursor:not-allowed}.assessment{display:none;margin-top:16px;border:1px solid #91aaff45;background:#91aaff0c;border-radius:15px;padding:16px}.assessment.show{display:block}.assessment-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.assessment h3{font-size:14px;margin:0}.score{font-size:27px;font-weight:900;color:var(--cyan)}.assessment p,.assessment li{font-size:11px;color:#c5d2e7;line-height:1.6}.assessment ul{padding-left:18px}.assessment .disclaimer{font-size:10px;color:#91a0ba;border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}.step{border:1px solid var(--line);border-radius:12px;padding:12px}.step b{font-size:11px;display:block;margin-bottom:5px}.step span{font-size:10px;color:var(--muted);line-height:1.5}
+footer{padding:0 0 28px;color:#7485a3;font-size:10px;line-height:1.6;text-align:center}
+@media(max-width:800px){.workspace{grid-template-columns:1fr}.levels{max-width:430px}.hero{padding-top:40px}}
+@media(max-width:480px){.wrap{width:calc(100% - 22px)}header{height:66px}.header-right{display:none}.panel{padding:16px}.mainpanel{padding:15px}.steps{grid-template-columns:1fr}.word-card{padding:19px 12px}}
 </style>
 </head>
-
 <body>
-
-<!-- =========================
-     TIÊU ĐỀ
-========================= -->
-
-<header class="header">
-    <h1>Tiếng Đức cùng Artificial Intelligence</h1>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">Ä</div><div>Aussprache <span class="grad">AI</span><small>Deutsch pronunciation trainer</small></div></div>
+  <div class="header-right">Học phát âm tiếng Đức cùng AI</div>
 </header>
-
-
-<!-- =========================
-     KHU VỰC CẤP ĐỘ
-========================= -->
-
-<main class="main">
-    <div class="level-list">
-        <a class="placement-card" href="Einstufungstest.html">
-            <span class="placement-card-title">Kiểm tra trình độ đầu vào</span>
-        </a>
-        <div class="level-card season-winter" id="levelB2">
-            <div class="level-title">Lựa chọn kỹ năng</div>
-            <div class="menu">
-                <a href="B2/Hoeren/index.html"><h2>Hören – Nghe</h2></a>
-                <a href="B2/Sprechen/index.html"><h2>Sprechen – Nói</h2></a>
-                <a href="B2/Aussprache/index.html"><h2>Aussprache – Phát âm</h2></a>
-                <a href="B2/Lesen/index.html"><h2>Lesen – Đọc</h2></a>
-                <a href="B2/Schreiben/index.html"><h2>Schreiben – Viết</h2></a>
-                <a href="B2/Grammatik/index.html"><h2>Grammatik – Ngữ pháp</h2></a>
-                <a href="B2/Grammatik-Uebungen/index.html"><h2>Bài tập ngữ pháp</h2></a>
-                <div class="menu-item" id="wortschatzB2">
-                    <a href="#" class="submenu-trigger" aria-haspopup="true" aria-expanded="false"><h2>Wortschatz - Từ vựng</h2></a>
-                    <div class="submenu">
-                        <a href="B2/Wortschatz/Alltag/index.html">Alltag</a>
-                        <a href="B2/Wortschatz/Technik/index.html">Technik</a>
-                        <a href="B2/Wortschatz/Medizin/index.html">Medizin</a>
-                        <a href="B2/Wortschatz/Wirtschaft/index.html">Wirtschaft</a>
-                        <a href="B2/Wortschatz/Umwelt/index.html">Umwelt</a>
-                        <a href="B2/Wortschatz/Beruf/index.html">Beruf</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-
-<!-- =========================
-     SLOGAN
-========================= -->
-
-<section class="quote-led" aria-label="Bảng điện tử câu châm ngôn">
-    <span class="quote-led-status" aria-hidden="true"></span>
-    <p id="quoteLedText" aria-live="polite">Học, học nữa, học mãi.</p>
+<section class="hero">
+  <div class="eyebrow">✦ DEUTSCHE AUSSPRACHE</div>
+  <h1>Phát âm chuẩn hơn,<br><span class="grad">tự tin hơn mỗi ngày.</span></h1>
+  <p>Chọn trình độ từ A1 đến C1, nghe phát âm mẫu và luyện đọc theo từng cấp độ. Bắt đầu từ âm đơn, từ vựng đến câu nói tự nhiên.</p>
 </section>
-
-
-<!-- =========================
-     TƯƠNG TÁC MÁY TÍNH VÀ ĐIỆN THOẠI
-========================= -->
-
+<div class="workspace">
+  <aside class="panel">
+    <h2>Thiết lập bài luyện</h2>
+    <p class="hint">Chọn cấp độ phù hợp với năng lực hiện tại. Bạn có thể thay đổi bất cứ lúc nào.</p>
+    <span class="field-label">Trình độ tiếng Đức</span>
+    <div class="levels" role="group" aria-label="Chọn trình độ">
+      <button class="level active" data-level="A1">A1</button><button class="level" data-level="A2">A2</button><button class="level" data-level="B1">B1</button><button class="level" data-level="B2">B2</button><button class="level" data-level="C1">C1</button>
+    </div>
+    <div class="level-desc"><strong id="levelName">A1 · Anfänger</strong><p id="levelDesc">Làm quen với âm cơ bản, từ thông dụng và câu ngắn trong giao tiếp hằng ngày.</p></div>
+    <label class="field-label" for="topic">Chủ đề luyện tập</label>
+    <select id="topic">
+      <option value="basics">Âm cơ bản & nguyên âm</option>
+      <option value="words">Từ vựng và trọng âm</option>
+      <option value="sentences">Đọc câu hoàn chỉnh</option>
+      <option value="dialogue">Hội thoại thực tế</option>
+    </select>
+    <label class="field-label" for="voice">Giọng mẫu</label>
+    <select id="voice">
+      <option value="de-DE">Hochdeutsch · Đức chuẩn</option>
+      <option value="de-AT">Österreichisches Deutsch · Áo</option>
+    </select>
+    <label class="checkrow"><input type="checkbox" id="showIPA" checked> Hiển thị phiên âm IPA và hướng dẫn khẩu hình.</label>
+    <button class="primary full" id="newExercise">↻ Đổi bài luyện</button>
+  </aside>
+  <main class="panel mainpanel">
+    <div class="topline"><span class="pill" id="levelPill">A1 · BASICS</span><span class="record-state">Bài luyện mẫu · 01</span></div>
+    <h2 class="exercise-title" id="exerciseTitle">Làm quen với nguyên âm Ü</h2>
+    <p class="exercise-sub" id="exerciseSub">Nghe mẫu trước, sau đó ghi âm giọng đọc của bạn.</p>
+    <div class="word-card">
+      <div class="word" id="target">über</div>
+      <div class="translation" id="meaning">ở phía trên · qua</div>
+      <div class="ipa" id="ipa">/ˈyːbɐ/</div>
+      <div class="audio-row">
+        <button class="action" id="speak">▶ Nghe phát âm mẫu</button>
+        <button class="action" id="slowSpeak">◷ Nghe chậm</button>
+      </div>
+    </div>
+    <div class="recorder">
+      <div class="recorder-head"><strong>🎙️ Ghi âm phát âm của bạn</strong><span class="record-state" id="recordState">Chưa ghi âm</span></div>
+      <button class="mic" id="mic" aria-label="Bắt đầu ghi âm">🎙</button>
+      <div class="timer" id="timer">00:00</div>
+      <div class="rec-actions">
+        <button class="primary" id="start">Bắt đầu ghi âm</button>
+        <button class="secondary" id="stop" disabled>Dừng ghi âm</button>
+        <button class="secondary" id="playback" disabled>▶ Nghe lại</button>
+      </div>
+      <div class="submit-row">
+        <button class="submit-btn" id="submitRecording" disabled>Gửi bài &amp; đánh giá phát âm</button>
+      </div>
+    </div>
+    <div class="feedback" id="feedback"><h3>Gợi ý tự luyện tập</h3><p id="feedbackText"></p></div>
+    <div class="assessment" id="assessment">
+      <div class="assessment-head"><h3>📊 Kết quả đánh giá Aussprache</h3><div class="score" id="scoreValue">—</div></div>
+      <p id="assessmentSummary"></p>
+      <div id="assessmentDetails"></div>
+      <p class="disclaimer" id="assessmentDisclaimer">Kết quả chỉ mang tính hỗ trợ học tập; không phải chứng nhận trình độ hoặc đánh giá chuyên môn.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><b>1. Listen</b><span>Nghe kỹ giọng mẫu và chú ý âm mục tiêu.</span></div>
+      <div class="step"><b>2. Repeat</b><span>Đọc chậm, rõ, không cố nói quá nhanh.</span></div>
+      <div class="step"><b>3. Compare</b><span>Nghe lại bản ghi và tự đối chiếu với mẫu.</span></div>
+    </div>
+  </main>
+</div>
+<footer>Bản giao diện thử nghiệm Aussprache AI · Ghi âm được xử lý trong trình duyệt và không tải lên máy chủ.<br>Nhận xét hiện tại là hướng dẫn tự luyện, chưa phải kết quả chấm phát âm bằng mô hình chuyên dụng.</footer>
+</div>
 <script>
-const touchDevice = window.matchMedia("(hover: none)");
-const levelCards = document.querySelectorAll(".level-card");
-
-// Bang LED tu dong thay cau cham ngon moi sau moi 3 phut.
-const quoteLedItems = [
-    "Học, học nữa, học mãi.",
-    "Có công mài sắt, có ngày nên kim.",
-    "Có công mài sắc, có ngày nên kim.",
-    "Những điều vĩ đại không được xây dựng bằng sự vội vàng.",
-    "Kỷ luật hôm nay tạo nên tự do ngày mai.",
-    "Kiên trì là con đường dẫn đến thành công.",
-    "Mỗi ngày tiến một bước, rồi cậu sẽ đi rất xa.",
-    "Wissen ist Macht – Tri thức là sức mạnh."
-];
-const quoteLedText = document.getElementById("quoteLedText");
-let quoteLedIndex = 0;
-window.setInterval(() => {
-    quoteLedText.classList.add("is-changing");
-    window.setTimeout(() => {
-        quoteLedIndex = (quoteLedIndex + 1) % quoteLedItems.length;
-        quoteLedText.textContent = quoteLedItems[quoteLedIndex];
-        quoteLedText.classList.remove("is-changing");
-    }, 450);
-}, 180000);
-
-// Can mep duoi menu cap do va menu Wortschatz theo mep duoi cua thu muc B2.
-function alignLevelMenusToB2() {
-    if (touchDevice.matches || window.innerWidth <= 600) return;
-    const b2 = document.getElementById("levelB2");
-    if (!b2) return;
-    const b2Bottom = b2.getBoundingClientRect().bottom;
-
-    levelCards.forEach((card) => {
-        const menu = card.querySelector(":scope > .menu");
-        if (!menu) return;
-        const cardTop = card.getBoundingClientRect().top;
-        const menuHeight = menu.scrollHeight;
-        menu.style.top = `${b2Bottom - cardTop - menuHeight}px`;
-    });
+const levels={
+ A1:{name:"A1 · Anfänger",desc:"Làm quen với âm cơ bản, từ thông dụng và câu ngắn trong giao tiếp hằng ngày.",pill:"A1 · BASICS"},
+ A2:{name:"A2 · Grundstufe",desc:"Luyện phát âm từ quen thuộc, cụm từ, trọng âm và câu giao tiếp đơn giản.",pill:"A2 · ELEMENTARY"},
+ B1:{name:"B1 · Mittelstufe",desc:"Tập trung vào nhịp điệu câu, phụ âm khó và diễn đạt rõ ràng trong tình huống thường gặp.",pill:"B1 · INTERMEDIATE"},
+ B2:{name:"B2 · Gute Mittelstufe",desc:"Luyện câu dài, ngữ điệu, trọng âm câu và cách nói tự nhiên trong thảo luận.",pill:"B2 · UPPER INTERMEDIATE"},
+ C1:{name:"C1 · Fortgeschritten",desc:"Tinh chỉnh ngữ điệu, nhịp điệu, độ rõ và sắc thái phát âm trong diễn đạt phức tạp.",pill:"C1 · ADVANCED"}
+};
+const exercises={
+ A1:[
+  ["Làm quen với nguyên âm Ü","Nghe mẫu trước, sau đó ghi âm giọng đọc của bạn.","über","ở phía trên · qua","/ˈyːbɐ/","Giữ lưỡi gần vị trí phát âm /iː/, đồng thời làm tròn môi. Đừng thay /yː/ bằng /uː/."],
+  ["Phân biệt Ö và O","Chú ý hình dáng môi và vị trí lưỡi.","schön","đẹp","/ʃøːn/","Với /øː/, giữ lưỡi ở vị trí gần /eː/ nhưng làm tròn môi."],
+  ["Âm CH trong ich","Luyện âm xát mềm ở phía trước miệng.","ich","tôi","/ɪç/","Nâng phần giữa lưỡi gần vòm miệng, để luồng hơi đi qua khe hẹp."]
+ ],
+ A2:[
+  ["Nguyên âm dài và ngắn","Nghe sự khác biệt về trường độ nguyên âm.","Stadt","thành phố","/ʃtat/","Giữ nguyên âm ngắn gọn; tránh kéo dài quá mức."],
+  ["Phụ âm W và V","Luyện sự khác nhau giữa các chữ cái trong từ Đức.","Wasser","nước","/ˈvasɐ/","Chữ W trong tiếng Đức thường được phát âm gần /v/."],
+  ["Trọng âm từ","Đặt trọng âm đúng trong từ quen thuộc.","beginnen","bắt đầu","/bəˈɡɪnən/","Chú ý âm tiết thứ hai mang trọng âm chính."]
+ ],
+ B1:[
+  ["Âm CH mềm và cứng","Phân biệt hai cách phát âm CH theo ngữ cảnh.","Buch","quyển sách","/buːx/","Trong Buch là âm /x/ ở phía sau miệng; khác với /ç/ trong ich."],
+  ["Phụ âm cuối","Chú ý hiện tượng vô thanh hóa phụ âm cuối.","Tag","ngày","/taːk/","Âm /g/ viết ở cuối từ được phát âm thành /k/ trong từ này."],
+  ["Nhịp điệu câu","Đọc câu có nhịp tự nhiên, không tách từng từ.","Ich lerne jeden Tag Deutsch.","Tôi học tiếng Đức mỗi ngày.","","Nhấn vào thông tin quan trọng, nối các từ một cách tự nhiên."]
+ ],
+ B2:[
+  ["Ngữ điệu trong câu phụ","Luyện nhịp và ngữ điệu của câu phức.","Obwohl es schwierig ist, übe ich weiter.","Mặc dù khó, tôi vẫn tiếp tục luyện tập.","","Giữ mạch câu liên tục; chú ý vị trí động từ ở cuối mệnh đề phụ."],
+  ["Trọng âm câu","Làm nổi bật thông tin đối lập trong câu.","Ich habe das nicht gestern gesagt.","Tôi không nói điều đó hôm qua.","","Thay đổi trọng âm theo ý muốn nhấn mạnh; tránh nhấn đều mọi từ."],
+  ["Cụm phụ âm","Luyện chuyển tiếp giữa nhiều phụ âm.","Sprachkenntnisse","kiến thức ngôn ngữ","/ˈʃpʁaːxˌkɛntnɪsə/","Giữ rõ cụm phụ âm nhưng không chèn thêm nguyên âm."]
+ ],
+ C1:[
+  ["Ngữ điệu diễn đạt quan điểm","Điều chỉnh ngữ điệu trong lập luận dài.","Meines Erachtens sollte man diese Entwicklung kritisch betrachten.","Theo quan điểm của tôi, cần nhìn nhận sự phát triển này một cách phản biện.","","Tổ chức câu thành các cụm ý; dùng ngữ điệu để thể hiện cấu trúc lập luận."],
+  ["Nhịp điệu và độ trôi chảy","Luyện câu dài với nhịp nói ổn định.","Die zunehmende Digitalisierung verändert unseren Alltag grundlegend.","Sự số hóa ngày càng tăng đang thay đổi căn bản đời sống hằng ngày.","","Giữ nhịp đều, giảm ngắt nghỉ không cần thiết và phát âm rõ các âm tiết không mang trọng âm."],
+  ["Sắc thái phát âm","Luyện cách nhấn để thể hiện thái độ và ý nghĩa.","Das ist keineswegs eine selbstverständliche Lösung.","Đó hoàn toàn không phải là một giải pháp hiển nhiên.","","Nhấn vào từ phủ định và từ mang ý nghĩa đánh giá để truyền tải đúng sắc thái."]
+ ]
+};
+let level="A1", current=0, mediaRecorder=null, chunks=[], recordedBlob=null, stream=null, seconds=0, interval=null;
+/*
+  KẾT NỐI AI:
+  Điền URL Cloudflare Worker chuyên xử lý đánh giá phát âm vào biến dưới đây.
+  Worker nhận multipart/form-data: audio, target_text, level, locale, exercise_title.
+  Worker nên trả JSON: { score, summary, transcript, strengths:[], improvements:[], phoneme_feedback:[] }.
+  Không đặt Groq API Key hoặc secret trong file HTML.
+*/
+const PRONUNCIATION_API_URL = "";
+const $=id=>document.getElementById(id);
+function render(){
+ const arr=exercises[level]; current=current%arr.length; const e=arr[current];
+ $("levelName").textContent=levels[level].name;$("levelDesc").textContent=levels[level].desc;$("levelPill").textContent=levels[level].pill;
+ $("exerciseTitle").textContent=e[0];$("exerciseSub").textContent=e[1];$("target").textContent=e[2];$("meaning").textContent=e[3];$("ipa").textContent=e[4]||"Luyện ngữ điệu và nhịp điệu";
+ $("ipa").style.display=$("showIPA").checked?"block":"none";$("feedback").classList.remove("show");
+ $("recordState").textContent="Chưa ghi âm";$("timer").textContent="00:00";$("playback").disabled=true;$("submitRecording").disabled=true;recordedBlob=null;
+ $("assessment").classList.remove("show");$("feedback").classList.remove("show");
 }
+document.querySelectorAll(".level").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".level").forEach(b=>b.classList.remove("active"));btn.classList.add("active");level=btn.dataset.level;current=0;render()}));
+$("showIPA").addEventListener("change",()=>{$("ipa").style.display=$("showIPA").checked?"block":"none"});
+$("newExercise").addEventListener("click",()=>{current=(current+1)%exercises[level].length;render()});
+$("topic").addEventListener("change",()=>{const idx={basics:0,words:1,sentences:2,dialogue:2}[$("topic").value]||0;current=idx%exercises[level].length;render()});
+function speak(text,rate=1){if(!("speechSynthesis"in window)){alert("Trình duyệt này chưa hỗ trợ đọc văn bản.");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=$("voice").value;u.rate=rate;const voices=speechSynthesis.getVoices();const preferred=voices.find(v=>v.lang.toLowerCase().startsWith($("voice").value.toLowerCase()));if(preferred)u.voice=preferred;speechSynthesis.speak(u)}
+$("speak").onclick=()=>speak($("target").textContent,1);$("slowSpeak").onclick=()=>speak($("target").textContent,.72);
+function resetTimer(){seconds=0;$("timer").textContent="00:00"}
+$("start").onclick=async()=>{
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){alert("Trình duyệt hoặc kết nối hiện tại chưa hỗ trợ ghi âm. Hãy dùng trình duyệt mới và HTTPS hoặc localhost.");return}
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recordedBlob=null;
+  const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"";
+  mediaRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+  mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  mediaRecorder.onstop=()=>{recordedBlob=new Blob(chunks,{type:mediaRecorder.mimeType||"audio/webm"});$("playback").disabled=false;$("submitRecording").disabled=false;$("recordState").textContent="Đã ghi âm · sẵn sàng gửi đánh giá";$("feedbackText").textContent=exercises[level][current][5]+" Bạn có thể nghe lại hoặc gửi bản ghi để hệ thống đánh giá."; $("feedback").classList.add("show");stream?.getTracks().forEach(t=>t.stop())};
+  mediaRecorder.start();$("start").disabled=true;$("stop").disabled=false;$("mic").classList.add("recording");$("recordState").textContent="Đang ghi âm…";resetTimer();interval=setInterval(()=>{seconds++;$("timer").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");if(seconds>=30)$("stop").click()},1000);
+ }catch(err){alert("Không thể truy cập microphone. Hãy cấp quyền sử dụng microphone cho trang web.")}
+};
+$("stop").onclick=()=>{if(mediaRecorder&&mediaRecorder.state!=="inactive"){mediaRecorder.stop();clearInterval(interval);$("start").disabled=false;$("stop").disabled=true;$("mic").classList.remove("recording")}};
+$("mic").onclick=()=>{if(mediaRecorder?.state==="recording")$("stop").click();else $("start").click()};
+$("playback").onclick=()=>{if(recordedBlob){const url=URL.createObjectURL(recordedBlob);const audio=new Audio(url);audio.play();audio.onended=()=>URL.revokeObjectURL(url)}};
 
-// Cap nhat lai vi tri khi hover, focus hoac thay doi kich thuoc cua so.
-levelCards.forEach((card) => {
-    card.addEventListener("mouseenter", alignLevelMenusToB2);
-    card.addEventListener("focusin", alignLevelMenusToB2);
-});
-window.addEventListener("resize", alignLevelMenusToB2);
+$("submitRecording").onclick=async()=>{
+ if(!recordedBlob){alert("Bạn cần ghi âm trước khi gửi bài.");return}
+ if(!PRONUNCIATION_API_URL){
+   $("assessment").classList.add("show");
+   $("scoreValue").textContent="—";
+   $("assessmentSummary").textContent="Bản ghi đã sẵn sàng, nhưng trang chưa được kết nối với dịch vụ AI đánh giá phát âm.";
+   $("assessmentDetails").innerHTML="<p><strong>Để bật đánh giá thật:</strong> cần triển khai một Cloudflare Worker nhận tệp âm thanh, phân tích phát âm và trả về điểm số cùng nhận xét. Sau đó cấu hình URL Worker trong biến PRONUNCIATION_API_URL ở cuối file HTML.</p><p>Không nên tự tạo điểm số giả từ bản ghi hoặc chỉ dựa vào nhận dạng văn bản, vì điều đó không phản ánh chính xác chất lượng phát âm.</p>";
+   $("assessmentDisclaimer").textContent="Hiện tại chưa có điểm đánh giá AI. Bản ghi chỉ được lưu tạm trong trình duyệt và chưa được gửi đi đâu.";
+   $("assessment").scrollIntoView({behavior:"smooth",block:"nearest"});
+   return;
+ }
+ const btn=$("submitRecording");btn.disabled=true;btn.textContent="Đang gửi và phân tích…";
+ $("assessment").classList.add("show");$("scoreValue").textContent="…";
+ $("assessmentSummary").textContent="Đang tải bản ghi lên dịch vụ đánh giá. Vui lòng chờ trong giây lát.";
+ $("assessmentDetails").innerHTML="";
+ $("assessmentDisclaimer").textContent="Không đóng trang trong khi hệ thống đang phân tích.";
+ try{
+   const form=new FormData();
+   form.append("audio",recordedBlob,"aussprache-recording.webm");
+   form.append("target_text",$("target").textContent);
+   form.append("level",level);
+   form.append("locale",$("voice").value);
+   form.append("exercise_title",$("exerciseTitle").textContent);
+   form.append("topic",$("topic").value);
+   const response=await fetch(PRONUNCIATION_API_URL,{method:"POST",body:form});
+   if(!response.ok)throw new Error("Máy chủ trả về mã lỗi "+response.status);
+   const data=await response.json();
+   if(typeof data.score!=="number")throw new Error("Phản hồi máy chủ thiếu trường score hợp lệ.");
+   $("scoreValue").textContent=Math.max(0,Math.min(100,Math.round(data.score)))+"/100";
+   $("assessmentSummary").textContent=data.summary||"Đã nhận kết quả phân tích phát âm.";
+   const groups=[
+     ["Bản nhận dạng",data.transcript?[data.transcript]:[]],
+     ["Điểm tốt",data.strengths||[]],
+     ["Cần cải thiện",data.improvements||[]],
+     ["Phân tích âm cụ thể",data.phoneme_feedback||[]]
+   ];
+   $("assessmentDetails").innerHTML=groups.filter(g=>g[1]&&g[1].length).map(g=>"<p><strong>"+g[0]+"</strong></p><ul>"+g[1].map(x=>"<li>"+String(typeof x==="string"?x:(x.detail||x.message||JSON.stringify(x))).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))+"</li>").join("")+"</ul>").join("");
+   $("assessmentDisclaimer").textContent="Điểm số phụ thuộc vào chất lượng ghi âm, dữ liệu và mô hình đánh giá. Hãy dùng kết quả như phản hồi luyện tập, không phải chứng nhận CEFR.";
+ }catch(err){
+   $("scoreValue").textContent="—";
+   $("assessmentSummary").textContent="Chưa thể hoàn thành đánh giá: "+err.message;
+   $("assessmentDetails").innerHTML="<p>Kiểm tra URL Worker, quyền truy cập mạng, định dạng âm thanh và cấu trúc JSON phản hồi.</p>";
+   $("assessmentDisclaimer").textContent="Bản ghi vẫn còn trong phiên trình duyệt; bạn có thể thử gửi lại sau khi kiểm tra máy chủ.";
+ }finally{btn.disabled=false;btn.textContent="Gửi lại & đánh giá"}
+};
 
-// Tren may tinh: hover vao tung cap do de mo menu.
-// Tren dien thoai: cham vao ten cap do de mo/dong menu.
-levelCards.forEach((card) => {
-    card.addEventListener("click", function(event) {
-        if (touchDevice.matches && !event.target.closest("a")) {
-            card.classList.toggle("open");
-        }
-    });
-
-    // Tren dien thoai, moi muc co submenu deu co the mo bang cham.
-    card.querySelectorAll(".submenu-trigger").forEach((trigger) => {
-        const submenuItem = trigger.closest(".menu-item");
-
-        trigger.addEventListener("click", function(event) {
-            event.preventDefault();
-            if (touchDevice.matches) {
-                const isOpen = submenuItem.classList.toggle("submenu-open");
-                trigger.setAttribute("aria-expanded", String(isOpen));
-            }
-        });
-    });
-});
-
-window.addEventListener("load", alignLevelMenusToB2);
-
-// Dong tat ca menu khi nhan Escape.
-document.addEventListener("keydown", function(event) {
-    if (event.key === "Escape") {
-        levelCards.forEach((card) => {
-            card.classList.remove("open");
-            card.querySelectorAll(".menu-item.submenu-open").forEach((item) => {
-                item.classList.remove("submenu-open");
-            });
-            card.querySelectorAll(".submenu-trigger").forEach((trigger) => {
-                trigger.setAttribute("aria-expanded", "false");
-            });
-        });
-    }
-});
+render();
 </script>
-
 </body>
 </html>
